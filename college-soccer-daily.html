@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>College Soccer Daily</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #042C53;
+    --navy-mid: #0C4478;
+    --blue: #185FA5;
+    --blue-light: #E6F1FB;
+    --green: #3B6D11;
+    --green-mid: #639922;
+    --field: #97C459;
+    --field-light: #EAF3DE;
+    --chalk: #F4F2EB;
+    --amber: #BA7517;
+    --amber-light: #FAEEDA;
+    --white: #ffffff;
+    --gray-50: #F8F7F4;
+    --gray-100: #EBEBEB;
+    --gray-300: #C0BFBA;
+    --gray-500: #888780;
+    --gray-700: #444441;
+    --gray-900: #1A1A18;
+    --text: #1A1A18;
+    --text-muted: #5F5E5A;
+    --text-faint: #888780;
+    --border: rgba(0,0,0,0.08);
+    --border-strong: rgba(0,0,0,0.15);
+    --radius: 10px;
+    --radius-lg: 16px;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--chalk);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  a { text-decoration: none; color: inherit; }
+
+  /* ── TICKER ── */
+  .ticker {
+    background: var(--navy);
+    padding: 9px 0;
+    overflow: hidden;
+    border-bottom: 2px solid var(--field);
+  }
+  .ticker-inner {
+    display: flex;
+    gap: 0;
+    animation: ticker 40s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .ticker-inner:hover { animation-play-state: paused; }
+  .ticker-item {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    padding: 0 36px;
+    letter-spacing: 0.2px;
+  }
+  .ticker-item::before {
+    content: "●";
+    color: var(--field);
+    margin-right: 12px;
+    font-size: 8px;
+    vertical-align: middle;
+  }
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    gap: 32px;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .nav-logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--navy);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-logo-text {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .nav-logo-text span { color: var(--green); }
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+  }
+  .nav-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .nav-link:hover, .nav-link.active {
+    color: var(--navy);
+    background: var(--blue-light);
+  }
+  .nav-link.active { color: var(--blue); }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .nav-date {
+    font-size: 12px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+  }
+  .nav-search {
+    background: var(--chalk);
+    border: 1px solid var(--border-strong);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-family: var(--font-body);
+    color: var(--text);
+    width: 180px;
+    outline: none;
+  }
+  .nav-search:focus { border-color: var(--blue); }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--navy);
+    padding: 0;
+    overflow: hidden;
+  }
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 24px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 48px;
+    align-items: center;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--field);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .hero-excerpt {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+    margin-bottom: 24px;
+    max-width: 520px;
+  }
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+  }
+  .hero-meta span { color: rgba(255,255,255,0.65); }
+  .hero-read-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--field);
+    color: var(--navy);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    margin-top: 20px;
+  }
+  .hero-read-btn:hover { background: #a8d468; transform: translateY(-1px); }
+  .hero-sidebar-stories { display: flex; flex-direction: column; gap: 0; }
+  .hero-side-story {
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+  }
+  .hero-side-story:last-child { border-bottom: none; }
+  .hero-side-tag {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--field);
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .hero-side-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.4;
+  }
+  .hero-side-title:hover { color: var(--field); }
+  .hero-side-meta {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 5px;
+  }
+
+  /* ── SECTION TABS ── */
+  .section-tabs {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+  }
+  .section-tabs-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .stab {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    padding: 14px 18px;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .stab:hover { color: var(--navy); }
+  .stab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+  }
+
+  /* ── AI NEWS SECTION ── */
+  .ai-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+  }
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--field-light);
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+  .ai-badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: var(--green-mid);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── NEWS CARDS ── */
+  .news-feed { display: flex; flex-direction: column; gap: 16px; }
+  .news-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .news-card:hover {
+    border-color: var(--blue);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(4,44,83,0.08);
+  }
+  .news-card-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .news-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .tag-recruiting { background: var(--field-light); color: var(--green); }
+  .tag-news { background: var(--blue-light); color: var(--navy-mid); }
+  .tag-transfer { background: var(--amber-light); color: var(--amber); }
+  .tag-rankings { background: #FBEAF0; color: #72243E; }
+  .tag-womens { background: #EDE8FE; color: #3C3489; }
+  .tag-mens { background: var(--blue-light); color: var(--blue); }
+  .news-time { font-size: 11px; color: var(--text-faint); font-family: var(--font-mono); }
+  .news-title {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.35;
+    margin-bottom: 8px;
+  }
+  .news-excerpt {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+  .news-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .news-author { font-size: 12px; color: var(--text-faint); }
+  .news-read { font-size: 12px; font-weight: 600; color: var(--blue); }
+
+  /* AI generate button */
+  .ai-generate-btn {
+    width: 100%;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.15s;
+    margin-top: 8px;
+  }
+  .ai-generate-btn:hover { background: var(--navy-mid); }
+  .ai-generate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .ai-spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── AI ARTICLE MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(4,44,83,0.7);
+    z-index: 200;
+    overflow-y: auto;
+    padding: 40px 20px;
+  }
+  .modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+  .modal {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    max-width: 720px;
+    width: 100%;
+    overflow: hidden;
+    animation: modalIn 0.2s ease;
+  }
+  @keyframes modalIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .modal-header {
+    background: var(--navy);
+    padding: 24px 28px;
+  }
+  .modal-tag { display: inline-block; background: var(--field); color: var(--navy); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; margin-bottom: 12px; }
+  .modal-title { font-family: var(--font-display); font-size: 26px; font-weight: 900; color: var(--white); line-height: 1.25; }
+  .modal-meta { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 10px; }
+  .modal-body { padding: 28px; }
+  .modal-body p { font-size: 15px; line-height: 1.8; color: var(--text-muted); margin-bottom: 16px; }
+  .modal-body p strong { color: var(--text); font-weight: 600; }
+  .modal-loading { padding: 48px 28px; text-align: center; }
+  .modal-loading-spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+  .modal-loading-text { font-size: 14px; color: var(--text-muted); }
+  .modal-close {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; padding: 14px;
+    background: var(--chalk);
+    border: none; border-top: 1px solid var(--border);
+    font-size: 13px; font-weight: 600; color: var(--text-muted);
+    cursor: pointer; font-family: var(--font-body);
+  }
+  .modal-close:hover { background: var(--gray-100); color: var(--text); }
+
+  /* ── SIDEBAR ── */
+  .sidebar { display: flex; flex-direction: column; gap: 20px; }
+  .sidebar-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .sidebar-card-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .sidebar-card-title { font-size: 12px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+  .sidebar-card-body { padding: 4px 0; }
+
+  /* Commitments */
+  .commit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .commit-item:last-child { border-bottom: none; }
+  .commit-item:hover { background: var(--gray-50); }
+  .commit-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--blue-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: var(--blue);
+    flex-shrink: 0;
+  }
+  .commit-info { flex: 1; }
+  .commit-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .commit-school { font-size: 12px; color: var(--text-muted); }
+  .commit-pos {
+    font-size: 10px; font-weight: 600;
+    background: var(--field-light); color: var(--green);
+    padding: 3px 8px; border-radius: 20px;
+  }
+  .commit-gender {
+    font-size: 10px; font-weight: 600;
+    padding: 3px 8px; border-radius: 20px;
+    margin-right: 4px;
+  }
+  .commit-gender.m { background: var(--blue-light); color: var(--blue); }
+  .commit-gender.w { background: #EDE8FE; color: #3C3489; }
+
+  /* Rankings */
+  .rank-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 18px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+  .rank-row:last-child { border-bottom: none; }
+  .rank-row:hover { background: var(--gray-50); }
+  .rank-num { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--text-faint); width: 22px; }
+  .rank-num.top3 { color: var(--amber); font-weight: 600; }
+  .rank-name { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; }
+  .rank-conf { font-size: 11px; color: var(--text-faint); }
+  .rank-record { font-size: 12px; font-family: var(--font-mono); color: var(--text-muted); }
+  .rank-move { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
+  .move-up { background: var(--field-light); color: var(--green); }
+  .move-down { background: #FCEBEB; color: #A32D2D; }
+  .move-same { background: var(--gray-100); color: var(--gray-500); }
+
+  /* Newsletter */
+  .newsletter { background: var(--navy); border-radius: var(--radius-lg); padding: 22px 20px; }
+  .newsletter-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+  .newsletter-sub { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 16px; line-height: 1.5; }
+  .newsletter-input {
+    width: 100%; background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px; padding: 10px 14px;
+    font-size: 13px; color: white; font-family: var(--font-body);
+    outline: none; margin-bottom: 10px;
+  }
+  .newsletter-input::placeholder { color: rgba(255,255,255,0.35); }
+  .newsletter-input:focus { border-color: var(--field); }
+  .newsletter-btn {
+    width: 100%; background: var(--field); color: var(--navy);
+    border: none; border-radius: 8px; padding: 11px;
+    font-size: 13px; font-weight: 700; font-family: var(--font-body);
+    cursor: pointer; transition: background 0.15s;
+  }
+  .newsletter-btn:hover { background: #a8d468; }
+
+  /* Portal tracker */
+  .portal-item {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .portal-item:last-child { border-bottom: none; }
+  .portal-item:hover { background: var(--gray-50); }
+  .portal-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .portal-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .portal-from { font-size: 11px; color: var(--text-faint); margin-top: 3px; }
+
+  /* ── RECRUITING SECTION ── */
+  .recruiting-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 40px;
+  }
+  .rec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+  .rec-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .rec-card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(59,109,17,0.1); }
+  .rec-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+  .rec-player-name { font-size: 16px; font-weight: 600; color: var(--text); }
+  .rec-class { font-size: 11px; font-weight: 600; background: var(--chalk); color: var(--text-muted); padding: 3px 9px; border-radius: 20px; }
+  .rec-details { display: flex; flex-direction: column; gap: 5px; }
+  .rec-detail { display: flex; justify-content: space-between; font-size: 13px; }
+  .rec-detail-label { color: var(--text-faint); }
+  .rec-detail-val { color: var(--text); font-weight: 500; }
+  .rec-status { margin-top: 12px; }
+  .rec-status-badge {
+    font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px;
+  }
+  .status-committed { background: var(--field-light); color: var(--green); }
+  .status-uncommitted { background: var(--blue-light); color: var(--blue); }
+  .status-verbal { background: var(--amber-light); color: var(--amber); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    padding: 40px 24px;
+    margin-top: 0;
+  }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-logo { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+  .footer-logo span { color: var(--field); }
+  .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 24px; }
+  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+  .footer-link { font-size: 13px; color: rgba(255,255,255,0.5); transition: color 0.15s; }
+  .footer-link:hover { color: var(--field); }
+  .footer-bottom { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 12px; color: rgba(255,255,255,0.25); }
+
+  /* ── AI SEARCH BAR ── */
+  .ai-search-section {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+  .ai-search-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .ai-search-label { font-size: 13px; font-weight: 600; color: var(--navy); white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+  .ai-search-input {
+    flex: 1;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--chalk);
+    outline: none;
+  }
+  .ai-search-input:focus { border-color: var(--blue); background: white; }
+  .ai-search-btn {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .ai-search-btn:hover { background: var(--navy); }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    max-width: 1200px;
+    margin: 0 auto 24px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+  .section-divider-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-sidebar-stories { display: none; }
+    .main { grid-template-columns: 1fr; }
+    .rec-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 28px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- API KEY BAR -->
+<div id="api-key-bar" style="background:#FAEEDA;border-bottom:1px solid #EF9F27;padding:10px 24px;display:flex;align-items:center;gap:12px;font-size:13px;">
+  <span style="color:#633806;font-weight:600;white-space:nowrap;">🔑 Paste your Anthropic API key to enable AI articles:</span>
+  <input id="api-key-input" type="password" placeholder="sk-ant-..." style="flex:1;border:1px solid #EF9F27;border-radius:6px;padding:6px 12px;font-size:13px;font-family:monospace;background:white;outline:none;max-width:400px;">
+  <button onclick="saveKey()" style="background:#BA7517;color:white;border:none;border-radius:6px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">Save Key</button>
+  <a href="https://console.anthropic.com" style="color:#854F0B;font-size:12px;white-space:nowrap;">Get a free key →</a>
+  <button onclick="document.getElementById('api-key-bar').style.display='none'" style="background:none;border:none;color:#854F0B;cursor:pointer;font-size:18px;line-height:1;margin-left:auto;">×</button>
+</div>
+<div class="ticker">
+  <div class="ticker-inner" id="ticker-inner">
+    <span class="ticker-item">ECNL Boys Indy Showcase: top 2027 prospects turning heads this weekend</span>
+    <span class="ticker-item">Spring transfer portal window closes April 25 — 40+ D1 players still available</span>
+    <span class="ticker-item">Class of 2026 signing period complete — programs finalize rosters for fall</span>
+    <span class="ticker-item">NIL revenue sharing now active at all D1 programs under House settlement</span>
+    <span class="ticker-item">Girls Academy Spring Showcase underway in Phoenix — coaches out in force</span>
+    <span class="ticker-item">Washington men's program celebrates national title with spring open practice</span>
+    <span class="ticker-item">Class of 2027 early commitments surge — several 2028s already fielding D1 interest</span>
+    <span class="ticker-item">Spring ECNL Phoenix Showcase 2026 — Day 2 standouts announced</span>
+    <span class="ticker-item">ECNL Boys Indy Showcase: top 2027 prospects turning heads this weekend</span>
+    <span class="ticker-item">Spring transfer portal window closes April 25 — 40+ D1 players still available</span>
+    <span class="ticker-item">Class of 2026 signing period complete — programs finalize rosters for fall</span>
+    <span class="ticker-item">NIL revenue sharing now active at all D1 programs under House settlement</span>
+    <span class="ticker-item">Girls Academy Spring Showcase underway in Phoenix — coaches out in force</span>
+    <span class="ticker-item">Washington men's program celebrates national title with spring open practice</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <circle cx="11" cy="11" r="9.5" stroke="#97C459" stroke-width="1.5"/>
+          <path d="M11 1.5C11 1.5 7.5 5.5 7.5 11C7.5 16.5 11 20.5 11 20.5C11 20.5 14.5 16.5 14.5 11C14.5 5.5 11 1.5 11 1.5Z" fill="#97C459" opacity="0.3"/>
+          <path d="M1.5 11L20.5 11" stroke="#97C459" stroke-width="1.2"/>
+          <path d="M2.5 7.5L19.5 7.5" stroke="#97C459" stroke-width="0.8" opacity="0.5"/>
+          <path d="M2.5 14.5L19.5 14.5" stroke="#97C459" stroke-width="0.8" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="nav-logo-text">College Soccer <span>Daily</span></div>
+    </div>
+    <div class="nav-links">
+      <div class="nav-link active" onclick="showTab('news')">News</div>
+      <div class="nav-link" onclick="showTab('recruiting')">Recruiting</div>
+      <div class="nav-link" onclick="showTab('rankings')">Rankings</div>
+      <div class="nav-link" onclick="showTab('transfers')">Transfer Portal</div>
+      <div class="nav-link" onclick="showTab('programs')">Programs</div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-date" id="nav-date"></div>
+      <input class="nav-search" placeholder="Search players, schools...">
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag">Top Story</div>
+      <h1 class="hero-title">NIL Revenue Sharing Is Here — What It Means for Every College Soccer Family</h1>
+      <p class="hero-excerpt">The House v. NCAA settlement is now in effect, meaning D1 programs can share revenue directly with athletes. For soccer families navigating recruiting, scholarships just got more complicated — and more valuable. Here's what you need to know right now.</p>
+      <div class="hero-meta">
+        <span>Staff Report</span>
+        <span>·</span>
+        <span>Today, 7:15 AM</span>
+        <span>·</span>
+        <span>6 min read</span>
+      </div>
+      <button class="hero-read-btn" onclick="openArticle('nil-house', 'Recruiting', 'NIL Revenue Sharing Is Here — What It Means for Every College Soccer Family')">Read full story →</button>
+    </div>
+    <div class="hero-sidebar-stories">
+      <div class="hero-side-story" onclick="openArticle('ecnl-indy','Showcases','ECNL Boys Indy: Best U15s and U16s from the Weekend')">
+        <div class="hero-side-tag">Showcases</div>
+        <div class="hero-side-title">ECNL Boys Indy Showcase: The U15 and U16 Standouts Coaches Were Watching</div>
+        <div class="hero-side-meta">Today, 9:00 AM</div>
+      </div>
+      <div class="hero-side-story" onclick="openArticle('portal-spring','Transfer Portal','Spring Portal Window Closing April 25 — Who\'s Still Available')">
+        <div class="hero-side-tag">Transfer Portal</div>
+        <div class="hero-side-title">Portal Window Closes April 25 — The 10 D1 Players Every Coach Should Still Be Calling</div>
+        <div class="hero-side-meta">Yesterday</div>
+      </div>
+      <div class="hero-side-story" onclick="openArticle('class27-early','Recruiting','Class of 2027 Early Commitment Surge')">
+        <div class="hero-side-tag">Recruiting</div>
+        <div class="hero-side-title">Class of 2027 Early Commitments Are Surging — Is Your Player Behind?</div>
+        <div class="hero-side-meta">2 days ago</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION TABS -->
+<div class="section-tabs">
+  <div class="section-tabs-inner">
+    <div class="stab active" onclick="filterFeed('all')">All</div>
+    <div class="stab" onclick="filterFeed('recruiting')">Recruiting</div>
+    <div class="stab" onclick="filterFeed('mens')">Men's</div>
+    <div class="stab" onclick="filterFeed('womens')">Women's</div>
+    <div class="stab" onclick="filterFeed('transfer')">Transfer Portal</div>
+    <div class="stab" onclick="filterFeed('rankings')">Rankings</div>
+  </div>
+</div>
+
+<!-- AI SEARCH -->
+<div class="ai-search-section">
+  <div class="ai-search-inner">
+    <div class="ai-search-label">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;">
+        <circle cx="8" cy="8" r="7" stroke="#185FA5" stroke-width="1.5"/>
+        <path d="M8 5v3l2 2" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Ask CSD
+    </div>
+    <input class="ai-search-input" id="ai-search-input" placeholder="e.g. What are the top uncommitted goalkeepers in the 2026 class?" onkeydown="if(event.key==='Enter') askCSD()">
+    <button class="ai-search-btn" onclick="askCSD()">Ask →</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main" id="main-content">
+  <!-- NEWS FEED -->
+  <div>
+    <div class="ai-section-header">
+      <div class="section-title">Today's Stories</div>
+      <div class="ai-badge">AI-updated daily</div>
+    </div>
+
+    <div class="news-feed" id="news-feed">
+
+      <div class="news-card" data-category="recruiting" onclick="openArticle('class27-surge','Recruiting','Class of 2027 Early Commitments Are Surging — Is Your Player Behind?')">
+        <div class="news-card-top">
+          <span class="news-tag tag-recruiting">Recruiting</span>
+          <span class="news-time">Today, 8:00 AM</span>
+        </div>
+        <div class="news-title">Class of 2027 Early Commitments Are Surging — Is Your Player Behind?</div>
+        <div class="news-excerpt">D1 coaches are locking up 2027 players faster than any previous cycle. With spring showcases in full swing, we break down which positions are going first, which programs are most active, and what families need to do right now.</div>
+        <div class="news-footer">
+          <span class="news-author">By Marcus Rivera</span>
+          <span class="news-read">Read more →</span>
+        </div>
+      </div>
+
+      <div class="news-card" data-category="transfer" onclick="openArticle('portal-april','Transfer Portal','Spring Portal Window Closes April 25 — Who\'s Still Available')">
+        <div class="news-card-top">
+          <span class="news-tag tag-transfer">Transfer Portal</span>
+          <span class="news-time">Today, 6:30 AM</span>
+        </div>
+        <div class="news-title">Spring Transfer Portal Window Closes April 25 — The Players Still on the Board</div>
+        <div class="news-excerpt">With less than a week before the spring portal window shuts, programs scrambling to fill gaps are targeting a shrinking pool of available talent. Here are the impact players still unsigned and the programs most likely to land them.</div>
+        <div class="news-footer">
+          <span class="news-author">By Jen Park</span>
+          <span class="news-read">Read more →</span>
+        </div>
+      </div>
+
+      <div class="news-card" data-category="recruiting" onclick="openArticle('nil-explainer','Recruiting','How the House Settlement Changes College Soccer Scholarships')">
+        <div class="news-card-top">
+          <span class="news-tag tag-recruiting">NIL & Scholarships</span>
+          <span class="news-time">Yesterday</span>
+        </div>
+        <div class="news-title">How the House v. NCAA Settlement Changes College Soccer Scholarships for Every Family</div>
+        <div class="news-excerpt">Revenue sharing is now live at D1 programs. Every rostered player (up to 28) can now receive athletic aid — but that also means smaller individual scholarships at some programs. We explain what changed and how to evaluate offers differently in 2026.</div>
+        <div class="news-footer">
+          <span class="news-author">By the CSD Staff</span>
+          <span class="news-read">Read more →</span>
+        </div>
+      </div>
+
+      <div class="news-card" data-category="recruiting" onclick="openArticle('ecnl-phoenix','Showcases','Girls Academy Spring Showcase Phoenix — Standout Players')">
+        <div class="news-card-top">
+          <span class="news-tag tag-recruiting">Showcases</span>
+          <span class="news-time">Yesterday</span>
+        </div>
+        <div class="news-title">Girls Academy Spring Showcase Phoenix: The Standouts Coaches Were Tracking</div>
+        <div class="news-excerpt">The Girls Academy Spring Showcase in Phoenix wrapped up this weekend with D1 coaches out in force evaluating 2027 and 2028 prospects. We highlight the players who made the biggest impressions across all age groups.</div>
+        <div class="news-footer">
+          <span class="news-author">By Sarah Collins</span>
+          <span class="news-read">Read more →</span>
+        </div>
+      </div>
+
+      <div class="news-card" data-category="mens" onclick="openArticle('washington-spring','Men\'s','National Champion Washington Opens Spring Practice')">
+        <div class="news-card-top">
+          <span class="news-tag tag-mens">Men's</span>
+          <span class="news-time">2 days ago</span>
+        </div>
+        <div class="news-title">National Champion Washington Opens Spring Practice — A New Era Begins in Seattle</div>
+        <div class="news-excerpt">Fresh off their historic national title — fueled by a mostly in-state roster — the Washington Huskies held their first open spring practice. Coach Jamie Clark spoke about building the program's identity and what comes next for the defending champions.</div>
+        <div class="news-footer">
+          <span class="news-author">Staff Report</span>
+          <span class="news-read">Read more →</span>
+        </div>
+      </div>
+
+      <div class="news-card" data-category="recruiting" onclick="openArticle('recruiting-guide','Recruiting','The Complete Spring Recruiting Checklist for Soccer Families')">
+        <div class="news-card-top">
+          <span class="news-tag tag-recruiting">Parent Guide</span>
+          <span class="news-time">3 days ago</span>
+        </div>
+        <div class="news-title">Spring Recruiting Checklist: What Every Soccer Family Should Be Doing Right Now</div>
+        <div class="news-excerpt">Spring is the most important evaluation window of the year. From ECNL and GA showcases to coach emails and highlight film — here's the exact checklist every family should be working through in April and May.</div>
+        <div class="news-footer">
+          <span class="news-author">By the CSD Staff</span>
+          <span class="news-read">Read more →</span>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="ai-generate-btn" id="gen-btn" onclick="generateMoreNews()">
+      <div class="ai-spinner" id="gen-spinner"></div>
+      <span id="gen-btn-text">✦ Generate today's AI news briefing</span>
+    </button>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- Newsletter -->
+    <div class="newsletter">
+      <div class="newsletter-title">Daily Briefing</div>
+      <div class="newsletter-sub">Top college soccer stories delivered every morning. Free, forever.</div>
+      <input class="newsletter-input" placeholder="Your email address" id="nl-email">
+      <button class="newsletter-btn" onclick="subscribe()">Subscribe free →</button>
+    </div>
+
+    <!-- Commitments -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">
+        <div class="sidebar-card-title">Recent Commitments</div>
+        <div style="font-size:11px;color:var(--green);font-weight:600;">Class of 2027</div>
+      </div>
+      <div class="sidebar-card-body">
+        <div class="commit-item">
+          <div class="commit-avatar">LS</div>
+          <div class="commit-info">
+            <div class="commit-name">Luca Santana</div>
+            <div class="commit-school">→ Notre Dame · 2027</div>
+          </div>
+          <span class="commit-gender m">M</span>
+          <span class="commit-pos">MF</span>
+        </div>
+        <div class="commit-item">
+          <div class="commit-avatar" style="background:#EDE8FE;color:#3C3489;">KW</div>
+          <div class="commit-info">
+            <div class="commit-name">Kayla Washington</div>
+            <div class="commit-school">→ UCLA · 2027</div>
+          </div>
+          <span class="commit-gender w">W</span>
+          <span class="commit-pos">FW</span>
+        </div>
+        <div class="commit-item">
+          <div class="commit-avatar">BO</div>
+          <div class="commit-info">
+            <div class="commit-name">Ben O'Sullivan</div>
+            <div class="commit-school">→ Georgetown · 2027</div>
+          </div>
+          <span class="commit-gender m">M</span>
+          <span class="commit-pos">CB</span>
+        </div>
+        <div class="commit-item">
+          <div class="commit-avatar" style="background:#EDE8FE;color:#3C3489;">MR</div>
+          <div class="commit-info">
+            <div class="commit-name">Maya Reyes</div>
+            <div class="commit-school">→ Stanford · 2027</div>
+          </div>
+          <span class="commit-gender w">W</span>
+          <span class="commit-pos">GK</span>
+        </div>
+        <div class="commit-item">
+          <div class="commit-avatar">TP</div>
+          <div class="commit-info">
+            <div class="commit-name">Tyler Park</div>
+            <div class="commit-school">→ Wake Forest · 2027</div>
+          </div>
+          <span class="commit-gender m">M</span>
+          <span class="commit-pos">ST</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spring Showcase Calendar -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">
+        <div class="sidebar-card-title">Spring Showcase Calendar</div>
+        <div style="font-size:11px;color:var(--blue);font-weight:600;">April–June</div>
+      </div>
+      <div class="sidebar-card-body">
+        <div class="portal-item">
+          <div class="portal-name">ECNL Boys — Indianapolis</div>
+          <div class="portal-meta">April 17–20 · U14–U19</div>
+          <div class="portal-from">Ongoing this weekend</div>
+        </div>
+        <div class="portal-item">
+          <div class="portal-name">Girls Academy Spring Showcase</div>
+          <div class="portal-meta">April 10–13 · Phoenix, AZ</div>
+          <div class="portal-from">Results posted</div>
+        </div>
+        <div class="portal-item">
+          <div class="portal-name">ECNL Girls — TX Playoffs</div>
+          <div class="portal-meta">May 8–11 · Frisco, TX</div>
+          <div class="portal-from">Registration open</div>
+        </div>
+        <div class="portal-item">
+          <div class="portal-name">MLS Next Playoffs</div>
+          <div class="portal-meta">June 5–15 · Nationwide</div>
+          <div class="portal-from">Bracket TBD</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transfer Portal -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">
+        <div class="sidebar-card-title">Transfer Portal — Spring Window</div>
+        <div style="font-size:11px;color:var(--amber);font-weight:600;">Closes Apr 25</div>
+      </div>
+      <div class="sidebar-card-body">
+        <div class="portal-item">
+          <div class="portal-name">Theo Barnes · MF</div>
+          <div class="portal-meta">Virginia → Available</div>
+          <div class="portal-from">All-ACC · 8G 11A last season</div>
+        </div>
+        <div class="portal-item">
+          <div class="portal-name">Sofia Reyes · FW</div>
+          <div class="portal-meta">Florida → Available</div>
+          <div class="portal-from">SEC All-Freshman · 12G</div>
+        </div>
+        <div class="portal-item">
+          <div class="portal-name">Jake Moreno · CB</div>
+          <div class="portal-meta">Louisville → Available</div>
+          <div class="portal-from">2-year starter · 3.8 GPA</div>
+        </div>
+        <div class="portal-item">
+          <div class="portal-name">Maya Chen · GK</div>
+          <div class="portal-meta">Oregon → Available</div>
+          <div class="portal-from">0.72 GAA · Pac-12 All-Conf</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- RECRUITING SECTION -->
+<div class="section-divider">
+  <div class="section-divider-line"></div>
+  <div class="section-divider-label">Recruiting Spotlight</div>
+  <div class="section-divider-line"></div>
+</div>
+
+<div class="recruiting-section">
+  <div class="rec-grid">
+    <div class="rec-card" onclick="openArticle('player-santana','Recruiting','Luca Santana — MF Profile')">
+      <div class="rec-card-top">
+        <div class="rec-player-name">Luca Santana</div>
+        <div class="rec-class">Class of 2027</div>
+      </div>
+      <div class="rec-details">
+        <div class="rec-detail"><span class="rec-detail-label">Position</span><span class="rec-detail-val">Midfielder</span></div>
+        <div class="rec-detail"><span class="rec-detail-label">State</span><span class="rec-detail-val">New Jersey</span></div>
+        <div class="rec-detail"><span class="rec-detail-label">Club</span><span class="rec-detail-val">NY Red Bulls Academy</span></div>
+        <div class="rec-detail"><span class="rec-detail-label">Gender</span><span class="rec-detail-val">Men's</span></div>
+      </div>
+      <div class="rec-status"><span class="rec-status-badge status-committed">Committed — Notre Dame</span></div>
+    </div>
+    <div class="rec-card" onclick="openArticle('player-washington','Recruiting','Kayla Washington — FW Profile')">
+      <div class="rec-card-top">
+        <div class="rec-player-name">Kayla Washington</div>
+        <div class="rec-class">Class of 2027</div>
+      </div>
+      <div class="rec-details">
+        <div class="rec-detail"><span class="rec-detail-label">Position</span><span class="rec-detail-val">Forward</span></div>
+        <div class="rec-detail"><span class="rec-detail-label">State</span><span class="rec-detail-val">Georgia</span></div>
+        <div class="rec-detail"><span class="rec-detail-label">Club</span><span class="rec-detail-val">Atlanta Fire ECNL</span></div>
+        <div class="rec-detail"><span class="rec-detail-label">Gender</span><span class="rec-detail-val">Women's</span></div>
+      </div>
+      <div class="rec-status"><span class="rec-status-badge status-committed">Committed — UCLA</span></div>
+    </div>
+    <div class="rec-card" onclick="openArticle('player-chen','Recruiting','Devin Chen — CB Profile')">
+      <div class="rec-card-top">
+        <div class="rec-player-name">Devin Chen</div>
+        <div class="rec-class">Class of 2027</div>
+      </div>
+      <div class="rec-details">
+        <div class="rec-detail"><span class="rec-detail-label">Position</span><span class="rec-detail-val">Center Back</span></div>
+        <div class="rec-detail"><span class="rec-detail-label">State</span><span class="rec-detail-val">California</span></div>
+        <div class="rec-detail"><span class="rec-detail-label">Club</span><span class="rec-detail-val">LAFC Academy</span></div>
+        <div class="rec-detail"><span class="rec-detail-label">Gender</span><span class="rec-detail-val">Men's</span></div>
+      </div>
+      <div class="rec-status"><span class="rec-status-badge status-uncommitted">Uncommitted — Multiple D1 Offers</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">College Soccer <span>Daily</span></div>
+    <div class="footer-tagline">Your daily college soccer source — news, recruiting, rankings & more.</div>
+    <div class="footer-links">
+      <a class="footer-link" href="#">News</a>
+      <a class="footer-link" href="#">Recruiting</a>
+      <a class="footer-link" href="#">Rankings</a>
+      <a class="footer-link" href="#">Transfer Portal</a>
+      <a class="footer-link" href="#">Programs</a>
+      <a class="footer-link" href="#">Newsletter</a>
+      <a class="footer-link" href="#">About</a>
+      <a class="footer-link" href="#">Contact</a>
+    </div>
+    <div class="footer-bottom">© 2026 College Soccer Daily · Built for players, parents & coaches</div>
+  </div>
+</footer>
+
+<!-- ARTICLE MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header" id="modal-header">
+      <div class="modal-tag" id="modal-tag"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-meta" id="modal-meta">College Soccer Daily Staff · Just now</div>
+    </div>
+    <div id="modal-body-wrap">
+      <div class="modal-loading" id="modal-loading">
+        <div class="modal-loading-spinner"></div>
+        <div class="modal-loading-text">Generating full article with AI...</div>
+      </div>
+      <div class="modal-body" id="modal-body" style="display:none;"></div>
+    </div>
+    <button class="modal-close" onclick="closeModalDirect()">✕ Close article</button>
+  </div>
+</div>
+
+<script>
+  // API key management
+  let API_KEY = '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';
+  if (API_KEY) {
+    document.getElementById('api-key-bar').style.display = 'none';
+    document.getElementById('api-key-input').value = API_KEY;
+  }
+  function saveKey() {
+    const k = document.getElementById('api-key-input').value.trim();
+    if (!k.startsWith('sk-')) { alert('That doesn\'t look like a valid API key. It should start with sk-ant-...'); return; }
+    API_KEY = k;
+    localStorage.setItem('csd_api_key', k);
+    document.getElementById('api-key-bar').style.display = 'none';
+    alert('API key saved! Click any article to read it.');
+  }
+
+  // Set today's date
+  const now = new Date();
+  document.getElementById('nav-date').textContent = now.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+
+  // Tab navigation
+  function showTab(tab) {
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  // Feed filter
+  function filterFeed(cat) {
+    document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    document.querySelectorAll('.news-card').forEach(card => {
+      if (cat === 'all' || card.dataset.category === cat) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // Article modal
+  let currentTitle = '';
+  let currentTag = '';
+
+  async function openArticle(id, tag, title) {
+    currentTitle = title;
+    currentTag = tag;
+    document.getElementById('modal-tag').textContent = tag;
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-meta').textContent = 'College Soccer Daily Staff · ' + now.toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
+    document.getElementById('modal-loading').style.display = 'block';
+    document.getElementById('modal-body').style.display = 'none';
+    document.getElementById('modal-body').innerHTML = '';
+    document.getElementById('modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    await fetchArticle(tag, title);
+  }
+
+  async function fetchArticle(tag, title) {
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': API_KEY,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: `You are the lead writer for College Soccer Daily, a trusted daily news source for the college soccer world. Your audience is players (recruits), parents, and coaches. Write in a clear, informative, credible tone — like ESPN meets a knowledgeable soccer insider.
+
+CRITICAL CONTEXT: It is currently April 2026 — the spring OFFSEASON. College soccer seasons (fall) are over. Washington won the 2025 men's national title. The current news cycle is: spring transfer portal window (closes April 25), Class of 2027 early recruiting commitments, ECNL and Girls Academy spring showcases, spring team practices, NIL/House settlement impacts, and coaches evaluating prospects. Do NOT write about active match results, rankings, or NCAA tournaments — those happen in fall. Stay seasonally accurate.
+
+Write a full article (4-6 paragraphs) for the given headline. Include realistic details. Format as HTML paragraphs only using <p> and <strong> tags. No markdown. Start directly with the article content, no title needed.`,
+          messages: [{ role: 'user', content: `Write a full article for College Soccer Daily with this headline:\n\nSection: ${tag}\nHeadline: ${title}\n\nWrite 4-6 substantive paragraphs with realistic college soccer details. Use <p> and <strong> HTML tags only.` }]
+        })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message);
+      const text = data.content?.map(b => b.text || '').join('') || 'Unable to load article.';
+      document.getElementById('modal-loading').style.display = 'none';
+      document.getElementById('modal-body').innerHTML = text;
+      document.getElementById('modal-body').style.display = 'block';
+    } catch(e) {
+      document.getElementById('modal-loading').style.display = 'none';
+      document.getElementById('modal-body').innerHTML = `<p style="color:var(--text-muted)">⚠️ To load AI articles, open this file in a browser and add your Anthropic API key where it says <code>ANTHROPIC_API_KEY</code> in the script. Get one free at <a href="https://console.anthropic.com" style="color:var(--blue)">console.anthropic.com</a>.</p>`;
+      document.getElementById('modal-body').style.display = 'block';
+    }
+  }
+
+  function closeModal(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
+  }
+  function closeModalDirect() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Generate more news
+  async function generateMoreNews() {
+    const btn = document.getElementById('gen-btn');
+    const spinner = document.getElementById('gen-spinner');
+    const btnText = document.getElementById('gen-btn-text');
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnText.textContent = 'Generating today\'s briefing...';
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': API_KEY,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: 'You are an editor for College Soccer Daily. It is April 2026 — the college soccer spring offseason. Generate 3 college soccer news stories relevant RIGHT NOW: spring transfer portal (closes April 25), Class of 2027 recruiting commitments, ECNL/GA spring showcases, spring practices, NIL/House settlement, coaching changes. NO fall season content, no match rankings, no tournament brackets. Return ONLY a JSON array with no markdown code fences. Each object has: tag (e.g. Recruiting, Transfer Portal, Men\'s, Women\'s, Showcases, NIL), title (headline string), excerpt (2-sentence summary string), author (name string), time (e.g. "1h ago"), category (one of: recruiting, transfer, mens, womens, rankings).',
+          messages: [{ role: 'user', content: `Generate 3 fresh spring offseason college soccer news headlines for ${now.toDateString()}. Mix recruiting, portal, showcase, and NIL topics. Return only a raw JSON array.` }]
+        })
+      });
+      const data = await res.json();
+      let raw = data.content?.map(b => b.text || '').join('') || '[]';
+      raw = raw.replace(/```json|```/g, '').trim();
+      const stories = JSON.parse(raw);
+      const feed = document.getElementById('news-feed');
+      stories.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        card.dataset.category = s.category || 'news';
+        card.onclick = () => openArticle(s.category, s.tag, s.title);
+        card.innerHTML = `
+          <div class="news-card-top">
+            <span class="news-tag tag-${s.category || 'news'}">${s.tag}</span>
+            <span class="news-time">${s.time}</span>
+          </div>
+          <div class="news-title">${s.title}</div>
+          <div class="news-excerpt">${s.excerpt}</div>
+          <div class="news-footer">
+            <span class="news-author">By ${s.author}</span>
+            <span class="news-read">Read more →</span>
+          </div>`;
+        feed.appendChild(card);
+      });
+      btnText.textContent = '✦ Generate more stories';
+    } catch(e) {
+      btnText.textContent = '✦ Try again';
+    }
+    btn.disabled = false;
+    spinner.style.display = 'none';
+  }
+
+  // Ask CSD AI
+  async function askCSD() {
+    const input = document.getElementById('ai-search-input');
+    const q = input.value.trim();
+    if (!q) return;
+    await openArticle('ask-csd', 'Ask CSD', q);
+    input.value = '';
+  }
+
+  // Newsletter
+  function subscribe() {
+    const email = document.getElementById('nl-email').value.trim();
+    if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return; }
+    document.querySelector('.newsletter-btn').textContent = '✓ You\'re subscribed!';
+    document.getElementById('nl-email').value = '';
+  }
+</script>
+</body>
+</html>
