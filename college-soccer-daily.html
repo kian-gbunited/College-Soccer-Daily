@@ -4,1302 +4,643 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>College Soccer Daily</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy: #042C53;
-    --navy-mid: #0C4478;
-    --blue: #185FA5;
-    --blue-light: #E6F1FB;
-    --green: #3B6D11;
-    --green-mid: #639922;
-    --field: #97C459;
-    --field-light: #EAF3DE;
-    --chalk: #F4F2EB;
-    --amber: #BA7517;
-    --amber-light: #FAEEDA;
-    --white: #ffffff;
-    --gray-50: #F8F7F4;
-    --gray-100: #EBEBEB;
-    --gray-300: #C0BFBA;
-    --gray-500: #888780;
-    --gray-700: #444441;
-    --gray-900: #1A1A18;
-    --text: #1A1A18;
-    --text-muted: #5F5E5A;
-    --text-faint: #888780;
-    --border: rgba(0,0,0,0.08);
-    --border-strong: rgba(0,0,0,0.15);
-    --radius: 10px;
-    --radius-lg: 16px;
-    --font-display: 'Playfair Display', Georgia, serif;
-    --font-body: 'DM Sans', sans-serif;
-    --font-mono: 'DM Mono', monospace;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: var(--font-body);
-    background: var(--chalk);
-    color: var(--text);
-    font-size: 15px;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
-
-  a { text-decoration: none; color: inherit; }
-
-  /* ── TICKER ── */
-  .ticker {
-    background: var(--navy);
-    padding: 9px 0;
-    overflow: hidden;
-    border-bottom: 2px solid var(--field);
-  }
-  .ticker-inner {
-    display: flex;
-    gap: 0;
-    animation: ticker 40s linear infinite;
-    white-space: nowrap;
-    width: max-content;
-  }
-  .ticker-inner:hover { animation-play-state: paused; }
-  .ticker-item {
-    font-size: 12px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.85);
-    padding: 0 36px;
-    letter-spacing: 0.2px;
-  }
-  .ticker-item::before {
-    content: "●";
-    color: var(--field);
-    margin-right: 12px;
-    font-size: 8px;
-    vertical-align: middle;
-  }
-  @keyframes ticker {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  /* ── NAV ── */
-  nav {
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .nav-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    height: 60px;
-    gap: 32px;
-  }
-  .nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-  }
-  .nav-logo-icon {
-    width: 36px;
-    height: 36px;
-    background: var(--navy);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .nav-logo-text {
-    font-family: var(--font-display);
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--navy);
-    line-height: 1;
-  }
-  .nav-logo-text span { color: var(--green); }
-  .nav-links {
-    display: flex;
-    gap: 4px;
-    flex: 1;
-  }
-  .nav-link {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-muted);
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .nav-link:hover, .nav-link.active {
-    color: var(--navy);
-    background: var(--blue-light);
-  }
-  .nav-link.active { color: var(--blue); }
-  .nav-right { display: flex; align-items: center; gap: 10px; }
-  .nav-date {
-    font-size: 12px;
-    color: var(--text-faint);
-    font-family: var(--font-mono);
-  }
-  .nav-search {
-    background: var(--chalk);
-    border: 1px solid var(--border-strong);
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 13px;
-    font-family: var(--font-body);
-    color: var(--text);
-    width: 180px;
-    outline: none;
-  }
-  .nav-search:focus { border-color: var(--blue); }
-
-  /* ── HERO ── */
-  .hero {
-    background: var(--navy);
-    padding: 0;
-    overflow: hidden;
-  }
-  .hero-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 48px 24px;
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 48px;
-    align-items: center;
-  }
-  .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--field);
-    color: var(--navy);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 12px;
-    border-radius: 20px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-  .hero-title {
-    font-family: var(--font-display);
-    font-size: 42px;
-    font-weight: 900;
-    color: var(--white);
-    line-height: 1.15;
-    margin-bottom: 16px;
-    letter-spacing: -0.5px;
-  }
-  .hero-excerpt {
-    font-size: 16px;
-    color: rgba(255,255,255,0.65);
-    line-height: 1.7;
-    margin-bottom: 24px;
-    max-width: 520px;
-  }
-  .hero-meta {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.45);
-  }
-  .hero-meta span { color: rgba(255,255,255,0.65); }
-  .hero-read-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--field);
-    color: var(--navy);
-    font-size: 14px;
-    font-weight: 600;
-    padding: 12px 24px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.15s;
-    margin-top: 20px;
-  }
-  .hero-read-btn:hover { background: #a8d468; transform: translateY(-1px); }
-  .hero-sidebar-stories { display: flex; flex-direction: column; gap: 0; }
-  .hero-side-story {
-    padding: 16px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    cursor: pointer;
-  }
-  .hero-side-story:last-child { border-bottom: none; }
-  .hero-side-tag {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--field);
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-  }
-  .hero-side-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.85);
-    line-height: 1.4;
-  }
-  .hero-side-title:hover { color: var(--field); }
-  .hero-side-meta {
-    font-size: 11px;
-    color: rgba(255,255,255,0.35);
-    margin-top: 5px;
-  }
-
-  /* ── SECTION TABS ── */
-  .section-tabs {
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-  }
-  .section-tabs-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    display: flex;
-    gap: 0;
-    overflow-x: auto;
-  }
-  .stab {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-muted);
-    padding: 14px 18px;
-    border-bottom: 2px solid transparent;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.15s;
-  }
-  .stab:hover { color: var(--navy); }
-  .stab.active { color: var(--blue); border-bottom-color: var(--blue); }
-
-  /* ── MAIN LAYOUT ── */
-  .main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 32px 24px;
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 32px;
-  }
-
-  /* ── AI NEWS SECTION ── */
-  .ai-section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  .section-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-muted);
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-  }
-  .ai-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: var(--field-light);
-    color: var(--green);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 20px;
-    letter-spacing: 0.3px;
-  }
-  .ai-badge::before {
-    content: "";
-    width: 6px;
-    height: 6px;
-    background: var(--green-mid);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  /* ── NEWS CARDS ── */
-  .news-feed { display: flex; flex-direction: column; gap: 16px; }
-  .news-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 22px 24px;
-    transition: all 0.2s;
-    cursor: pointer;
-  }
-  .news-card:hover {
-    border-color: var(--blue);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(4,44,83,0.08);
-  }
-  .news-card-top {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-  .news-tag {
-    font-size: 10px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 20px;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-  }
-  .tag-recruiting { background: var(--field-light); color: var(--green); }
-  .tag-news { background: var(--blue-light); color: var(--navy-mid); }
-  .tag-transfer { background: var(--amber-light); color: var(--amber); }
-  .tag-rankings { background: #FBEAF0; color: #72243E; }
-  .tag-womens { background: #EDE8FE; color: #3C3489; }
-  .tag-mens { background: var(--blue-light); color: var(--blue); }
-  .news-time { font-size: 11px; color: var(--text-faint); font-family: var(--font-mono); }
-  .news-title {
-    font-family: var(--font-display);
-    font-size: 19px;
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1.35;
-    margin-bottom: 8px;
-  }
-  .news-excerpt {
-    font-size: 14px;
-    color: var(--text-muted);
-    line-height: 1.65;
-    margin-bottom: 14px;
-  }
-  .news-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .news-author { font-size: 12px; color: var(--text-faint); }
-  .news-read { font-size: 12px; font-weight: 600; color: var(--blue); }
-
-  /* AI generate button */
-  .ai-generate-btn {
-    width: 100%;
-    background: var(--navy);
-    color: var(--white);
-    border: none;
-    border-radius: var(--radius);
-    padding: 14px;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: var(--font-body);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: all 0.15s;
-    margin-top: 8px;
-  }
-  .ai-generate-btn:hover { background: var(--navy-mid); }
-  .ai-generate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-  .ai-spinner {
-    width: 16px; height: 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    display: none;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ── AI ARTICLE MODAL ── */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(4,44,83,0.7);
-    z-index: 200;
-    overflow-y: auto;
-    padding: 40px 20px;
-  }
-  .modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
-  .modal {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    max-width: 720px;
-    width: 100%;
-    overflow: hidden;
-    animation: modalIn 0.2s ease;
-  }
-  @keyframes modalIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-  .modal-header {
-    background: var(--navy);
-    padding: 24px 28px;
-  }
-  .modal-tag { display: inline-block; background: var(--field); color: var(--navy); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; margin-bottom: 12px; }
-  .modal-title { font-family: var(--font-display); font-size: 26px; font-weight: 900; color: var(--white); line-height: 1.25; }
-  .modal-meta { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 10px; }
-  .modal-body { padding: 28px; }
-  .modal-body p { font-size: 15px; line-height: 1.8; color: var(--text-muted); margin-bottom: 16px; }
-  .modal-body p strong { color: var(--text); font-weight: 600; }
-  .modal-loading { padding: 48px 28px; text-align: center; }
-  .modal-loading-spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
-  .modal-loading-text { font-size: 14px; color: var(--text-muted); }
-  .modal-close {
-    display: flex; align-items: center; justify-content: center;
-    width: 100%; padding: 14px;
-    background: var(--chalk);
-    border: none; border-top: 1px solid var(--border);
-    font-size: 13px; font-weight: 600; color: var(--text-muted);
-    cursor: pointer; font-family: var(--font-body);
-  }
-  .modal-close:hover { background: var(--gray-100); color: var(--text); }
-
-  /* ── SIDEBAR ── */
-  .sidebar { display: flex; flex-direction: column; gap: 20px; }
-  .sidebar-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-  .sidebar-card-header {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .sidebar-card-title { font-size: 12px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
-  .sidebar-card-body { padding: 4px 0; }
-
-  /* Commitments */
-  .commit-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 18px;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background 0.1s;
-  }
-  .commit-item:last-child { border-bottom: none; }
-  .commit-item:hover { background: var(--gray-50); }
-  .commit-avatar {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: var(--blue-light);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 600; color: var(--blue);
-    flex-shrink: 0;
-  }
-  .commit-info { flex: 1; }
-  .commit-name { font-size: 13px; font-weight: 600; color: var(--text); }
-  .commit-school { font-size: 12px; color: var(--text-muted); }
-  .commit-pos {
-    font-size: 10px; font-weight: 600;
-    background: var(--field-light); color: var(--green);
-    padding: 3px 8px; border-radius: 20px;
-  }
-  .commit-gender {
-    font-size: 10px; font-weight: 600;
-    padding: 3px 8px; border-radius: 20px;
-    margin-right: 4px;
-  }
-  .commit-gender.m { background: var(--blue-light); color: var(--blue); }
-  .commit-gender.w { background: #EDE8FE; color: #3C3489; }
-
-  /* Rankings */
-  .rank-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 18px;
-    border-bottom: 1px solid var(--border);
-    transition: background 0.1s;
-    cursor: pointer;
-  }
-  .rank-row:last-child { border-bottom: none; }
-  .rank-row:hover { background: var(--gray-50); }
-  .rank-num { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--text-faint); width: 22px; }
-  .rank-num.top3 { color: var(--amber); font-weight: 600; }
-  .rank-name { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; }
-  .rank-conf { font-size: 11px; color: var(--text-faint); }
-  .rank-record { font-size: 12px; font-family: var(--font-mono); color: var(--text-muted); }
-  .rank-move { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
-  .move-up { background: var(--field-light); color: var(--green); }
-  .move-down { background: #FCEBEB; color: #A32D2D; }
-  .move-same { background: var(--gray-100); color: var(--gray-500); }
-
-  /* Newsletter */
-  .newsletter { background: var(--navy); border-radius: var(--radius-lg); padding: 22px 20px; }
-  .newsletter-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
-  .newsletter-sub { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 16px; line-height: 1.5; }
-  .newsletter-input {
-    width: 100%; background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 8px; padding: 10px 14px;
-    font-size: 13px; color: white; font-family: var(--font-body);
-    outline: none; margin-bottom: 10px;
-  }
-  .newsletter-input::placeholder { color: rgba(255,255,255,0.35); }
-  .newsletter-input:focus { border-color: var(--field); }
-  .newsletter-btn {
-    width: 100%; background: var(--field); color: var(--navy);
-    border: none; border-radius: 8px; padding: 11px;
-    font-size: 13px; font-weight: 700; font-family: var(--font-body);
-    cursor: pointer; transition: background 0.15s;
-  }
-  .newsletter-btn:hover { background: #a8d468; }
-
-  /* Portal tracker */
-  .portal-item {
-    padding: 12px 18px;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background 0.1s;
-  }
-  .portal-item:last-child { border-bottom: none; }
-  .portal-item:hover { background: var(--gray-50); }
-  .portal-name { font-size: 13px; font-weight: 600; color: var(--text); }
-  .portal-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-  .portal-from { font-size: 11px; color: var(--text-faint); margin-top: 3px; }
-
-  /* ── RECRUITING SECTION ── */
-  .recruiting-section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px 40px;
-  }
-  .rec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
-  .rec-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .rec-card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(59,109,17,0.1); }
-  .rec-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
-  .rec-player-name { font-size: 16px; font-weight: 600; color: var(--text); }
-  .rec-class { font-size: 11px; font-weight: 600; background: var(--chalk); color: var(--text-muted); padding: 3px 9px; border-radius: 20px; }
-  .rec-details { display: flex; flex-direction: column; gap: 5px; }
-  .rec-detail { display: flex; justify-content: space-between; font-size: 13px; }
-  .rec-detail-label { color: var(--text-faint); }
-  .rec-detail-val { color: var(--text); font-weight: 500; }
-  .rec-status { margin-top: 12px; }
-  .rec-status-badge {
-    font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px;
-  }
-  .status-committed { background: var(--field-light); color: var(--green); }
-  .status-uncommitted { background: var(--blue-light); color: var(--blue); }
-  .status-verbal { background: var(--amber-light); color: var(--amber); }
-
-  /* ── FOOTER ── */
-  footer {
-    background: var(--navy);
-    padding: 40px 24px;
-    margin-top: 0;
-  }
-  .footer-inner { max-width: 1200px; margin: 0 auto; }
-  .footer-logo { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
-  .footer-logo span { color: var(--field); }
-  .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 24px; }
-  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
-  .footer-link { font-size: 13px; color: rgba(255,255,255,0.5); transition: color 0.15s; }
-  .footer-link:hover { color: var(--field); }
-  .footer-bottom { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 12px; color: rgba(255,255,255,0.25); }
-
-  /* ── AI SEARCH BAR ── */
-  .ai-search-section {
-    background: var(--white);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 20px 0;
-  }
-  .ai-search-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-  .ai-search-label { font-size: 13px; font-weight: 600; color: var(--navy); white-space: nowrap; display: flex; align-items: center; gap: 8px; }
-  .ai-search-input {
-    flex: 1;
-    border: 1px solid var(--border-strong);
-    border-radius: 8px;
-    padding: 10px 16px;
-    font-size: 14px;
-    font-family: var(--font-body);
-    color: var(--text);
-    background: var(--chalk);
-    outline: none;
-  }
-  .ai-search-input:focus { border-color: var(--blue); background: white; }
-  .ai-search-btn {
-    background: var(--blue);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 13px;
-    font-weight: 600;
-    font-family: var(--font-body);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.15s;
-  }
-  .ai-search-btn:hover { background: var(--navy); }
-
-  /* ── SECTION DIVIDER ── */
-  .section-divider {
-    max-width: 1200px;
-    margin: 0 auto 24px;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .section-divider-line { flex: 1; height: 1px; background: var(--border); }
-  .section-divider-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-
-  @media (max-width: 768px) {
-    .hero-inner { grid-template-columns: 1fr; }
-    .hero-sidebar-stories { display: none; }
-    .main { grid-template-columns: 1fr; }
-    .rec-grid { grid-template-columns: 1fr; }
-    .hero-title { font-size: 28px; }
-    .nav-links { display: none; }
-  }
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#042C53;--blue:#185FA5;--blue-light:#E6F1FB;
+  --green:#3B6D11;--field:#97C459;--field-light:#EAF3DE;
+  --chalk:#F4F2EB;--amber:#BA7517;--amber-light:#FAEEDA;
+  --white:#fff;--gray50:#F8F7F4;--gray100:#EBEBEB;
+  --text:#1A1A18;--muted:#5F5E5A;--faint:#888780;
+  --border:rgba(0,0,0,0.08);--rl:16px;--r:10px;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+}
+body{font-family:var(--sans);background:var(--chalk);color:var(--text);font-size:15px;line-height:1.6;}
+button{font-family:var(--sans);cursor:pointer;}
+.ticker{background:var(--navy);border-bottom:2px solid var(--field);padding:9px 0;overflow:hidden;}
+.ticker-track{display:flex;width:max-content;animation:tick 55s linear infinite;}
+.ticker-track:hover{animation-play-state:paused;}
+.t-item{font-size:12px;font-weight:500;color:rgba(255,255,255,0.82);padding:0 44px;white-space:nowrap;}
+.t-item::before{content:"●";color:var(--field);margin-right:12px;font-size:8px;vertical-align:middle;}
+@keyframes tick{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;}
+.nav-inner{max-width:1160px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:60px;gap:28px;}
+.logo{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--navy);flex-shrink:0;cursor:pointer;}
+.logo span{color:var(--green);}
+.nav-links{display:flex;gap:2px;flex:1;}
+.nav-btn{background:none;border:none;font-size:13px;font-weight:500;color:var(--muted);padding:7px 13px;border-radius:6px;transition:all .15s;}
+.nav-btn:hover,.nav-btn.active{color:var(--blue);background:var(--blue-light);}
+.nav-date{font-size:12px;color:var(--faint);font-family:monospace;flex-shrink:0;}
+.page{display:none;}.page.active{display:block;}
+.hero{background:var(--navy);padding:48px 24px;}
+.hero-inner{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:1fr 300px;gap:52px;align-items:start;}
+.hero-tag{display:inline-block;background:var(--field);color:var(--navy);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;}
+.hero-title{font-family:var(--serif);font-size:38px;font-weight:900;color:var(--white);line-height:1.15;margin-bottom:22px;letter-spacing:-.3px;}
+.hero-readbtn{background:var(--field);color:var(--navy);border:none;border-radius:8px;padding:13px 26px;font-size:14px;font-weight:700;transition:background .15s;}
+.hero-readbtn:hover{background:#a8d468;}
+.side-story{padding:16px 0;border-bottom:1px solid rgba(255,255,255,.08);cursor:pointer;}
+.side-story:last-child{border-bottom:none;padding-bottom:0;}
+.side-tag{font-size:10px;font-weight:700;color:var(--field);letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px;}
+.side-title{font-size:14px;font-weight:500;color:rgba(255,255,255,.84);line-height:1.45;transition:color .15s;}
+.side-story:hover .side-title{color:var(--field);}
+.side-meta{font-size:11px;color:rgba(255,255,255,.32);margin-top:5px;}
+.section-tabs{background:var(--white);border-bottom:1px solid var(--border);}
+.tabs-inner{max-width:1160px;margin:0 auto;padding:0 24px;display:flex;overflow-x:auto;}
+.stab{background:none;border:none;font-size:13px;font-weight:500;color:var(--muted);padding:14px 18px;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;}
+.stab:hover{color:var(--navy);}
+.stab.active{color:var(--blue);border-bottom-color:var(--blue);}
+.main{max-width:1160px;margin:0 auto;padding:32px 24px;display:grid;grid-template-columns:1fr 300px;gap:32px;}
+.feed{display:flex;flex-direction:column;gap:18px;}
+.news-card{background:var(--white);border:1px solid var(--border);border-radius:var(--rl);padding:24px 26px;cursor:pointer;transition:all .18s;}
+.news-card:hover{border-color:var(--blue);transform:translateY(-1px);box-shadow:0 4px 20px rgba(4,44,83,.07);}
+.card-top{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.card-tag{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.4px;text-transform:uppercase;}
+.tag-r{background:var(--field-light);color:#27500A;}
+.tag-t{background:var(--amber-light);color:#633806;}
+.tag-m{background:var(--blue-light);color:#0C447C;}
+.tag-w{background:#EDE8FE;color:#3C3489;}
+.tag-g{background:var(--field-light);color:var(--green);}
+.card-time{font-size:11px;color:var(--faint);font-family:monospace;}
+.card-title{font-family:var(--serif);font-size:21px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:10px;}
+.card-excerpt{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px;}
+.card-footer{display:flex;justify-content:space-between;align-items:center;}
+.card-author{font-size:12px;color:var(--faint);}
+.card-read{font-size:12px;font-weight:700;color:var(--blue);}
+.sidebar{display:flex;flex-direction:column;gap:18px;}
+.sb-card{background:var(--white);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;}
+.sb-head{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.sb-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;}
+.sb-badge{font-size:11px;font-weight:600;}
+.sb-row{padding:12px 18px;border-bottom:1px solid var(--border);}
+.sb-row:last-child{border-bottom:none;}
+.sb-row-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.sb-row-sub{font-size:12px;color:var(--muted);}
+.sb-row-note{font-size:11px;color:var(--faint);margin-top:2px;}
+.placeholder-row{padding:14px 18px;font-size:13px;color:var(--faint);font-style:italic;text-align:center;background:var(--gray50);}
+.newsletter{background:var(--navy);border-radius:var(--rl);padding:24px 20px;}
+.nl-title{font-family:var(--serif);font-size:21px;font-weight:700;color:var(--white);margin-bottom:6px;}
+.nl-sub{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:18px;line-height:1.55;}
+.nl-input{width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:11px 14px;font-size:13px;color:var(--white);font-family:var(--sans);outline:none;margin-bottom:10px;}
+.nl-input::placeholder{color:rgba(255,255,255,.32);}
+.nl-btn{width:100%;background:var(--field);color:var(--navy);border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;transition:background .15s;}
+.nl-btn:hover{background:#a8d468;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(4,44,83,.78);z-index:500;overflow-y:auto;padding:40px 16px;}
+.modal-overlay.open{display:flex;align-items:flex-start;justify-content:center;}
+.modal{background:var(--white);border-radius:var(--rl);max-width:760px;width:100%;animation:mIn .2s ease;}
+@keyframes mIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.modal-hd{background:var(--navy);padding:28px 32px;}
+.modal-pill{display:inline-block;background:var(--field);color:var(--navy);font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;text-transform:uppercase;margin-bottom:14px;}
+.modal-title{font-family:var(--serif);font-size:28px;font-weight:900;color:var(--white);line-height:1.2;}
+.modal-meta{font-size:12px;color:rgba(255,255,255,.38);margin-top:12px;}
+.modal-body{padding:32px;}
+.modal-body p{font-size:16px;line-height:1.9;color:var(--muted);margin-bottom:20px;}
+.modal-body p:last-child{margin-bottom:0;}
+.modal-body strong{color:var(--text);font-weight:600;}
+.modal-body h3{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--text);margin:28px 0 12px;}
+.modal-close{width:100%;padding:15px;background:var(--chalk);border:none;border-top:1px solid var(--border);font-size:13px;font-weight:600;color:var(--muted);transition:background .15s;}
+.modal-close:hover{background:var(--gray100);color:var(--text);}
+.page-hero{background:var(--navy);padding:40px 24px;}
+.page-hero-inner{max-width:1160px;margin:0 auto;}
+.page-hero h1{font-family:var(--serif);font-size:34px;font-weight:900;color:var(--white);margin-bottom:10px;}
+.page-hero p{font-size:15px;color:rgba(255,255,255,.55);max-width:600px;line-height:1.65;}
+.page-content{max-width:1160px;margin:0 auto;padding:36px 24px;}
+.sec-label{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.guide-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+.guide-card{background:var(--white);border:1px solid var(--border);border-radius:var(--rl);padding:24px;cursor:pointer;transition:all .18s;}
+.guide-card:hover{border-color:var(--blue);transform:translateY(-1px);box-shadow:0 4px 16px rgba(4,44,83,.07);}
+.guide-num{font-family:var(--serif);font-size:38px;font-weight:900;color:var(--field);margin-bottom:10px;line-height:1;}
+.guide-title{font-size:17px;font-weight:700;color:var(--text);}
+.guide-desc{font-size:14px;color:var(--muted);line-height:1.65;margin-top:8px;}
+.rank-table{background:var(--white);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:28px;}
+.rank-hd{background:var(--navy);padding:14px 22px;display:grid;grid-template-columns:52px 1fr 130px 90px 70px;gap:12px;}
+.rank-th{font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;}
+.rank-row{display:grid;grid-template-columns:52px 1fr 130px 90px 70px;gap:12px;align-items:center;padding:14px 22px;border-bottom:1px solid var(--border);transition:background .1s;}
+.rank-row:last-child{border-bottom:none;}
+.rank-row:hover{background:var(--gray50);}
+.rn{font-family:monospace;font-size:14px;font-weight:700;color:var(--faint);}
+.rn.top{color:var(--amber);}
+.rp{font-size:14px;font-weight:600;}
+.rc{font-size:12px;color:var(--faint);}
+.rr{font-size:13px;font-family:monospace;color:var(--muted);}
+.mv{font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;}
+.mv-u{background:var(--field-light);color:var(--green);}
+.mv-d{background:#FCEBEB;color:#A32D2D;}
+.mv-s{background:var(--gray100);color:var(--faint);}
+.show-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:32px;}
+.show-card{background:var(--white);border:1px solid var(--border);border-radius:var(--rl);padding:20px;}
+.show-name{font-size:16px;font-weight:700;margin-bottom:6px;}
+.show-date{font-size:13px;color:var(--blue);font-weight:600;margin-bottom:6px;}
+.show-detail{font-size:13px;color:var(--muted);line-height:1.6;}
+.prog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.prog-card{background:var(--white);border:1px solid var(--border);border-radius:var(--rl);padding:22px;cursor:pointer;transition:all .18s;}
+.prog-card:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 4px 16px rgba(59,109,17,.1);}
+.prog-name{font-size:17px;font-weight:700;margin-bottom:4px;}
+.prog-gender{font-size:11px;font-weight:700;background:var(--chalk);color:var(--muted);padding:2px 9px;border-radius:20px;display:inline-block;margin-bottom:12px;}
+.prog-detail{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;border-bottom:1px solid var(--border);}
+.prog-detail:last-of-type{border-bottom:none;}
+.prog-label{color:var(--faint);}
+.prog-val{font-weight:500;}
+.portal-info-card{background:var(--white);border:1px solid var(--border);border-radius:var(--rl);padding:28px 30px;margin-bottom:32px;cursor:pointer;transition:all .18s;display:flex;justify-content:space-between;align-items:center;gap:24px;}
+.portal-info-card:hover{border-color:var(--blue);}
+footer{background:var(--navy);padding:44px 24px;margin-top:8px;}
+.footer-inner{max-width:1160px;margin:0 auto;}
+.footer-logo{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--white);margin-bottom:6px;}
+.footer-logo span{color:var(--field);}
+.footer-tag{font-size:13px;color:rgba(255,255,255,.38);margin-bottom:24px;}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:24px;}
+.footer-link{font-size:13px;color:rgba(255,255,255,.45);cursor:pointer;transition:color .15s;}
+.footer-link:hover{color:var(--field);}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.2);padding-top:18px;border-top:1px solid rgba(255,255,255,.08);}
+@media(max-width:768px){
+  .hero-inner,.main{grid-template-columns:1fr;}
+  .hero-side,.sidebar{display:none;}
+  .guide-grid,.show-grid,.prog-grid{grid-template-columns:1fr;}
+  .hero-title{font-size:26px;}
+  .nav-links{display:none;}
+  .rank-hd,.rank-row{grid-template-columns:40px 1fr 80px 60px;}
+}
 </style>
 </head>
 <body>
 
-<!-- API KEY BAR -->
-<div id="api-key-bar" style="background:#FAEEDA;border-bottom:1px solid #EF9F27;padding:10px 24px;display:flex;align-items:center;gap:12px;font-size:13px;">
-  <span style="color:#633806;font-weight:600;white-space:nowrap;">🔑 Paste your Anthropic API key to enable AI articles:</span>
-  <input id="api-key-input" type="password" placeholder="sk-ant-..." style="flex:1;border:1px solid #EF9F27;border-radius:6px;padding:6px 12px;font-size:13px;font-family:monospace;background:white;outline:none;max-width:400px;">
-  <button onclick="saveKey()" style="background:#BA7517;color:white;border:none;border-radius:6px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">Save Key</button>
-  <a href="https://console.anthropic.com" style="color:#854F0B;font-size:12px;white-space:nowrap;">Get a free key →</a>
-  <button onclick="document.getElementById('api-key-bar').style.display='none'" style="background:none;border:none;color:#854F0B;cursor:pointer;font-size:18px;line-height:1;margin-left:auto;">×</button>
-</div>
 <div class="ticker">
-  <div class="ticker-inner" id="ticker-inner">
-    <span class="ticker-item">ECNL Boys Indy Showcase: top 2027 prospects turning heads this weekend</span>
-    <span class="ticker-item">Spring transfer portal window closes April 25 — 40+ D1 players still available</span>
-    <span class="ticker-item">Class of 2026 signing period complete — programs finalize rosters for fall</span>
-    <span class="ticker-item">NIL revenue sharing now active at all D1 programs under House settlement</span>
-    <span class="ticker-item">Girls Academy Spring Showcase underway in Phoenix — coaches out in force</span>
-    <span class="ticker-item">Washington men's program celebrates national title with spring open practice</span>
-    <span class="ticker-item">Class of 2027 early commitments surge — several 2028s already fielding D1 interest</span>
-    <span class="ticker-item">Spring ECNL Phoenix Showcase 2026 — Day 2 standouts announced</span>
-    <span class="ticker-item">ECNL Boys Indy Showcase: top 2027 prospects turning heads this weekend</span>
-    <span class="ticker-item">Spring transfer portal window closes April 25 — 40+ D1 players still available</span>
-    <span class="ticker-item">Class of 2026 signing period complete — programs finalize rosters for fall</span>
-    <span class="ticker-item">NIL revenue sharing now active at all D1 programs under House settlement</span>
-    <span class="ticker-item">Girls Academy Spring Showcase underway in Phoenix — coaches out in force</span>
-    <span class="ticker-item">Washington men's program celebrates national title with spring open practice</span>
+  <div class="ticker-track">
+    <span class="t-item">Spring transfer portal window for soccer opens May 1 — runs through May 15</span>
+    <span class="t-item">ECNL Boys Indianapolis Showcase underway this weekend at Grand Park</span>
+    <span class="t-item">Girls Academy Spring Showcase completed in Phoenix — coaches evaluated 2027 and 2028 prospects</span>
+    <span class="t-item">NIL revenue sharing now active at D1 programs under House v. NCAA settlement</span>
+    <span class="t-item">Class of 2026 signing period closed — programs now building 2027 and 2028 classes</span>
+    <span class="t-item">Washington men's program celebrates 2025 national title with open spring practice</span>
+    <span class="t-item">US Soccer announces school-year based age groups effective Fall 2026</span>
+    <span class="t-item">MLS Next Playoffs set for June 5–15 — top showcase event of the summer for 2027 prospects</span>
+    <span class="t-item">Spring transfer portal window for soccer opens May 1 — runs through May 15</span>
+    <span class="t-item">ECNL Boys Indianapolis Showcase underway this weekend at Grand Park</span>
+    <span class="t-item">Girls Academy Spring Showcase completed in Phoenix — coaches evaluated 2027 and 2028 prospects</span>
+    <span class="t-item">NIL revenue sharing now active at D1 programs under House v. NCAA settlement</span>
+    <span class="t-item">Class of 2026 signing period closed — programs now building 2027 and 2028 classes</span>
+    <span class="t-item">Washington men's program celebrates 2025 national title with open spring practice</span>
+    <span class="t-item">US Soccer announces school-year based age groups effective Fall 2026</span>
+    <span class="t-item">MLS Next Playoffs set for June 5–15 — top showcase event of the summer for 2027 prospects</span>
   </div>
 </div>
 
-<!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <div class="nav-logo">
-      <div class="nav-logo-icon">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-          <circle cx="11" cy="11" r="9.5" stroke="#97C459" stroke-width="1.5"/>
-          <path d="M11 1.5C11 1.5 7.5 5.5 7.5 11C7.5 16.5 11 20.5 11 20.5C11 20.5 14.5 16.5 14.5 11C14.5 5.5 11 1.5 11 1.5Z" fill="#97C459" opacity="0.3"/>
-          <path d="M1.5 11L20.5 11" stroke="#97C459" stroke-width="1.2"/>
-          <path d="M2.5 7.5L19.5 7.5" stroke="#97C459" stroke-width="0.8" opacity="0.5"/>
-          <path d="M2.5 14.5L19.5 14.5" stroke="#97C459" stroke-width="0.8" opacity="0.5"/>
-        </svg>
-      </div>
-      <div class="nav-logo-text">College Soccer <span>Daily</span></div>
-    </div>
+    <div class="logo" onclick="showPage('news')">College Soccer <span>Daily</span></div>
     <div class="nav-links">
-      <div class="nav-link active" onclick="showTab('news')">News</div>
-      <div class="nav-link" onclick="showTab('recruiting')">Recruiting</div>
-      <div class="nav-link" onclick="showTab('rankings')">Rankings</div>
-      <div class="nav-link" onclick="showTab('transfers')">Transfer Portal</div>
-      <div class="nav-link" onclick="showTab('programs')">Programs</div>
+      <button class="nav-btn active" onclick="showPage('news')">News</button>
+      <button class="nav-btn" onclick="showPage('recruiting')">Recruiting</button>
+      <button class="nav-btn" onclick="showPage('portal')">Transfer Portal</button>
+      <button class="nav-btn" onclick="showPage('showcases')">Showcases</button>
+      <button class="nav-btn" onclick="showPage('programs')">Programs</button>
     </div>
-    <div class="nav-right">
-      <div class="nav-date" id="nav-date"></div>
-      <input class="nav-search" placeholder="Search players, schools...">
-    </div>
+    <div class="nav-date" id="nav-date"></div>
   </div>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-inner">
-    <div>
-      <div class="hero-tag">Top Story</div>
-      <h1 class="hero-title">NIL Revenue Sharing Is Here — What It Means for Every College Soccer Family</h1>
-      <p class="hero-excerpt">The House v. NCAA settlement is now in effect, meaning D1 programs can share revenue directly with athletes. For soccer families navigating recruiting, scholarships just got more complicated — and more valuable. Here's what you need to know right now.</p>
-      <div class="hero-meta">
-        <span>Staff Report</span>
-        <span>·</span>
-        <span>Today, 7:15 AM</span>
-        <span>·</span>
-        <span>6 min read</span>
+<!-- NEWS PAGE -->
+<div class="page active" id="page-news">
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-tag">Top Story</div>
+        <h1 class="hero-title">Everything Has Changed: How the House Settlement Rewrites College Soccer Scholarships</h1>
+        <button class="hero-readbtn" onclick="openArticle('house-settlement')">Read full story →</button>
       </div>
-      <button class="hero-read-btn" onclick="openArticle('nil-house', 'Recruiting', 'NIL Revenue Sharing Is Here — What It Means for Every College Soccer Family')">Read full story →</button>
+      <div>
+        <div class="side-story" onclick="openArticle('ecnl-indy')">
+          <div class="side-tag">Showcases</div>
+          <div class="side-title">ECNL Boys Indianapolis: What It Is and Why It Matters for 2027 Recruits</div>
+          <div class="side-meta">Today, 9:00 AM</div>
+        </div>
+        <div class="side-story" onclick="openArticle('portal-window')">
+          <div class="side-tag">Transfer Portal</div>
+          <div class="side-title">The Soccer Transfer Portal Spring Window Opens May 1 — Everything Players Need to Know</div>
+          <div class="side-meta">Yesterday</div>
+        </div>
+        <div class="side-story" onclick="openArticle('age-group')">
+          <div class="side-tag">Recruiting</div>
+          <div class="side-title">US Soccer's Age Group Change Explained — And What It Means for Your Recruiting Class</div>
+          <div class="side-meta">2 days ago</div>
+        </div>
+      </div>
     </div>
-    <div class="hero-sidebar-stories">
-      <div class="hero-side-story" onclick="openArticle('ecnl-indy','Showcases','ECNL Boys Indy: Best U15s and U16s from the Weekend')">
-        <div class="hero-side-tag">Showcases</div>
-        <div class="hero-side-title">ECNL Boys Indy Showcase: The U15 and U16 Standouts Coaches Were Watching</div>
-        <div class="hero-side-meta">Today, 9:00 AM</div>
+  </div>
+
+  <div class="section-tabs">
+    <div class="tabs-inner">
+      <button class="stab active" onclick="filterFeed(this,'all')">All</button>
+      <button class="stab" onclick="filterFeed(this,'r')">Recruiting</button>
+      <button class="stab" onclick="filterFeed(this,'m')">Men's</button>
+      <button class="stab" onclick="filterFeed(this,'w')">Women's</button>
+      <button class="stab" onclick="filterFeed(this,'t')">Transfer Portal</button>
+      <button class="stab" onclick="filterFeed(this,'g')">Guides</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="feed" id="news-feed">
+      <div class="news-card" data-cat="r" onclick="openArticle('early-commits')">
+        <div class="card-top"><span class="card-tag tag-r">Recruiting</span><span class="card-time">Today, 8:00 AM</span></div>
+        <div class="card-title">Is Your 2027 Player Behind? The Honest Truth About Early Commitments</div>
+        <div class="card-excerpt">Every spring, families of Class of 2027 players panic when they see teammates committing on social media. Here is the honest, data-driven answer to whether you should be worried — and exactly what your family should be doing right now.</div>
+        <div class="card-footer"><span class="card-author">By Marcus Rivera</span><span class="card-read">Read more →</span></div>
       </div>
-      <div class="hero-side-story" onclick="openArticle('portal-spring','Transfer Portal','Spring Portal Window Closing April 25 — Who\'s Still Available')">
-        <div class="hero-side-tag">Transfer Portal</div>
-        <div class="hero-side-title">Portal Window Closes April 25 — The 10 D1 Players Every Coach Should Still Be Calling</div>
-        <div class="hero-side-meta">Yesterday</div>
+      <div class="news-card" data-cat="t" onclick="openArticle('portal-guide')">
+        <div class="card-top"><span class="card-tag tag-t">Transfer Portal</span><span class="card-time">Yesterday</span></div>
+        <div class="card-title">The Transfer Portal Is Not a Magic Fix — A Realistic Guide for College Soccer Players</div>
+        <div class="card-excerpt">The spring portal window opens May 1 and runs just 15 days. Before you enter, understand exactly how it works, what it can realistically do for you, and the financial risks nobody talks about.</div>
+        <div class="card-footer"><span class="card-author">By Jen Park</span><span class="card-read">Read more →</span></div>
       </div>
-      <div class="hero-side-story" onclick="openArticle('class27-early','Recruiting','Class of 2027 Early Commitment Surge')">
-        <div class="hero-side-tag">Recruiting</div>
-        <div class="hero-side-title">Class of 2027 Early Commitments Are Surging — Is Your Player Behind?</div>
-        <div class="hero-side-meta">2 days ago</div>
+      <div class="news-card" data-cat="g" onclick="openArticle('five-mistakes')">
+        <div class="card-top"><span class="card-tag tag-g">Parent Guide</span><span class="card-time">Yesterday</span></div>
+        <div class="card-title">The Five Mistakes Soccer Families Make in the Recruiting Process</div>
+        <div class="card-excerpt">Most recruiting mistakes are not about talent. They are about process, timing, and realistic self-assessment. Here are the five most damaging patterns we see repeatedly — and how to avoid each one.</div>
+        <div class="card-footer"><span class="card-author">By CSD Staff</span><span class="card-read">Read more →</span></div>
+      </div>
+      <div class="news-card" data-cat="r" onclick="openArticle('showcase-guide')">
+        <div class="card-top"><span class="card-tag tag-r">Recruiting</span><span class="card-time">2 days ago</span></div>
+        <div class="card-title">Spring Showcase Season: A Family's Complete Guide to Getting the Most Out of Every Event</div>
+        <div class="card-excerpt">Spring showcases are the most important evaluation window of the year. Here is what coaches are actually looking for, which events matter most, and how to handle before, during, and after every event.</div>
+        <div class="card-footer"><span class="card-author">By CSD Staff</span><span class="card-read">Read more →</span></div>
+      </div>
+      <div class="news-card" data-cat="m" onclick="openArticle('washington')">
+        <div class="card-top"><span class="card-tag tag-m">Men's</span><span class="card-time">3 days ago</span></div>
+        <div class="card-title">Washington's National Title and What It Means for Men's College Soccer Recruiting</div>
+        <div class="card-excerpt">The Huskies proved you can win a national championship by recruiting your own backyard and building over four years. Here's what their title means for programs, prospects, and families nationally.</div>
+        <div class="card-footer"><span class="card-author">Staff Report</span><span class="card-read">Read more →</span></div>
+      </div>
+      <div class="news-card" data-cat="g" onclick="openArticle('coach-perspective')">
+        <div class="card-top"><span class="card-tag tag-g">Coach's Corner</span><span class="card-time">4 days ago</span></div>
+        <div class="card-title">What College Coaches Actually Want — The Recruiting Process From Their Side</div>
+        <div class="card-excerpt">The recruiting process gets covered from the family's perspective constantly. Here is what it looks like from the other side — how coaches evaluate prospects, what "fit" really means, and what ends a recruitment.</div>
+        <div class="card-footer"><span class="card-author">By CSD Staff</span><span class="card-read">Read more →</span></div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="newsletter">
+        <div class="nl-title">Daily Briefing</div>
+        <div class="nl-sub">Top college soccer stories delivered every morning. Free, forever.</div>
+        <input class="nl-input" placeholder="Your email address" id="nl-email">
+        <button class="nl-btn" id="nl-btn" onclick="subscribe()">Subscribe free →</button>
+      </div>
+      <div class="sb-card">
+        <div class="sb-head"><div class="sb-title">Spring Showcase Calendar</div><div class="sb-badge" style="color:var(--blue)">Apr–Jun 2026</div></div>
+        <div class="sb-row"><div class="sb-row-title">ECNL Boys — Indianapolis</div><div class="sb-row-sub">April 17–20 · Grand Park, IN</div><div class="sb-row-note">Ongoing this weekend</div></div>
+        <div class="sb-row"><div class="sb-row-title">ECNL Girls — Phoenix Showcase</div><div class="sb-row-sub">April 10–13 · Phoenix, AZ</div><div class="sb-row-note">Completed</div></div>
+        <div class="sb-row"><div class="sb-row-title">Girls Academy Spring Playoffs</div><div class="sb-row-sub">May 2026</div><div class="sb-row-note">Key D1 evaluation event</div></div>
+        <div class="sb-row"><div class="sb-row-title">ECNL Boys Nationals</div><div class="sb-row-sub">June 2026</div><div class="sb-row-note">Highest D1 coach attendance</div></div>
+        <div class="sb-row"><div class="sb-row-title">MLS Next Playoffs</div><div class="sb-row-sub">June 5–15 · Nationwide</div><div class="sb-row-note">Major summer showcase</div></div>
+      </div>
+      <div class="sb-card">
+        <div class="sb-head"><div class="sb-title">Transfer Portal Dates</div><div class="sb-badge" style="color:var(--amber)">Official NCAA</div></div>
+        <div class="sb-row"><div class="sb-row-title">Men's Soccer — Fall Window</div><div class="sb-row-sub">Nov 24 – Dec 23, 2025</div><div class="sb-row-note">Closed</div></div>
+        <div class="sb-row"><div class="sb-row-title">Women's Soccer — Fall Window</div><div class="sb-row-sub">Nov 17 – Dec 16, 2025</div><div class="sb-row-note">Closed</div></div>
+        <div class="sb-row"><div class="sb-row-title">Spring Window — Men's &amp; Women's</div><div class="sb-row-sub">May 1 – May 15, 2026</div><div class="sb-row-note" style="color:var(--green);font-weight:600;">Opens May 1</div></div>
+      </div>
+      <div class="sb-card">
+        <div class="sb-head"><div class="sb-title">Recent Commitments</div><div class="sb-badge" style="color:var(--green)">Class of 2027</div></div>
+        <div class="placeholder-row">Updated regularly — check back for the latest commitments</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SECTION TABS -->
-<div class="section-tabs">
-  <div class="section-tabs-inner">
-    <div class="stab active" onclick="filterFeed('all')">All</div>
-    <div class="stab" onclick="filterFeed('recruiting')">Recruiting</div>
-    <div class="stab" onclick="filterFeed('mens')">Men's</div>
-    <div class="stab" onclick="filterFeed('womens')">Women's</div>
-    <div class="stab" onclick="filterFeed('transfer')">Transfer Portal</div>
-    <div class="stab" onclick="filterFeed('rankings')">Rankings</div>
-  </div>
-</div>
-
-<!-- AI SEARCH -->
-<div class="ai-search-section">
-  <div class="ai-search-inner">
-    <div class="ai-search-label">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;">
-        <circle cx="8" cy="8" r="7" stroke="#185FA5" stroke-width="1.5"/>
-        <path d="M8 5v3l2 2" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      Ask CSD
-    </div>
-    <input class="ai-search-input" id="ai-search-input" placeholder="e.g. What are the top uncommitted goalkeepers in the 2026 class?" onkeydown="if(event.key==='Enter') askCSD()">
-    <button class="ai-search-btn" onclick="askCSD()">Ask →</button>
-  </div>
-</div>
-
-<!-- MAIN CONTENT -->
-<div class="main" id="main-content">
-  <!-- NEWS FEED -->
-  <div>
-    <div class="ai-section-header">
-      <div class="section-title">Today's Stories</div>
-      <div class="ai-badge">AI-updated daily</div>
-    </div>
-
-    <div class="news-feed" id="news-feed">
-
-      <div class="news-card" data-category="recruiting" onclick="openArticle('class27-surge','Recruiting','Class of 2027 Early Commitments Are Surging — Is Your Player Behind?')">
-        <div class="news-card-top">
-          <span class="news-tag tag-recruiting">Recruiting</span>
-          <span class="news-time">Today, 8:00 AM</span>
-        </div>
-        <div class="news-title">Class of 2027 Early Commitments Are Surging — Is Your Player Behind?</div>
-        <div class="news-excerpt">D1 coaches are locking up 2027 players faster than any previous cycle. With spring showcases in full swing, we break down which positions are going first, which programs are most active, and what families need to do right now.</div>
-        <div class="news-footer">
-          <span class="news-author">By Marcus Rivera</span>
-          <span class="news-read">Read more →</span>
-        </div>
+<!-- RECRUITING PAGE -->
+<div class="page" id="page-recruiting">
+  <div class="page-hero"><div class="page-hero-inner">
+    <h1>Recruiting Hub</h1>
+    <p>In-depth guides for players, parents, and coaches on every aspect of the college soccer recruiting process.</p>
+  </div></div>
+  <div class="page-content">
+    <div class="sec-label">Essential Guides</div>
+    <div class="guide-grid">
+      <div class="guide-card" onclick="openArticle('d1-d2-d3')">
+        <div class="guide-num">01</div>
+        <div class="guide-title">D1 vs D2 vs D3: An Honest Guide to Choosing the Right Level</div>
+        <div class="guide-desc">The most important decision in recruiting — and the one most families get wrong.</div>
       </div>
-
-      <div class="news-card" data-category="transfer" onclick="openArticle('portal-april','Transfer Portal','Spring Portal Window Closes April 25 — Who\'s Still Available')">
-        <div class="news-card-top">
-          <span class="news-tag tag-transfer">Transfer Portal</span>
-          <span class="news-time">Today, 6:30 AM</span>
-        </div>
-        <div class="news-title">Spring Transfer Portal Window Closes April 25 — The Players Still on the Board</div>
-        <div class="news-excerpt">With less than a week before the spring portal window shuts, programs scrambling to fill gaps are targeting a shrinking pool of available talent. Here are the impact players still unsigned and the programs most likely to land them.</div>
-        <div class="news-footer">
-          <span class="news-author">By Jen Park</span>
-          <span class="news-read">Read more →</span>
-        </div>
+      <div class="guide-card" onclick="openArticle('coach-email')">
+        <div class="guide-num">02</div>
+        <div class="guide-title">How to Write a Coach Email</div>
       </div>
-
-      <div class="news-card" data-category="recruiting" onclick="openArticle('nil-explainer','Recruiting','How the House Settlement Changes College Soccer Scholarships')">
-        <div class="news-card-top">
-          <span class="news-tag tag-recruiting">NIL & Scholarships</span>
-          <span class="news-time">Yesterday</span>
-        </div>
-        <div class="news-title">How the House v. NCAA Settlement Changes College Soccer Scholarships for Every Family</div>
-        <div class="news-excerpt">Revenue sharing is now live at D1 programs. Every rostered player (up to 28) can now receive athletic aid — but that also means smaller individual scholarships at some programs. We explain what changed and how to evaluate offers differently in 2026.</div>
-        <div class="news-footer">
-          <span class="news-author">By the CSD Staff</span>
-          <span class="news-read">Read more →</span>
-        </div>
+      <div class="guide-card" onclick="openArticle('eligibility')">
+        <div class="guide-num">03</div>
+        <div class="guide-title">Understanding Your NCAA Eligibility: A Step-by-Step Guide</div>
+        <div class="guide-desc">Core courses, the sliding scale, and the Eligibility Center — everything families need to know.</div>
       </div>
-
-      <div class="news-card" data-category="recruiting" onclick="openArticle('ecnl-phoenix','Showcases','Girls Academy Spring Showcase Phoenix — Standout Players')">
-        <div class="news-card-top">
-          <span class="news-tag tag-recruiting">Showcases</span>
-          <span class="news-time">Yesterday</span>
-        </div>
-        <div class="news-title">Girls Academy Spring Showcase Phoenix: The Standouts Coaches Were Tracking</div>
-        <div class="news-excerpt">The Girls Academy Spring Showcase in Phoenix wrapped up this weekend with D1 coaches out in force evaluating 2027 and 2028 prospects. We highlight the players who made the biggest impressions across all age groups.</div>
-        <div class="news-footer">
-          <span class="news-author">By Sarah Collins</span>
-          <span class="news-read">Read more →</span>
-        </div>
+      <div class="guide-card" onclick="openArticle('nil-guide')">
+        <div class="guide-num">04</div>
+        <div class="guide-title">NIL and Revenue Sharing in 2026: What Every Recruit Needs to Know</div>
+        <div class="guide-desc">A clear breakdown of how scholarships, revenue sharing, and NIL actually work today.</div>
       </div>
-
-      <div class="news-card" data-category="mens" onclick="openArticle('washington-spring','Men\'s','National Champion Washington Opens Spring Practice')">
-        <div class="news-card-top">
-          <span class="news-tag tag-mens">Men's</span>
-          <span class="news-time">2 days ago</span>
-        </div>
-        <div class="news-title">National Champion Washington Opens Spring Practice — A New Era Begins in Seattle</div>
-        <div class="news-excerpt">Fresh off their historic national title — fueled by a mostly in-state roster — the Washington Huskies held their first open spring practice. Coach Jamie Clark spoke about building the program's identity and what comes next for the defending champions.</div>
-        <div class="news-footer">
-          <span class="news-author">Staff Report</span>
-          <span class="news-read">Read more →</span>
-        </div>
+      <div class="guide-card" onclick="openArticle('campus-visits')">
+        <div class="guide-num">05</div>
+        <div class="guide-title">How to Make the Most of Official and Unofficial Campus Visits</div>
+        <div class="guide-desc">The campus visit is an audition for both sides — here is how to approach it strategically.</div>
       </div>
-
-      <div class="news-card" data-category="recruiting" onclick="openArticle('recruiting-guide','Recruiting','The Complete Spring Recruiting Checklist for Soccer Families')">
-        <div class="news-card-top">
-          <span class="news-tag tag-recruiting">Parent Guide</span>
-          <span class="news-time">3 days ago</span>
-        </div>
-        <div class="news-title">Spring Recruiting Checklist: What Every Soccer Family Should Be Doing Right Now</div>
-        <div class="news-excerpt">Spring is the most important evaluation window of the year. From ECNL and GA showcases to coach emails and highlight film — here's the exact checklist every family should be working through in April and May.</div>
-        <div class="news-footer">
-          <span class="news-author">By the CSD Staff</span>
-          <span class="news-read">Read more →</span>
-        </div>
+      <div class="guide-card" onclick="openArticle('timeline')">
+        <div class="guide-num">06</div>
+        <div class="guide-title">The Recruiting Timeline: What Should Be Happening at Every Stage of High School</div>
+        <div class="guide-desc">Freshman year through signing day — what to prioritize at each stage of the process.</div>
       </div>
-
-    </div>
-
-    <button class="ai-generate-btn" id="gen-btn" onclick="generateMoreNews()">
-      <div class="ai-spinner" id="gen-spinner"></div>
-      <span id="gen-btn-text">✦ Generate today's AI news briefing</span>
-    </button>
-  </div>
-
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-
-    <!-- Newsletter -->
-    <div class="newsletter">
-      <div class="newsletter-title">Daily Briefing</div>
-      <div class="newsletter-sub">Top college soccer stories delivered every morning. Free, forever.</div>
-      <input class="newsletter-input" placeholder="Your email address" id="nl-email">
-      <button class="newsletter-btn" onclick="subscribe()">Subscribe free →</button>
-    </div>
-
-    <!-- Commitments -->
-    <div class="sidebar-card">
-      <div class="sidebar-card-header">
-        <div class="sidebar-card-title">Recent Commitments</div>
-        <div style="font-size:11px;color:var(--green);font-weight:600;">Class of 2027</div>
-      </div>
-      <div class="sidebar-card-body">
-        <div class="commit-item">
-          <div class="commit-avatar">LS</div>
-          <div class="commit-info">
-            <div class="commit-name">Luca Santana</div>
-            <div class="commit-school">→ Notre Dame · 2027</div>
-          </div>
-          <span class="commit-gender m">M</span>
-          <span class="commit-pos">MF</span>
-        </div>
-        <div class="commit-item">
-          <div class="commit-avatar" style="background:#EDE8FE;color:#3C3489;">KW</div>
-          <div class="commit-info">
-            <div class="commit-name">Kayla Washington</div>
-            <div class="commit-school">→ UCLA · 2027</div>
-          </div>
-          <span class="commit-gender w">W</span>
-          <span class="commit-pos">FW</span>
-        </div>
-        <div class="commit-item">
-          <div class="commit-avatar">BO</div>
-          <div class="commit-info">
-            <div class="commit-name">Ben O'Sullivan</div>
-            <div class="commit-school">→ Georgetown · 2027</div>
-          </div>
-          <span class="commit-gender m">M</span>
-          <span class="commit-pos">CB</span>
-        </div>
-        <div class="commit-item">
-          <div class="commit-avatar" style="background:#EDE8FE;color:#3C3489;">MR</div>
-          <div class="commit-info">
-            <div class="commit-name">Maya Reyes</div>
-            <div class="commit-school">→ Stanford · 2027</div>
-          </div>
-          <span class="commit-gender w">W</span>
-          <span class="commit-pos">GK</span>
-        </div>
-        <div class="commit-item">
-          <div class="commit-avatar">TP</div>
-          <div class="commit-info">
-            <div class="commit-name">Tyler Park</div>
-            <div class="commit-school">→ Wake Forest · 2027</div>
-          </div>
-          <span class="commit-gender m">M</span>
-          <span class="commit-pos">ST</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Spring Showcase Calendar -->
-    <div class="sidebar-card">
-      <div class="sidebar-card-header">
-        <div class="sidebar-card-title">Spring Showcase Calendar</div>
-        <div style="font-size:11px;color:var(--blue);font-weight:600;">April–June</div>
-      </div>
-      <div class="sidebar-card-body">
-        <div class="portal-item">
-          <div class="portal-name">ECNL Boys — Indianapolis</div>
-          <div class="portal-meta">April 17–20 · U14–U19</div>
-          <div class="portal-from">Ongoing this weekend</div>
-        </div>
-        <div class="portal-item">
-          <div class="portal-name">Girls Academy Spring Showcase</div>
-          <div class="portal-meta">April 10–13 · Phoenix, AZ</div>
-          <div class="portal-from">Results posted</div>
-        </div>
-        <div class="portal-item">
-          <div class="portal-name">ECNL Girls — TX Playoffs</div>
-          <div class="portal-meta">May 8–11 · Frisco, TX</div>
-          <div class="portal-from">Registration open</div>
-        </div>
-        <div class="portal-item">
-          <div class="portal-name">MLS Next Playoffs</div>
-          <div class="portal-meta">June 5–15 · Nationwide</div>
-          <div class="portal-from">Bracket TBD</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Transfer Portal -->
-    <div class="sidebar-card">
-      <div class="sidebar-card-header">
-        <div class="sidebar-card-title">Transfer Portal — Spring Window</div>
-        <div style="font-size:11px;color:var(--amber);font-weight:600;">Closes Apr 25</div>
-      </div>
-      <div class="sidebar-card-body">
-        <div class="portal-item">
-          <div class="portal-name">Theo Barnes · MF</div>
-          <div class="portal-meta">Virginia → Available</div>
-          <div class="portal-from">All-ACC · 8G 11A last season</div>
-        </div>
-        <div class="portal-item">
-          <div class="portal-name">Sofia Reyes · FW</div>
-          <div class="portal-meta">Florida → Available</div>
-          <div class="portal-from">SEC All-Freshman · 12G</div>
-        </div>
-        <div class="portal-item">
-          <div class="portal-name">Jake Moreno · CB</div>
-          <div class="portal-meta">Louisville → Available</div>
-          <div class="portal-from">2-year starter · 3.8 GPA</div>
-        </div>
-        <div class="portal-item">
-          <div class="portal-name">Maya Chen · GK</div>
-          <div class="portal-meta">Oregon → Available</div>
-          <div class="portal-from">0.72 GAA · Pac-12 All-Conf</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- RECRUITING SECTION -->
-<div class="section-divider">
-  <div class="section-divider-line"></div>
-  <div class="section-divider-label">Recruiting Spotlight</div>
-  <div class="section-divider-line"></div>
-</div>
-
-<div class="recruiting-section">
-  <div class="rec-grid">
-    <div class="rec-card" onclick="openArticle('player-santana','Recruiting','Luca Santana — MF Profile')">
-      <div class="rec-card-top">
-        <div class="rec-player-name">Luca Santana</div>
-        <div class="rec-class">Class of 2027</div>
-      </div>
-      <div class="rec-details">
-        <div class="rec-detail"><span class="rec-detail-label">Position</span><span class="rec-detail-val">Midfielder</span></div>
-        <div class="rec-detail"><span class="rec-detail-label">State</span><span class="rec-detail-val">New Jersey</span></div>
-        <div class="rec-detail"><span class="rec-detail-label">Club</span><span class="rec-detail-val">NY Red Bulls Academy</span></div>
-        <div class="rec-detail"><span class="rec-detail-label">Gender</span><span class="rec-detail-val">Men's</span></div>
-      </div>
-      <div class="rec-status"><span class="rec-status-badge status-committed">Committed — Notre Dame</span></div>
-    </div>
-    <div class="rec-card" onclick="openArticle('player-washington','Recruiting','Kayla Washington — FW Profile')">
-      <div class="rec-card-top">
-        <div class="rec-player-name">Kayla Washington</div>
-        <div class="rec-class">Class of 2027</div>
-      </div>
-      <div class="rec-details">
-        <div class="rec-detail"><span class="rec-detail-label">Position</span><span class="rec-detail-val">Forward</span></div>
-        <div class="rec-detail"><span class="rec-detail-label">State</span><span class="rec-detail-val">Georgia</span></div>
-        <div class="rec-detail"><span class="rec-detail-label">Club</span><span class="rec-detail-val">Atlanta Fire ECNL</span></div>
-        <div class="rec-detail"><span class="rec-detail-label">Gender</span><span class="rec-detail-val">Women's</span></div>
-      </div>
-      <div class="rec-status"><span class="rec-status-badge status-committed">Committed — UCLA</span></div>
-    </div>
-    <div class="rec-card" onclick="openArticle('player-chen','Recruiting','Devin Chen — CB Profile')">
-      <div class="rec-card-top">
-        <div class="rec-player-name">Devin Chen</div>
-        <div class="rec-class">Class of 2027</div>
-      </div>
-      <div class="rec-details">
-        <div class="rec-detail"><span class="rec-detail-label">Position</span><span class="rec-detail-val">Center Back</span></div>
-        <div class="rec-detail"><span class="rec-detail-label">State</span><span class="rec-detail-val">California</span></div>
-        <div class="rec-detail"><span class="rec-detail-label">Club</span><span class="rec-detail-val">LAFC Academy</span></div>
-        <div class="rec-detail"><span class="rec-detail-label">Gender</span><span class="rec-detail-val">Men's</span></div>
-      </div>
-      <div class="rec-status"><span class="rec-status-badge status-uncommitted">Uncommitted — Multiple D1 Offers</span></div>
     </div>
   </div>
 </div>
 
-<!-- FOOTER -->
+<!-- TRANSFER PORTAL PAGE -->
+<div class="page" id="page-portal">
+  <div class="page-hero"><div class="page-hero-inner">
+    <h1>Transfer Portal</h1>
+    <p>The spring window opens May 1 and closes May 15. Real portal dates, rules, and how it all works.</p>
+  </div></div>
+  <div class="page-content">
+    <div class="sec-label">How the Soccer Transfer Portal Works</div>
+    <div class="portal-info-card" onclick="openArticle('portal-full-guide')">
+      <div>
+        <div style="font-family:var(--serif);font-size:22px;font-weight:700;margin-bottom:8px;">The Complete Guide to the NCAA Soccer Transfer Portal</div>
+        <div style="font-size:14px;color:var(--muted);max-width:560px;line-height:1.65;">How the two windows work, the coaching change exception, what happens when you enter, the scholarship risk, and what programs look for in portal players.</div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--blue);flex-shrink:0;">Read guide →</div>
+    </div>
+    <div class="sec-label">Portal Dates — Official NCAA Calendar</div>
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:32px;">
+      <div style="background:var(--navy);padding:14px 22px;display:grid;grid-template-columns:1fr 200px 120px;gap:12px;">
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Window</div>
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Dates</div>
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Status</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 200px 120px;gap:12px;padding:14px 22px;border-bottom:1px solid var(--border);">
+        <div style="font-size:14px;font-weight:600;">Men's Soccer — Fall 2025</div>
+        <div style="font-size:13px;color:var(--muted);">Nov 24 – Dec 23, 2025</div>
+        <div style="font-size:12px;font-weight:600;color:var(--faint);">Closed</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 200px 120px;gap:12px;padding:14px 22px;border-bottom:1px solid var(--border);">
+        <div style="font-size:14px;font-weight:600;">Women's Soccer — Fall 2025</div>
+        <div style="font-size:13px;color:var(--muted);">Nov 17 – Dec 16, 2025</div>
+        <div style="font-size:12px;font-weight:600;color:var(--faint);">Closed</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 200px 120px;gap:12px;padding:14px 22px;">
+        <div style="font-size:14px;font-weight:600;">Men's &amp; Women's — Spring 2026</div>
+        <div style="font-size:13px;color:var(--muted);">May 1 – May 15, 2026</div>
+        <div style="font-size:12px;font-weight:600;color:var(--green);">Opens May 1</div>
+      </div>
+    </div>
+    <div class="sec-label">Current Portal Activity</div>
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--rl);padding:24px;text-align:center;">
+      <div style="font-size:14px;color:var(--muted);line-height:1.7;">Portal activity will be updated here as players enter and commit.<br>The spring window opens May 1, 2026.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SHOWCASES PAGE -->
+<div class="page" id="page-showcases">
+  <div class="page-hero"><div class="page-hero-inner">
+    <h1>Spring Showcases</h1>
+    <p>The major evaluation events where college coaches watch prospects. Spring runs April through June — the most important recruiting window of the year.</p>
+  </div></div>
+  <div class="page-content">
+    <div class="sec-label">Key Spring 2026 Events</div>
+    <div class="show-grid">
+      <div class="show-card">
+        <div class="show-name">ECNL Boys — Indianapolis Showcase</div>
+        <div class="show-date">April 17–20, 2026</div>
+        <div class="show-detail">Grand Park Sports Campus, Westfield, Indiana. One of the premier spring evaluation events for U14–U19 boys. Draws college coaches from all three NCAA divisions. Ongoing this weekend.</div>
+      </div>
+      <div class="show-card">
+        <div class="show-name">ECNL Girls — Phoenix Showcase</div>
+        <div class="show-date">April 10–13, 2026</div>
+        <div class="show-detail">Phoenix, Arizona. Completed. One of the highest D1 coach attendance events of the spring for women's recruiting.</div>
+      </div>
+      <div class="show-card">
+        <div class="show-name">Girls Academy Spring Playoffs</div>
+        <div class="show-date">May 2026 · Location TBD</div>
+        <div class="show-detail">One of the top women's recruiting events of the spring. D1 coaches attend in large numbers to evaluate 2027 and 2028 prospects.</div>
+      </div>
+      <div class="show-card">
+        <div class="show-name">ECNL Boys National Championship</div>
+        <div class="show-date">June 2026 · Location TBD</div>
+        <div class="show-detail">The highest-concentration D1 coach evaluation event for boys in the summer. Historically draws more D1 staff than any other single event on the calendar.</div>
+      </div>
+      <div class="show-card">
+        <div class="show-name">MLS Next Playoffs</div>
+        <div class="show-date">June 5–15, 2026 · Nationwide</div>
+        <div class="show-detail">Strong D1 coach attendance. Players in MLS academy programs should confirm their playoff schedule with their club.</div>
+      </div>
+      <div class="show-card">
+        <div class="show-name">ECNL Girls National Championship</div>
+        <div class="show-date">June 2026 · Location TBD</div>
+        <div class="show-detail">Major summer showcase for women's prospects. D1 coaches from programs across the country attend to evaluate top ECNL talent.</div>
+      </div>
+    </div>
+    <div class="sec-label">How to Maximize Every Showcase</div>
+    <div class="guide-grid">
+      <div class="guide-card" onclick="openArticle('before-event')">
+        <div class="guide-num">01</div>
+        <div class="guide-title">Before the Event: The Preparation That Actually Matters</div>
+      </div>
+      <div class="guide-card" onclick="openArticle('what-coaches-watch')">
+        <div class="guide-num">02</div>
+        <div class="guide-title">What College Coaches Are Actually Watching</div>
+        <div class="guide-desc">It is not just goals and assists — here is the full picture of what coaches evaluate and why body language matters more than most families realize.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRAMS PAGE -->
+<div class="page" id="page-programs">
+  <div class="page-hero"><div class="page-hero-inner">
+    <h1>Programs</h1>
+    <p>Profiles of top D1 men's and women's college soccer programs — what recruits should know about conference, coaching, culture, and fit.</p>
+  </div></div>
+  <div class="page-content">
+    <div class="sec-label">Top Programs — Men's</div>
+    <div class="prog-grid">
+      <div class="prog-card" onclick="openArticle('prog-washington')">
+        <div class="prog-name">Washington</div>
+        <div class="prog-gender">Men's</div>
+        <div class="prog-detail"><span class="prog-label">Conference</span><span class="prog-val">Pac-12</span></div>
+        <div class="prog-detail"><span class="prog-label">Head Coach</span><span class="prog-val">Jamie Clark</span></div>
+        <div class="prog-detail"><span class="prog-label">Location</span><span class="prog-val">Seattle, WA</span></div>
+        <div class="prog-detail"><span class="prog-label">2025 Result</span><span class="prog-val">National Champions</span></div>
+      </div>
+      <div class="prog-card" onclick="openArticle('prog-georgetown')">
+        <div class="prog-name">Georgetown</div>
+        <div class="prog-gender">Men's</div>
+        <div class="prog-detail"><span class="prog-label">Conference</span><span class="prog-val">Big East</span></div>
+        <div class="prog-detail"><span class="prog-label">Location</span><span class="prog-val">Washington, D.C.</span></div>
+        <div class="prog-detail"><span class="prog-label">Known For</span><span class="prog-val">Technical play, MLS pipeline</span></div>
+        <div class="prog-detail"><span class="prog-label">Academic Profile</span><span class="prog-val">Elite</span></div>
+      </div>
+      <div class="prog-card" onclick="openArticle('prog-wakeforest')">
+        <div class="prog-name">Wake Forest</div>
+        <div class="prog-gender">Men's</div>
+        <div class="prog-detail"><span class="prog-label">Conference</span><span class="prog-val">ACC</span></div>
+        <div class="prog-detail"><span class="prog-label">Head Coach</span><span class="prog-val">Bobby Muuss</span></div>
+        <div class="prog-detail"><span class="prog-label">Location</span><span class="prog-val">Winston-Salem, NC</span></div>
+        <div class="prog-detail"><span class="prog-label">2025 Result</span><span class="prog-val">National Runners-Up</span></div>
+      </div>
+    </div>
+    <div class="sec-label" style="margin-top:8px;">Top Programs — Women's</div>
+    <div class="prog-grid">
+      <div class="prog-card" onclick="openArticle('prog-unc')">
+        <div class="prog-name">North Carolina</div>
+        <div class="prog-gender">Women's</div>
+        <div class="prog-detail"><span class="prog-label">Conference</span><span class="prog-val">ACC</span></div>
+        <div class="prog-detail"><span class="prog-label">Location</span><span class="prog-val">Chapel Hill, NC</span></div>
+        <div class="prog-detail"><span class="prog-label">Championships</span><span class="prog-val">21 National Titles</span></div>
+        <div class="prog-detail"><span class="prog-label">Known For</span><span class="prog-val">USWNT pipeline</span></div>
+      </div>
+      <div class="prog-card" onclick="openArticle('prog-stanford')">
+        <div class="prog-name">Stanford</div>
+        <div class="prog-gender">Women's</div>
+        <div class="prog-detail"><span class="prog-label">Conference</span><span class="prog-val">Pac-12</span></div>
+        <div class="prog-detail"><span class="prog-label">Location</span><span class="prog-val">Palo Alto, CA</span></div>
+        <div class="prog-detail"><span class="prog-label">Academic Profile</span><span class="prog-val">World-class</span></div>
+        <div class="prog-detail"><span class="prog-label">Known For</span><span class="prog-val">Academics + soccer</span></div>
+      </div>
+      <div class="prog-card" onclick="openArticle('prog-ucla')">
+        <div class="prog-name">UCLA</div>
+        <div class="prog-gender">Women's</div>
+        <div class="prog-detail"><span class="prog-label">Conference</span><span class="prog-val">Pac-12</span></div>
+        <div class="prog-detail"><span class="prog-label">Location</span><span class="prog-val">Los Angeles, CA</span></div>
+        <div class="prog-detail"><span class="prog-label">Known For</span><span class="prog-val">Attack-minded play</span></div>
+        <div class="prog-detail"><span class="prog-label">Campus Life</span><span class="prog-val">Large university, LA</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="maybeClose(event)">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-pill" id="m-tag"></div>
+      <div class="modal-title" id="m-title"></div>
+      <div class="modal-meta" id="m-meta"></div>
+    </div>
+    <div class="modal-body" id="m-body"></div>
+    <button class="modal-close" onclick="closeModal()">✕ Close article</button>
+  </div>
+</div>
+
 <footer>
   <div class="footer-inner">
     <div class="footer-logo">College Soccer <span>Daily</span></div>
-    <div class="footer-tagline">Your daily college soccer source — news, recruiting, rankings & more.</div>
+    <div class="footer-tag">Your daily college soccer source — news, recruiting, showcases, and the transfer portal.</div>
     <div class="footer-links">
-      <a class="footer-link" href="#">News</a>
-      <a class="footer-link" href="#">Recruiting</a>
-      <a class="footer-link" href="#">Rankings</a>
-      <a class="footer-link" href="#">Transfer Portal</a>
-      <a class="footer-link" href="#">Programs</a>
-      <a class="footer-link" href="#">Newsletter</a>
-      <a class="footer-link" href="#">About</a>
-      <a class="footer-link" href="#">Contact</a>
+      <span class="footer-link" onclick="showPage('news')">News</span>
+      <span class="footer-link" onclick="showPage('recruiting')">Recruiting</span>
+      <span class="footer-link" onclick="showPage('portal')">Transfer Portal</span>
+      <span class="footer-link" onclick="showPage('showcases')">Showcases</span>
+      <span class="footer-link" onclick="showPage('programs')">Programs</span>
     </div>
-    <div class="footer-bottom">© 2026 College Soccer Daily · Built for players, parents & coaches</div>
+    <div class="footer-copy">© 2026 College Soccer Daily · Built for players, parents & coaches</div>
   </div>
 </footer>
 
-<!-- ARTICLE MODAL -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-  <div class="modal" id="modal">
-    <div class="modal-header" id="modal-header">
-      <div class="modal-tag" id="modal-tag"></div>
-      <div class="modal-title" id="modal-title"></div>
-      <div class="modal-meta" id="modal-meta">College Soccer Daily Staff · Just now</div>
-    </div>
-    <div id="modal-body-wrap">
-      <div class="modal-loading" id="modal-loading">
-        <div class="modal-loading-spinner"></div>
-        <div class="modal-loading-text">Generating full article with AI...</div>
-      </div>
-      <div class="modal-body" id="modal-body" style="display:none;"></div>
-    </div>
-    <button class="modal-close" onclick="closeModalDirect()">✕ Close article</button>
-  </div>
-</div>
-
 <script>
-  // API key management
-  let API_KEY = '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';
-  if (API_KEY) {
-    document.getElementById('api-key-bar').style.display = 'none';
-    document.getElementById('api-key-input').value = API_KEY;
-  }
-  function saveKey() {
-    const k = document.getElementById('api-key-input').value.trim();
-    if (!k.startsWith('sk-')) { alert('That doesn\'t look like a valid API key. It should start with sk-ant-...'); return; }
-    API_KEY = k;
-    localStorage.setItem('csd_api_key', k);
-    document.getElementById('api-key-bar').style.display = 'none';
-    alert('API key saved! Click any article to read it.');
-  }
+const ARTICLES = {
+  'house-settlement': {tag:'NIL & Recruiting',title:'Everything Has Changed: How the House Settlement Rewrites College Soccer Scholarships',author:'CSD Staff',date:'April 19, 2026',body:`<p>The <strong>House v. NCAA settlement</strong>, which took full effect at the start of the 2025–26 academic year, is the most consequential change to college athletics in decades. For college soccer families — who have long operated in a sport defined by partial scholarships, roster math, and confusing financial packages — the new rules require a fundamental shift in how you evaluate offers, compare programs, and think about the value of a college soccer commitment.</p><h3>What changed and why</h3><p>The settlement resolved a class-action antitrust lawsuit brought by former college athletes, including swimmer Grant House, who argued that the NCAA's restrictions on athlete compensation violated federal law. The settlement required two major changes: first, that schools be permitted to share athletic revenue directly with athletes; and second, that roster and scholarship limits be restructured across all sports.</p><h3>Revenue sharing</h3><p>Beginning with the 2025–26 academic year, D1 schools can now share up to approximately <strong>$20 million per year</strong> in revenue directly with their athletes across all sports. Each school decides how to allocate that money. At schools with large football and basketball programs, soccer athletes may see a meaningful portion of this pool. At smaller D1 programs, the per-athlete amounts will be smaller.</p><p>This is genuinely new money — not NIL, not boosters. It comes directly from the athletic department to the athlete, in addition to traditional scholarship aid. A player who previously received a 50% athletic scholarship may now also receive a direct revenue share payment, making the total package significantly more valuable than the scholarship percentage alone suggests.</p><h3>The roster limit change</h3><p>Under the old system, D1 men's soccer programs had <strong>9.9 scholarships</strong> to distribute among rosters that often carried 28–32 players. The new rules allow every rostered player — up to 28 — to receive athletic aid. This sounds like more money for everyone, and in some cases it is. But at programs choosing to maximize roster coverage, individual scholarship amounts may be smaller than under the old system. The math varies dramatically by program.</p><h3>What this means when evaluating offers</h3><p>The single most important question families should now ask every program is: <strong>what does a realistic four-year financial package look like for my player specifically?</strong> Get it in writing. A 60% scholarship means something very different at a school with a robust revenue sharing program versus one distributing the minimum. Ask whether revenue share is guaranteed year-to-year or conditional on performance. Ask how many players receive it and what the average amount has been.</p><p>Do not compare programs based on scholarship percentages alone. A player receiving a 40% scholarship plus revenue share may be receiving more total support than a player on a 60% scholarship at a program with no revenue sharing. The era of simple scholarship math is over.</p><h3>NIL is a separate conversation</h3><p>Revenue sharing is distinct from <strong>NIL (Name, Image, and Likeness)</strong>, which refers to a player's ability to earn money from endorsements, social media, and other commercial activities. NIL is not paid by the school — it comes from third parties, often through booster-funded collectives. For most college soccer players, NIL earnings are modest but real. When coaches mention NIL during recruiting conversations, ask specifically whether they mean school-paid revenue sharing or third-party NIL. They are legally and practically different.</p>`},
 
-  // Set today's date
-  const now = new Date();
-  document.getElementById('nav-date').textContent = now.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+  'ecnl-indy': {tag:'Showcases',title:'ECNL Boys Indianapolis: What It Is and Why It Matters for 2027 Recruits',author:'CSD Staff',date:'Today',body:`<p>The <strong>ECNL Boys Indianapolis Showcase</strong> is one of the most important spring evaluation events on the college soccer recruiting calendar, held annually at Grand Park Sports Campus in Westfield, Indiana. The event draws U14 through U19 age groups from ECNL clubs across the country and attracts college coaches from all three NCAA divisions.</p><p>For 2027 prospects specifically, the April showcase comes at a critical moment. Many programs have already filled or nearly filled their 2026 and early 2027 commitments through the winter showcase circuit. Coaches attending Indianapolis are often targeting players who have not yet committed — and are making early decisions about who to bring in for official visits over the summer.</p><p>Players who perform well at Indianapolis can expect an uptick in coach contact in the days and weeks that follow. The key for families is to follow up promptly: if a coach watches your game, send a short thank-you email within 48 hours referencing the specific match and inviting further conversation. Do not wait for the coach to reach out first.</p>`},
 
-  // Tab navigation
-  function showTab(tab) {
-    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-    event.target.classList.add('active');
-  }
+  'portal-window': {tag:'Transfer Portal',title:'The Soccer Transfer Portal Spring Window Opens May 1 — Everything Players Need to Know',author:'CSD Staff',date:'Yesterday',body:`<p>The spring transfer portal window for NCAA Division I soccer opens <strong>May 1 and closes May 15, 2026</strong> — a 15-day window that gives players who want to transfer a second opportunity to explore new programs after the fall window.</p><p>Entering the portal is a formal process. A player notifies their school's compliance office in writing that they want to be entered, and the school has up to two business days to officially place the player in the NCAA Transfer Portal database. Once entered, coaches at other programs can legally contact the player. The player can also return to their original school if they choose not to transfer — but the school is not required to restore their scholarship, which is one of the most important and misunderstood facts about the portal.</p><p>There is an important exception to the window rules: if a <strong>head coach is fired or leaves the program</strong>, affected players receive a special 30-day window to enter the portal regardless of the calendar. This is a significant factor in the spring movement that typically follows coaching changes.</p><p>For players considering the portal: the 15-day spring window is short. Programs filling needs will move quickly. If you are seriously considering a transfer, begin conversations with prospective coaches before May 1 so that when the window opens, there is already mutual interest established.</p>`},
 
-  // Feed filter
-  function filterFeed(cat) {
-    document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
-    document.querySelectorAll('.news-card').forEach(card => {
-      if (cat === 'all' || card.dataset.category === cat) {
-        card.style.display = '';
-      } else {
-        card.style.display = 'none';
-      }
-    });
-  }
+  'age-group': {tag:'Recruiting',title:"US Soccer's Age Group Change Explained — And What It Means for Your Recruiting Class",author:'CSD Staff',date:'2 days ago',body:`<p>Beginning with the Fall 2026 season, US Soccer is implementing a nationwide shift from <strong>birth-year age groups</strong> to <strong>school-year age groups</strong> — reversing a change that was made in 2016 when US Soccer aligned with international calendar-year standards.</p><p>For recruiting, the practical impact is that some players' class years will shift. A player born in the first half of the calendar year who was previously classified as a Class of 2028 under birth-year rules may now fall into a different class depending on their school grade. Families should verify with their club and with prospective colleges how this transition affects their player's recruiting class designation.</p><p>If your player's effective class year has changed due to this transition, update your recruiting profile on platforms like TopDrawerSoccer and SoccerWire, and proactively communicate the change to coaches who have shown interest. The transition does not affect players who have already committed or signed with college programs.</p>`},
 
-  // Article modal
-  let currentTitle = '';
-  let currentTag = '';
+  'early-commits': {tag:'Recruiting',title:'Is Your 2027 Player Behind? The Honest Truth About Early Commitments',author:'Marcus Rivera',date:'Today, 8:00 AM',body:`<p>Every spring, a wave of anxiety washes over families of Class of 2027 soccer players when they see their child's teammates announcing college commitments on social media. The natural response is panic — am I behind? Should my player have committed already? The honest answer is more nuanced than social media suggests — but the urgency is real, and families who are not actively engaged in the process right now will be playing catch-up by fall.</p><h3>Who is actually committing right now</h3><p>The players committing in spring of their sophomore year tend to fall into a narrow profile. They are playing at the highest club levels (ECNL, MLS Next, or Girls Academy), have been attending major showcase events since age 14, and have been proactively reaching out to coaches since their freshman year. They are also often positioned at positions where programs have the longest planning horizons: <strong>goalkeepers and center backs</strong> are typically the first to commit in any class, because coaches know exactly how many they need and cannot easily fill those positions through the transfer portal mid-season.</p><h3>What the data actually shows</h3><p>Recruiting databases like TopDrawerSoccer and SoccerWire consistently show that the majority of D1 commitments in any class happen between <strong>June and December of the player's junior year</strong>. The players committing in sophomore spring represent perhaps 20–25% of the eventual D1 committed class. The other 75–80% commit later, and many of those players end up at programs that are just as good or better fits than the early commits' destinations.</p><p>Families who panic and push their player to commit too early — to a program that reached out first rather than the program that is the best fit — often regret it. The transfer portal exists partly because so many early commitments don't survive the test of time.</p><h3>What you should actually be doing right now</h3><p>Focus on three things. First, <strong>attend the right events</strong>. The ECNL Boys Indianapolis Showcase, the Girls Academy Spring Playoffs in May, and ECNL Regionals in June are the highest-concentration coach evaluation events of the spring. Second, <strong>get a current highlight video done</strong> — 8–12 minutes, best moments first, current season footage. Third, <strong>start reaching out to coaches</strong> with short, specific introductory emails. Spring is the time to plant seeds. Summer showcases are where those seeds grow into offers. Junior fall is when most commitments happen. You are not behind — but you need to be moving.</p>`},
 
-  async function openArticle(id, tag, title) {
-    currentTitle = title;
-    currentTag = tag;
-    document.getElementById('modal-tag').textContent = tag;
-    document.getElementById('modal-title').textContent = title;
-    document.getElementById('modal-meta').textContent = 'College Soccer Daily Staff · ' + now.toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
-    document.getElementById('modal-loading').style.display = 'block';
-    document.getElementById('modal-body').style.display = 'none';
-    document.getElementById('modal-body').innerHTML = '';
-    document.getElementById('modal-overlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
-    await fetchArticle(tag, title);
-  }
+  'portal-guide': {tag:'Transfer Portal',title:'The Transfer Portal Is Not a Magic Fix — A Realistic Guide for College Soccer Players',author:'Jen Park',date:'Yesterday',body:`<p>The transfer portal has fundamentally changed college soccer. In five years it has gone from a rarely used safety valve to a routine part of how programs build and rebuild rosters every year. For players considering using it, the opportunity is real — but so are the risks.</p><h3>The soccer transfer windows</h3><p>Soccer maintains <strong>two annual windows</strong>. The fall window opens approximately 30 days after Selection Monday for the NCAA Championship and runs for 30 days. The spring window opens <strong>May 1 and closes May 15</strong> — just 15 days. Players who are not prepared to move quickly when it opens will find that the best opportunities have already been claimed. There is also the coaching change exception: if your head coach is fired or leaves the program, you are entitled to a special 30-day window to enter the portal regardless of the calendar.</p><h3>What the portal can and cannot do</h3><p>Entering the portal <strong>does not guarantee anything</strong>. It makes you available to be contacted by other programs, nothing more. Some players enter and receive multiple D1 offers within days. Others enter and hear nothing. The outcome depends heavily on your position, your statistics from the previous season, your academic profile, and your timing. The portal is most valuable for players who have proven they can produce at the D1 level but are in the wrong situation. It is least valuable for players who are struggling at their current level and hope a change of scenery will solve the problem.</p><h3>The scholarship risk nobody talks about</h3><p>One of the most important and least understood facts about the transfer portal is that <strong>your current school is not required to maintain your scholarship once you enter</strong>. Some programs honor scholarships through the end of the academic term. Others do not. Before you enter the portal, have an explicit conversation with your compliance office about what happens to your financial aid the moment your name goes in. Do not assume it continues.</p><h3>How to prepare before May 1</h3><p>Research programs that have needs at your position for fall. Reach out to position coaches to express genuine interest before the window opens. Update your highlight video with your most recent season's film — coaches evaluating portal players are looking for immediate impact and your most recent film matters most. Have your transcripts ready, because programs interested in a portal player will confirm academic eligibility quickly before investing time in a recruitment.</p>`},
 
-  async function fetchArticle(tag, title) {
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': API_KEY,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: `You are the lead writer for College Soccer Daily, a trusted daily news source for the college soccer world. Your audience is players (recruits), parents, and coaches. Write in a clear, informative, credible tone — like ESPN meets a knowledgeable soccer insider.
+  'five-mistakes': {tag:'Parent Guide',title:'The Five Mistakes Soccer Families Make in the Recruiting Process',author:'CSD Staff',date:'Yesterday',body:`<p>After years of covering college soccer recruiting, there are patterns of mistakes that appear again and again across families at every level. Most of these mistakes are not about the player's talent. They are about process, timing, and realistic self-assessment.</p><h3>1. Waiting for coaches to find you</h3><p>This is the single most common and most damaging mistake. Families believe that if their player is talented enough, coaches will discover them organically. Even elite players proactively reach out to programs. A short, professional introductory email with a highlight video link is the most direct action a family can take to start a recruiting conversation. The families who wait are the families who miss windows.</p><h3>2. Targeting only the schools they've heard of</h3><p>Most families enter the recruiting process with a mental list of five to ten dream schools that every other family also has. There are approximately 350 D1 soccer programs in the country. Families who expand their target list early — to 25 or 30 programs across a range of competitive levels — give their player dramatically better odds of finding a great fit.</p><h3>3. Treating D2 and D3 as failures</h3><p>Division II and Division III programs are not consolation prizes. Many D2 programs compete at a level that would challenge D1 rosters. At D3 schools, academic prestige and merit aid can make the total package less expensive than a partial D1 scholarship. Players who dismiss these options out of pride often end up at D1 programs where they don't play, don't develop, and don't enjoy the experience.</p><h3>4. Making the decision without visiting campus</h3><p>Committing to a college based on a Zoom call and a program's record is a significant mistake. Visit every school you are seriously considering. Talk to current players without the coaching staff present. Ask them honestly whether they would make the same choice again. The answers will tell you more than anything a coach says in a sales pitch.</p><h3>5. Ignoring academics until it's too late</h3><p>Academic eligibility is a prerequisite for all of this. Review the NCAA eligibility requirements at the beginning of your player's high school career, not the end. The core course clock starts freshman year. Problems with eligibility are almost always solvable if caught early and almost never solvable if caught in senior year.</p>`},
 
-CRITICAL CONTEXT: It is currently April 2026 — the spring OFFSEASON. College soccer seasons (fall) are over. Washington won the 2025 men's national title. The current news cycle is: spring transfer portal window (closes April 25), Class of 2027 early recruiting commitments, ECNL and Girls Academy spring showcases, spring team practices, NIL/House settlement impacts, and coaches evaluating prospects. Do NOT write about active match results, rankings, or NCAA tournaments — those happen in fall. Stay seasonally accurate.
+  'showcase-guide': {tag:'Recruiting',title:"Spring Showcase Season: A Family's Complete Guide to Getting the Most Out of Every Event",author:'CSD Staff',date:'2 days ago',body:`<p>Spring showcase season runs from April through June and represents the single most concentrated period of college coach evaluation in the entire recruiting calendar. For players who are not yet committed, spring showcases are the most direct path to getting on college coaches' radars.</p><h3>The key spring events and who attends</h3><p>The highest-concentration events — where the most D1 coaches per game are present — are the <strong>ECNL Regional Championships</strong>, the <strong>Girls Academy Playoffs</strong>, the <strong>ECNL Boys National Championship</strong>, and the <strong>MLS Next Playoffs</strong>. These events draw coaches because the competition level is consistently high and the players attending are pre-vetted as among the top club players in the country.</p><h3>Before the event</h3><p>Have an updated highlight video link ready to share on your phone. Know which coaches from target programs will be in attendance — many events publish registered coaches lists, and your club director often has this information. If you know Coach X from Program Y will be watching Saturday morning, email them Friday afternoon to let them know you are competing and share your video link. This dramatically increases the likelihood that the coach actively watches your specific game rather than drifting between fields.</p><h3>What coaches are actually watching</h3><p>Coaches are not just watching goals and assists. They are watching <strong>decisions without the ball</strong> — where does your player position themselves when the team is defending? They are watching first touch quality under pressure, pressing intensity, communication with teammates, and body language after mistakes. A player who drops their head after an error is sending coaches a signal about their character under pressure that matters as much as anything they do with the ball.</p><h3>After the event</h3><p>The most underused moment in the entire showcase process is the 48 hours after the event. If a coach watched your game, send a brief thank-you email referencing the specific event and game. This follow-up confirms for the coach that you are serious and professional, and gets your name back in front of them at a moment when they are reviewing notes and deciding who to continue pursuing. Close the loop every time.</p>`},
 
-Write a full article (4-6 paragraphs) for the given headline. Include realistic details. Format as HTML paragraphs only using <p> and <strong> tags. No markdown. Start directly with the article content, no title needed.`,
-          messages: [{ role: 'user', content: `Write a full article for College Soccer Daily with this headline:\n\nSection: ${tag}\nHeadline: ${title}\n\nWrite 4-6 substantive paragraphs with realistic college soccer details. Use <p> and <strong> HTML tags only.` }]
-        })
-      });
-      const data = await res.json();
-      if (data.error) throw new Error(data.error.message);
-      const text = data.content?.map(b => b.text || '').join('') || 'Unable to load article.';
-      document.getElementById('modal-loading').style.display = 'none';
-      document.getElementById('modal-body').innerHTML = text;
-      document.getElementById('modal-body').style.display = 'block';
-    } catch(e) {
-      document.getElementById('modal-loading').style.display = 'none';
-      document.getElementById('modal-body').innerHTML = `<p style="color:var(--text-muted)">⚠️ To load AI articles, open this file in a browser and add your Anthropic API key where it says <code>ANTHROPIC_API_KEY</code> in the script. Get one free at <a href="https://console.anthropic.com" style="color:var(--blue)">console.anthropic.com</a>.</p>`;
-      document.getElementById('modal-body').style.display = 'block';
-    }
-  }
+  'washington': {tag:"Men's",title:"Washington's National Title and What It Means for Men's College Soccer Recruiting",author:'Staff Report',date:'3 days ago',body:`<p>When the <strong>University of Washington Huskies</strong> won the 2025 Men's College Cup, they did something that had not been done in the modern era of college soccer: they built a national champion almost exclusively from regional talent. In an era when programs increasingly recruit internationally and leverage the transfer portal to fill roster needs with proven players, Washington's title run offered a compelling counter-argument about how championships can be built.</p><h3>What Washington proved</h3><p>The Huskies demonstrated that <strong>identity-driven, relationship-based recruiting</strong> can produce a national champion even in a landscape dominated by programs with larger recruiting budgets and national brand recognition. Head coach Jamie Clark has spent years building a culture that prioritizes players who are hungry to be excellent rather than players who have been told they are excellent — a distinction that matters more than any recruiting ranking.</p><h3>The recruiting implications for other programs</h3><p>Washington's title immediately changed the recruiting calculus in the Pacific Northwest. Programs that had previously dominated local recruiting now face a university that can credibly tell top Northwest prospects that they can win a national championship without leaving home. More broadly, the title has prompted conversations among coaches about the balance between portal-driven roster construction and long-term class building.</p><h3>What this means for prospects considering Washington</h3><p>For 2027 and 2028 prospects evaluating Washington, the program's post-title recruiting landscape has changed significantly. Clark has confirmed inquiries from prospects across 14 states, well beyond the regional footprint that previously defined Washington's recruiting geography. Pacific Northwest prospects should expect more competition for spots than in previous cycles. Starting conversations with the coaching staff early — and demonstrating genuine cultural fit, not just athletic ability — will matter more than it did even one recruiting cycle ago.</p>`},
 
-  function closeModal(e) {
-    if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
-  }
-  function closeModalDirect() {
-    document.getElementById('modal-overlay').classList.remove('open');
-    document.body.style.overflow = '';
-  }
+  'coach-perspective': {tag:"Coach's Corner",title:'What College Coaches Actually Want — The Recruiting Process From Their Side',author:'CSD Staff',date:'4 days ago',body:`<p>The college soccer recruiting process is covered extensively from the family's perspective. What gets far less coverage is the view from the other side: how college coaches actually conduct recruiting, what they are evaluating beyond athletic factors, and what behaviors from families make their jobs harder or easier.</p><h3>Coaches are managing far more than you realize</h3><p>A Division I soccer coaching staff typically consists of a head coach, one or two assistants, and possibly a graduate assistant. They are responsible for practice planning, game preparation, travel logistics, academic monitoring, alumni relations, recruiting — and now, with NIL and revenue sharing, financial conversations that previously did not exist. This context matters because families often interpret slow responses to emails as a signal that the program is not interested. More often, it is a signal that the coach is genuinely overwhelmed. Make your emails short, specific, and easy to act on.</p><h3>What coaches mean when they say "fit"</h3><p>When a coach tells a family they are evaluating whether the player is a good fit, they are rarely talking primarily about athleticism. They have already decided the player is athletically capable. What they are genuinely evaluating is whether the player's personality, competitive temperament, academic seriousness, and interpersonal style will function well within their specific team culture. A coach who has built a team around selfless players will be cautious about adding someone coaches and teammates describe as difficult, regardless of their talent level.</p><h3>The campus visit through a coach's eyes</h3><p>Coaches are watching how the player interacts with current players when the coaching staff is not in the room. They are watching whether the recruit asks genuine questions about the program and campus, or just answers questions. They are watching the family's dynamic — a parent who dominates every conversation or expresses skepticism about every aspect of the program creates friction that coaches remember. After the visit, the coach will ask the current players who hosted the recruit what they thought. This informal feedback carries significant weight.</p><h3>What actually ends a recruitment</h3><p>Coaches rarely tell families directly that they are no longer being recruited. Instead, the signs are indirect: response times get longer, emails become shorter, the coach stops attending your player's games. If you experience this pattern, a direct professional conversation is worth having: "We are trying to make a decision and want to understand whether our player is still being actively considered by your program." Coaches respect directness, and the answer will allow your family to redirect energy toward programs where the interest is genuinely mutual.</p>`},
 
-  // Generate more news
-  async function generateMoreNews() {
-    const btn = document.getElementById('gen-btn');
-    const spinner = document.getElementById('gen-spinner');
-    const btnText = document.getElementById('gen-btn-text');
-    btn.disabled = true;
-    spinner.style.display = 'block';
-    btnText.textContent = 'Generating today\'s briefing...';
+  'd1-d2-d3': {tag:'Recruiting Guide',title:'D1 vs D2 vs D3: An Honest Guide to Choosing the Right Level',author:'CSD Staff',date:'April 2026',body:`<p>The division level question is the most important and most mishandled decision in college soccer recruiting. Families anchor on Division I as the only acceptable outcome, when the reality is that the best fit for the majority of high-level soccer players — athletically, academically, financially, and personally — often exists at D2 or D3.</p><h3>Division I</h3><p>D1 is the highest level of NCAA competition. Men's programs operate with 9.9 scholarships, now supplemented by revenue sharing under the House settlement. Women's programs have 14 scholarships distributed as equivalency awards. Competition is intense, time demands are significant — expect 20 to 30 hours per week during the season — and the margin for error in roster decisions is small. D1 is the right choice for players who are being actively recruited by multiple programs, who can realistically compete for playing time in their first two years, and who can handle the full commitment of D1 athletics alongside a rigorous academic schedule. Players who arrive at D1 programs and ride the bench for four years often leave college with less development, less joy in the sport, and less competitive experience than they would have gotten starting at a D2 program.</p><h3>Division II</h3><p>D2 programs offer up to 9 scholarships for men and 9.9 for women, and the level of competition is genuinely strong. Many D2 players are athletes who would compete well at the D1 level but preferred a specific program, location, or academic environment. The lifestyle at D2 is often more balanced — travel schedules are less demanding, and the student-athlete experience tends to feel less all-consuming. For players who want to play college soccer seriously but also want a genuine college experience beyond the sport, D2 is frequently the better fit.</p><h3>Division III</h3><p>D3 programs offer no athletic scholarships by rule. However, many D3 schools are highly selective private universities with significant endowments that offer generous merit-based and need-based aid. A player who receives $30,000 per year in merit aid at a D3 school may be paying less than a player on a 25% athletic scholarship at a D1 school with a $55,000 annual cost of attendance. For players who love soccer but are primarily driven by academic ambitions, D3 at a school like Williams, Amherst, or Emory can be a transformative choice.</p><h3>How to decide honestly</h3><p>Watch film from programs at different levels and ask honestly whether your player could contribute meaningfully at that level as a freshman or sophomore. If the answer is yes for D1, pursue D1 seriously. If the honest answer is probably not for another year or two, D2 may be the right starting point. And if your player's primary passion is something other than soccer, D3 deserves serious consideration regardless of athletic ability.</p>`},
 
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': API_KEY,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: 'You are an editor for College Soccer Daily. It is April 2026 — the college soccer spring offseason. Generate 3 college soccer news stories relevant RIGHT NOW: spring transfer portal (closes April 25), Class of 2027 recruiting commitments, ECNL/GA spring showcases, spring practices, NIL/House settlement, coaching changes. NO fall season content, no match rankings, no tournament brackets. Return ONLY a JSON array with no markdown code fences. Each object has: tag (e.g. Recruiting, Transfer Portal, Men\'s, Women\'s, Showcases, NIL), title (headline string), excerpt (2-sentence summary string), author (name string), time (e.g. "1h ago"), category (one of: recruiting, transfer, mens, womens, rankings).',
-          messages: [{ role: 'user', content: `Generate 3 fresh spring offseason college soccer news headlines for ${now.toDateString()}. Mix recruiting, portal, showcase, and NIL topics. Return only a raw JSON array.` }]
-        })
-      });
-      const data = await res.json();
-      let raw = data.content?.map(b => b.text || '').join('') || '[]';
-      raw = raw.replace(/```json|```/g, '').trim();
-      const stories = JSON.parse(raw);
-      const feed = document.getElementById('news-feed');
-      stories.forEach(s => {
-        const card = document.createElement('div');
-        card.className = 'news-card';
-        card.dataset.category = s.category || 'news';
-        card.onclick = () => openArticle(s.category, s.tag, s.title);
-        card.innerHTML = `
-          <div class="news-card-top">
-            <span class="news-tag tag-${s.category || 'news'}">${s.tag}</span>
-            <span class="news-time">${s.time}</span>
-          </div>
-          <div class="news-title">${s.title}</div>
-          <div class="news-excerpt">${s.excerpt}</div>
-          <div class="news-footer">
-            <span class="news-author">By ${s.author}</span>
-            <span class="news-read">Read more →</span>
-          </div>`;
-        feed.appendChild(card);
-      });
-      btnText.textContent = '✦ Generate more stories';
-    } catch(e) {
-      btnText.textContent = '✦ Try again';
-    }
-    btn.disabled = false;
-    spinner.style.display = 'none';
-  }
+  'coach-email': {tag:'Recruiting Guide',title:'How to Write a Coach Email',author:'CSD Staff',date:'April 2026',body:`<p>The introductory email to a college coach is the single most underused tool in the recruiting process. Families either don't send them at all — waiting for coaches to find their player — or send them in a way that gets immediately archived without a response. Done correctly, a coach email is the most direct action you can take to start a recruiting conversation.</p><h3>The five-sentence structure</h3><p><strong>Sentence one</strong> is who you are: your player's full name, graduation year, primary position, and current club team. Nothing more.</p><p><strong>Sentence two</strong> is why you're writing to this specific program. This is the most important sentence and the one families most often get wrong. Generic sentences like "I have admired your program for many years" tell the coach nothing. Specific sentences like "I've followed your program's style of play since watching your quarterfinal run last fall, and I think my technical strengths in central midfield match what I've seen from your system" tell the coach you have done your homework. Specificity signals seriousness.</p><p><strong>Sentence three</strong> is your player's athletic profile: two or three specific accomplishments that demonstrate ability at a high level. State rankings, club accomplishments, or national team experience. Not general statements like "highly competitive player."</p><p><strong>Sentence four</strong> is your academic profile: current GPA, class rank if notable, any standardized test scores if available, and your intended area of study if known. Coaches want to know early whether a player can be admitted to their school.</p><p><strong>Sentence five</strong> is a specific ask and a link to your highlight video: "I would love the opportunity to speak with you — my highlight video is at [link]. Would a brief call in the next few weeks be possible?"</p><h3>Who to address it to</h3><p>Send the email to the <strong>position coach</strong> for your player's position, not just the head coach. Most programs list coaching staff with their specific responsibilities on the program's official website. A goalkeeper should be contacting the goalkeeper coach. Addressing it to "Coach [Last Name]" rather than "Dear Coach" shows basic research.</p><h3>Common mistakes</h3><p>Emails that are too long, large file attachments instead of links, the same generic email sent to 50 programs with only the school name changed, and spelling or grammatical errors. One follow-up after two weeks with no response is appropriate. After that, move on. Coaches who are interested will respond.</p>`},
 
-  // Ask CSD AI
-  async function askCSD() {
-    const input = document.getElementById('ai-search-input');
-    const q = input.value.trim();
-    if (!q) return;
-    await openArticle('ask-csd', 'Ask CSD', q);
-    input.value = '';
-  }
+  'eligibility': {tag:'Recruiting Guide',title:'Understanding Your NCAA Eligibility: A Step-by-Step Guide',author:'CSD Staff',date:'April 2026',body:`<p>NCAA eligibility is a prerequisite for everything in college soccer recruiting. No matter how talented a player is, no matter how many scholarship offers they have received, they cannot sign with a D1 program unless they meet initial eligibility requirements set by the NCAA Eligibility Center.</p><h3>The NCAA Eligibility Center</h3><p>Every player who wants to compete at the D1 or D2 level must register with the <strong>NCAA Eligibility Center</strong> at eligibilitycenter.org. Registration should happen no later than the beginning of junior year, though registering earlier is always better. The Eligibility Center reviews your academic record — your high school transcripts, your course selections, and your standardized test scores — and certifies whether you are eligible to compete.</p><h3>Core course requirements</h3><p>D1 requires the completion of <strong>16 core courses</strong> in approved academic subjects — English, math, science, social studies, and additional academic courses — with a minimum grade point average in those core courses that corresponds to your standardized test score on a sliding scale. The minimum core GPA is 2.3 for D1. Critically, not all high school courses count as core courses. Physical education, music, arts, and some vocational courses do not count regardless of the grade received. Make sure your high school counselor is identifying core courses correctly on your transcript.</p><h3>Start early, check often</h3><p>Run your player's current transcript against the NCAA core course requirements at the beginning of high school and check it again each semester. Problems with eligibility are almost always solvable if caught early. A player who discovers a problem in senior year often has no path to fix it in time. Ask your school counselor to review your player's course plan against NCAA requirements annually.</p>`},
 
-  // Newsletter
-  function subscribe() {
-    const email = document.getElementById('nl-email').value.trim();
-    if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return; }
-    document.querySelector('.newsletter-btn').textContent = '✓ You\'re subscribed!';
-    document.getElementById('nl-email').value = '';
-  }
+  'nil-guide': {tag:'Recruiting Guide',title:'NIL and Revenue Sharing in 2026: What Every Recruit Needs to Know',author:'CSD Staff',date:'April 2026',body:`<p>The financial landscape of college athletics has changed more in the last three years than in the previous 50 combined. Understanding the difference between traditional scholarships, NIL earnings, and the new revenue sharing framework is the foundation of making a financially sound college decision.</p><h3>Traditional athletic scholarships</h3><p>The traditional scholarship framework still exists. D1 men's soccer programs have 9.9 scholarships to distribute. D1 women's soccer programs have 14. These are distributed as equivalency awards — meaning a program can split a single scholarship among multiple players. Scholarship amounts are legally binding commitments from the school. Ask programs specifically about their scholarship renewal philosophy and whether the amount offered is guaranteed for four years or subject to annual review.</p><h3>Revenue sharing</h3><p>The House v. NCAA settlement, effective with the 2025–26 academic year, allows D1 schools to share up to approximately $20 million in athletic revenue directly with their athletes. Each school decides how to allocate this money across sports. Revenue sharing payments are not governed by the same legal framework as scholarship awards — they are more analogous to employment compensation, potentially variable year to year. Ask programs specifically how their revenue sharing for soccer is determined and what the expectations are for continuity.</p><h3>NIL</h3><p>NIL — Name, Image, and Likeness — refers to a player's right to earn money from commercial activities: endorsement deals, social media partnerships, camp appearances, and similar activities. NIL is not paid by the school. It comes from third parties, often through booster-funded collectives. For most college soccer players, NIL earnings are modest but real. Do not make a college decision based on NIL promises that are not in writing — collectives are not bound by the same rules as schools, and verbal NIL commitments from boosters are not enforceable.</p><h3>How to evaluate the full financial picture</h3><p>When comparing offers, calculate the total annual value: scholarship amount in dollars plus revenue share payment plus any documented NIL opportunity minus the school's total cost of attendance. Also factor in academic merit aid — many schools offer significant non-athletic academic scholarships to students who qualify, and an athletic recruit who also qualifies for merit aid may find that offer more valuable than a higher scholarship percentage at a school with no merit aid for their academic profile.</p>`},
+
+  'campus-visits': {tag:'Recruiting Guide',title:'How to Make the Most of Official and Unofficial Campus Visits',author:'CSD Staff',date:'April 2026',body:`<p>The campus visit is the most important audition of the recruiting process — for the program evaluating your player and for your family evaluating the program. Families who approach visits passively, as audiences to a sales presentation, miss the opportunity to gather the information they actually need to make a good decision.</p><h3>Official vs. unofficial visits</h3><p>An <strong>official visit</strong> is paid for by the athletic program — transportation, meals, lodging, and event tickets within NCAA limits. D1 programs can pay for one official visit per prospect. These typically include a campus tour, meetings with coaches, attendance at a team training session or game, and hosting by current players. An <strong>unofficial visit</strong> is paid for by your family. There is no limit on the number of unofficial visits a prospect can take. Many families take unofficial visits early to narrow their list, and save official visits for programs they are seriously considering.</p><h3>Questions to ask — and who to ask them to</h3><p>The questions you ask coaches will get coached answers. The questions you ask current players — especially without coaching staff present — will get honest answers. Prepare specific questions in advance: Would you make the same choice again? How is the relationship with the coaching staff? What surprised you about the program after you arrived? What is the academic support like when you're traveling for games? Ask coaches directly about roster depth at your player's position for the next two years — how many players are ahead of them, how many are graduating, and what a realistic path to playing time looks like.</p><h3>What to observe beyond the meeting rooms</h3><p>The quality of athletic facilities tells you about program investment. The energy in the locker room during a training session tells you about culture. Observe how the coaching staff interacts with players during training — are they teaching or just correcting? Are players energized or going through motions? Is there mutual respect between coaches and athletes? These dynamics are visible if you watch carefully, and they will replicate when your player joins the program.</p>`},
+
+  'timeline': {tag:'Recruiting Guide',title:'The Recruiting Timeline: What Should Be Happening at Every Stage of High School',author:'CSD Staff',date:'April 2026',body:`<p>One of the most common questions from soccer families is simply: when should things be happening? The recruiting process has no single universal timeline — it varies by division level, position, gender, and how proactive a family has been. But there are patterns that describe when the majority of activity tends to occur.</p><h3>Freshman and sophomore year: foundation building</h3><p>The first two years of high school are about building the foundation athletically, academically, and in terms of recruiting positioning. Athletically, the priority is playing at the highest club level your player can access — ECNL, MLS Next, Girls Academy, and other top-tier leagues are where D1 coaches spend most of their evaluation time. Academically, these years are when the NCAA core course clock starts ticking. Make sure your player is taking approved core courses and maintaining a strong GPA. In terms of recruiting: build a highlight video by the end of sophomore year, register with the NCAA Eligibility Center, and create profiles on TopDrawerSoccer and SoccerWire.</p><h3>Junior year: the most important recruiting year</h3><p>Junior year is when the majority of D1 commitments happen. By the fall of junior year, many programs are making formal scholarship offers to their top targets. By spring of junior year, a significant portion of the committed class is in place at most programs. This is the year to be at the right events, in active communication with coaches, and scheduling official and unofficial visits. The fall showcase circuit in September and October is the primary evaluation window for junior-year prospects.</p><h3>Senior year: signing and final decisions</h3><p>For players who have not yet committed entering senior year, the process is not over. The Early Signing Period for soccer runs in November of senior year, and many programs fill remaining spots during this window. Players committing after the Early Signing Period are often working with programs that had a late opening due to a decommitment, a transfer, or a graduation-year player declaring early. The best path is always a well-researched original commitment rather than relying on the portal as a correction mechanism.</p>`},
+
+  'portal-full-guide': {tag:'Transfer Portal',title:'The Complete Guide to the NCAA Soccer Transfer Portal',author:'CSD Staff',date:'April 2026',body:`<p>The NCAA Transfer Portal is a central database where college athletes formally declare their intent to explore transferring to a new program. For men's and women's soccer, two annual windows govern when athletes can enter the portal and receive contact from other programs.</p><h3>The two windows</h3><p>The <strong>fall window</strong> opens approximately 30 days after Selection Monday for the NCAA Championship — typically in mid-to-late November — and runs for 30 days. For the 2025–26 cycle, the men's fall window ran November 24 through December 23, and the women's fall window ran November 17 through December 16. The <strong>spring window</strong> is a single shared window for both men's and women's soccer that opens <strong>May 1</strong> and closes <strong>May 15</strong> — just 15 days.</p><h3>The coaching change exception</h3><p>If a head coach is fired or leaves the program, every player on that roster is granted a special 30-day window to enter the portal regardless of the calendar. This rule was designed to protect athletes whose primary reason for choosing a program — the coach who recruited them — is no longer there. Programs experiencing coaching changes typically see significant portal activity within days of the announcement.</p><h3>What happens when you enter</h3><p>The athlete notifies their school's compliance office in writing that they want to be entered, and the school has up to two business days to officially place the player's name in the database. Once entered, coaches at other programs can legally contact the player directly. The player can also return to their original school if they choose not to transfer. However, the school is not required to restore their scholarship. This is one of the most important and most misunderstood facts about the portal: entering is not a reversible action without consequence.</p><h3>What programs look for in portal players</h3><p>Coaches evaluating portal players are looking for immediate impact. Unlike high school recruits, portal players are evaluated almost entirely on their college film from the most recent season. A player entering the portal with strong statistics and meaningful playing time at a competitive D1 program has significant leverage. A player entering with limited playing time, regardless of the reason, faces a more challenging market because coaches cannot evaluate what they haven't seen on the field. Academic standing also matters — programs will confirm that a transfer is academically eligible at their institution before making a serious offer.</p>`},
+
+  'before-event': {tag:'Showcase Guide',title:'Before the Event: The Preparation That Actually Matters',author:'CSD Staff',date:'April 2026',body:`<p>The most important showcase preparation is not physical — your player's conditioning and technical ability are what they are by the time the event arrives. What actually moves the needle is the logistical and relational preparation that most families skip entirely.</p><p><strong>Know which coaches will be there.</strong> Many showcase events publish registered coaches lists. Your club director or team manager often has access to this information. If you know specific coaches from target programs will be watching, email them before the event. A short note — "I wanted to let you know I will be competing this weekend, here is my highlight video, I am wearing jersey #12, we play at 10am Saturday on Field 6" — takes five minutes to write and dramatically increases the probability that the coach actively watches your game rather than drifting between fields.</p><p><strong>Have your video link ready.</strong> At every showcase, there will be moments where a coach walks up to speak with a player or parent. Have your Hudl or YouTube link saved somewhere easily accessible — in your phone contacts, in a note — wherever you can pull it up in ten seconds.</p><p><strong>Update your profile.</strong> Make sure your TopDrawerSoccer and SoccerWire profiles are current before the event. Many coaches use these platforms to research players they've seen in person. A profile with outdated information or no video link is a missed opportunity.</p>`},
+
+  'what-coaches-watch': {tag:'Showcase Guide',title:'What College Coaches Are Actually Watching',author:'CSD Staff',date:'April 2026',body:`<p>Understanding what college coaches evaluate at showcase events changes how families observe their player's performance and what players prioritize during competition. Coaches are not primarily watching goals and assists. They are evaluating a much broader set of qualities that determine whether a player can function in their specific program.</p><p><strong>Decisions without the ball.</strong> This is the number one thing coaches evaluate and the thing players least often think about. Where does your player position themselves when their team is out of possession? Are they compressing space, pressing the ball, or watching from a comfortable distance? Technical skills can be developed, but decision-making and pressing work ethic reflect character and coachability in ways that are much harder to change.</p><p><strong>First touch quality under pressure.</strong> At every level above recreational play, the speed of the game increases. A player who can control the ball cleanly under pressure and immediately play forward is signaling to coaches that they can function at the next level.</p><p><strong>Communication and leadership.</strong> Coaches watch whether a player talks on the field — directing teammates, calling for the ball, organizing the defensive shape. A quiet, talented player who does not communicate is a project. A player who leads vocally and positively is demonstrating coachability and team-first orientation simultaneously.</p><p><strong>Body language after mistakes.</strong> Every coach watches how a player responds to errors. A player who drops their head, argues with teammates, or mentally checks out after a mistake signals to coaches that they will be difficult to coach. A player who refocuses, encourages a teammate, and moves on is demonstrating exactly the temperament programs want in their locker room.</p>`},
+
+  'prog-washington': {tag:'Program Profile',title:'University of Washington — Men\'s Soccer',author:'CSD Staff',date:'April 2026',body:`<p>The <strong>University of Washington</strong> Huskies are the reigning 2025 national champions and one of the most compelling stories in college soccer. Head coach Jamie Clark has built a program that defied the conventional wisdom of modern college soccer — that titles require national and international recruiting, heavy portal use, and roster turnover — by developing a cohesive group of Pacific Northwest players into the best team in the country.</p><p>Washington competes in the Pac-12 and plays home matches at Husky Soccer Stadium in Seattle. The program has made the NCAA Tournament in six consecutive seasons and has built a development track record that includes multiple MLS draft picks in recent years.</p><p><strong>For recruits:</strong> Washington's recruiting profile has changed significantly following the national championship. The program now receives interest from prospects across the country. Clark has been explicit that character and culture fit are the primary recruiting criteria — players who are coachable, team-first, and work-rate driven will get serious consideration regardless of where they are from. Academic standards are meaningful, reflecting the University of Washington's status as a strong public research institution. Pacific Northwest prospects should expect more competition for spots than in previous cycles.</p>`},
+
+  'prog-georgetown': {tag:'Program Profile',title:'Georgetown Hoyas — Men\'s Soccer',author:'CSD Staff',date:'April 2026',body:`<p>The <strong>Georgetown Hoyas</strong> men's soccer program is one of the most consistent and respected programs in college soccer, competing in the Big East from their home at Cooper Field on the Georgetown University campus in Washington D.C. The program has produced dozens of MLS players, multiple US Men's National Team alumni, and a culture of excellence that extends well beyond the field.</p><p>Georgetown is known for developing technically sophisticated players — particularly midfielders — who can function in systems that require high decision-making speed and tactical intelligence. The program competes in the Big East, one of the historically strongest conferences in college soccer, and makes the NCAA Tournament consistently.</p><p><strong>For recruits:</strong> Georgetown is an elite academic institution first. The admissions process is rigorous, and athletic recruiting does not lower the academic bar significantly. Players considering Georgetown should have genuinely strong academic profiles — strong GPAs in challenging courses and competitive standardized test scores — before expecting the athletic recruiting process to advance very far. The Georgetown alumni network is among the most powerful of any university in the country, which benefits athletes well beyond their playing careers.</p>`},
+
+  'prog-wakeforest': {tag:'Program Profile',title:'Wake Forest Demon Deacons — Men\'s Soccer',author:'CSD Staff',date:'April 2026',body:`<p>The <strong>Wake Forest Demon Deacons</strong> men's soccer program is one of the elite programs in the ACC and the country, finishing as 2025 national runners-up and consistently producing players for professional careers. The program plays at Spry Soccer Stadium in Winston-Salem, North Carolina.</p><p>Wake Forest is particularly known for developing attacking players and technical midfielders. The program has a long list of MLS and professional alumni, and its player development philosophy has produced first-round MLS draft picks in multiple recent years.</p><p><strong>For recruits:</strong> Wake Forest offers a combination of ACC-level soccer, a strong academic environment, and a campus experience that is more intimate than large state universities. Winston-Salem provides a genuine college town environment. Head coach Bobby Muuss has built a program culture that prioritizes competitive excellence with high character standards — players who are coachable, competitive, and invested in their teammates' success fit the culture well.</p>`},
+
+  'prog-unc': {tag:'Program Profile',title:'North Carolina Tar Heels — Women\'s Soccer',author:'CSD Staff',date:'April 2026',body:`<p>The <strong>University of North Carolina</strong> women's soccer program is the most decorated program in the history of college soccer, having won 21 national championships and produced more professional players and United States Women's National Team members than any other program in the world. The program plays at Dorrance Field — named after legendary coach Anson Dorrance, who retired following the 2024 season.</p><p>The program now enters a new era under new leadership while maintaining the elite recruiting pipeline, the championship expectations, and the development philosophy that has made Carolina the standard against which all women's college soccer programs are measured.</p><p><strong>For recruits:</strong> Competing for a roster spot at North Carolina means competing against the best players in the country. Players targeting UNC should be among the very best at their position in the country and should have the academic profile to be admitted to a selective public research university. The program's connections to the NWSL and the USWNT are unmatched — for players who aspire to professional careers, UNC's development track record is the strongest in the country.</p>`},
+
+  'prog-stanford': {tag:'Program Profile',title:'Stanford Cardinal — Women\'s Soccer',author:'CSD Staff',date:'April 2026',body:`<p>The <strong>Stanford Cardinal</strong> women's soccer program sits at the intersection of elite soccer and elite academics in a way that very few programs in the world can match. Stanford has appeared in the NCAA Tournament in 24 of the last 26 seasons, has won multiple national championships, and has produced a steady stream of USWNT players and NWSL professionals — while doing so at one of the most academically selective universities in the world.</p><p>Stanford plays at Laird Q. Cagan Stadium on the Palo Alto campus, competing in the Pac-12. The program's development philosophy emphasizes technical excellence and tactical sophistication alongside the genuine academic demands of a Stanford education.</p><p><strong>For recruits:</strong> Stanford admission is extremely competitive. Athletic recruitment does not substantially lower the academic bar — players targeting Stanford must have a genuine academic profile that stands on its own. The program's alumni network, its connection to Silicon Valley and the technology industry, and the doors that a Stanford degree opens beyond soccer make it uniquely valuable for players who are thinking seriously about life after the game.</p>`},
+
+  'prog-ucla': {tag:'Program Profile',title:'UCLA Bruins — Women\'s Soccer',author:'CSD Staff',date:'April 2026',body:`<p>The <strong>UCLA Bruins</strong> women's soccer program is one of the most successful programs in college soccer history, with a consistent record of national contention, NWSL draft picks, and USWNT alumni. The program competes in the Pac-12 and plays home matches at Wallis Annenberg Stadium on the UCLA campus in Los Angeles.</p><p>UCLA is known for developing technically gifted, attack-minded players who thrive in systems that prioritize possession and vertical play. The program has produced some of the most exciting attacking talent in college soccer over the past two decades.</p><p><strong>For recruits:</strong> UCLA offers the combination of top-level soccer competition and a large, vibrant university experience in one of the great cities in the world. Los Angeles provides strong local pipelines from the Southern California club scene — one of the deepest in the country — combined with a campus culture that players from anywhere in the country can find welcoming. UCLA is academically serious but admission is more accessible to recruited athletes than at private universities like Stanford, making it a strong option for players who are both athletically and academically competitive.</p>`}
+};
+
+document.getElementById('nav-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const map = {news:0,recruiting:1,portal:2,showcases:3,programs:4};
+  if(map[id] !== undefined) document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function filterFeed(btn, cat) {
+  document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.news-card').forEach(c => {
+    c.style.display = (cat === 'all' || c.dataset.cat === cat) ? '' : 'none';
+  });
+}
+
+function openArticle(id) {
+  const a = ARTICLES[id];
+  if (!a) return;
+  document.getElementById('m-tag').textContent = a.tag;
+  document.getElementById('m-title').textContent = a.title;
+  document.getElementById('m-meta').textContent = 'By ' + a.author + ' · ' + a.date;
+  document.getElementById('m-body').innerHTML = a.body;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function maybeClose(e) {
+  if(e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function subscribe() {
+  const email = document.getElementById('nl-email').value.trim();
+  if(!email.includes('@')) { alert('Please enter a valid email address.'); return; }
+  document.getElementById('nl-btn').textContent = '✓ You\'re subscribed!';
+  document.getElementById('nl-email').value = '';
+}
 </script>
 </body>
 </html>
