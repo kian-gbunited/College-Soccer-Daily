@@ -63,6 +63,10 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .tag-w{background:#EDE8FE;color:#3C3489;}
 .tag-g{background:var(--field-light);color:var(--green);}
 .tag-n{background:#EDE8FE;color:#3C3489;}
+.tag-c{background:#042C53;color:#97C459;}
+.tag-s{background:var(--amber-light);color:var(--amber);}
+.tag-nil{background:#FBEAF0;color:#72243E;}
+.tag-usmnt{background:var(--blue-light);color:#042C53;}
 .card-time{font-size:11px;color:var(--faint);font-family:monospace;}
 .card-title{font-family:var(--serif);font-size:21px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:10px;}
 .card-excerpt{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px;}
@@ -237,12 +241,24 @@ footer{background:var(--navy);padding:44px 24px;margin-top:8px;}
       <button class="stab" onclick="filterFeed(this,'m')">Men's</button>
       <button class="stab" onclick="filterFeed(this,'w')">Women's</button>
       <button class="stab" onclick="filterFeed(this,'t')">Transfer Portal</button>
+      <button class="stab" onclick="filterFeed(this,'n')">Conference News</button>
       <button class="stab" onclick="filterFeed(this,'g')">Guides</button>
+      <button class="stab" onclick="filterFeed(this,'c')">Coach's Corner</button>
+      <button class="stab" onclick="filterFeed(this,'s')">Showcases</button>
+      <button class="stab" onclick="filterFeed(this,'nil')">NIL</button>
+      <button class="stab" onclick="filterFeed(this,'usmnt')">USMNT</button>
     </div>
   </div>
 
   <div class="main">
     <div class="feed" id="news-feed">
+      <div class="news-card" data-cat="nil" onclick="openArticle('house-settlement')">
+        <div class="card-top"><span class="card-tag tag-nil">NIL & Revenue Sharing</span><span class="card-time">Today, 7:15 AM</span></div>
+        <div class="card-title">Everything Has Changed: How the House Settlement Rewrites College Soccer Scholarships</div>
+        <div class="card-excerpt">The most significant shift in college athletics history is now in effect. For soccer families navigating offers, understanding the new rules isn't optional — it's essential. Revenue sharing, roster limits, NIL — all explained.</div>
+        <div class="card-footer"><span class="card-author">By CSD Staff</span><span class="card-read">Read more →</span></div>
+      </div>
+
       <div class="news-card" data-cat="r" onclick="openArticle('early-commits')">
         <div class="card-top"><span class="card-tag tag-r">Recruiting</span><span class="card-time">Today, 8:00 AM</span></div>
         <div class="card-title">Is Your 2027 Player Behind? The Honest Truth About Early Commitments</div>
@@ -273,8 +289,8 @@ footer{background:var(--navy);padding:44px 24px;margin-top:8px;}
         <div class="card-excerpt">The Huskies proved you can win a national championship by recruiting your own backyard and building over four years. Here's what their title means for programs, prospects, and families nationally.</div>
         <div class="card-footer"><span class="card-author">Staff Report</span><span class="card-read">Read more →</span></div>
       </div>
-      <div class="news-card" data-cat="g" onclick="openArticle('coach-perspective')">
-        <div class="card-top"><span class="card-tag tag-g">Coach's Corner</span><span class="card-time">4 days ago</span></div>
+      <div class="news-card" data-cat="c" onclick="openArticle('coach-perspective')">
+        <div class="card-top"><span class="card-tag tag-c">Coach's Corner</span><span class="card-time">4 days ago</span></div>
         <div class="card-title">What College Coaches Actually Want — The Recruiting Process From Their Side</div>
         <div class="card-excerpt">The recruiting process gets covered from the family's perspective constantly. Here is what it looks like from the other side — how coaches evaluate prospects, what "fit" really means, and what ends a recruitment.</div>
         <div class="card-footer"><span class="card-author">By CSD Staff</span><span class="card-read">Read more →</span></div>
@@ -294,15 +310,15 @@ footer{background:var(--navy);padding:44px 24px;margin-top:8px;}
         <div class="card-footer"><span class="card-author">By CSD Staff</span><span class="card-read">Read more →</span></div>
       </div>
 
-      <div class="news-card" data-cat="m" onclick="openArticle('usmnt-college')">
-        <div class="card-top"><span class="card-tag tag-m">Men's</span><span class="card-time">March 2026</span></div>
+      <div class="news-card" data-cat="usmnt" onclick="openArticle('usmnt-college')">
+        <div class="card-top"><span class="card-tag tag-usmnt">USMNT</span><span class="card-time">March 2026</span></div>
         <div class="card-title">11 Former College Soccer Players Are Competing for a 2026 World Cup Spot — Here's Where They Played</div>
         <div class="card-excerpt">With the 2026 FIFA World Cup on home soil, 11 of the 27 players in the USMNT's March camp are former college soccer players. From Indiana to Harvard to Saint Louis University, the college pipeline to the national team is very much alive.</div>
         <div class="card-footer"><span class="card-author">By CSD Staff</span><span class="card-read">Read more →</span></div>
       </div>
 
-      <div class="news-card" data-cat="n" onclick="openArticle('carolina-cup')">
-        <div class="card-top"><span class="card-tag tag-n">Spring Soccer</span><span class="card-time">April 12, 2026</span></div>
+      <div class="news-card" data-cat="s" onclick="openArticle('carolina-cup')">
+        <div class="card-top"><span class="card-tag tag-s">Spring Soccer</span><span class="card-time">April 12, 2026</span></div>
         <div class="card-title">UNC Wins the Carolina Cup — North Carolina and Virginia Tech Met in a Spring Final for the Ages</div>
         <div class="card-excerpt">North Carolina and Virginia Tech were the only two unbeaten sides through the group stage of the 2026 Carolina Cup. UNC forward Bertil Hansen led all scorers with six goals as the Tar Heels claimed the spring title.</div>
         <div class="card-footer"><span class="card-author">By CSD Staff</span><span class="card-read">Read more →</span></div>
@@ -318,11 +334,12 @@ footer{background:var(--navy);padding:44px 24px;margin-top:8px;}
       </div>
       <div class="sb-card">
         <div class="sb-head"><div class="sb-title">Spring Showcase Calendar</div><div class="sb-badge" style="color:var(--blue)">Apr–Jun 2026</div></div>
-        <div class="sb-row"><div class="sb-row-title">ECNL Boys — Indianapolis</div><div class="sb-row-sub">April 17–20 · Grand Park, IN</div><div class="sb-row-note">Ongoing this weekend</div></div>
-        <div class="sb-row"><div class="sb-row-title">ECNL Girls — Phoenix Showcase</div><div class="sb-row-sub">April 10–13 · Phoenix, AZ</div><div class="sb-row-note">Completed</div></div>
-        <div class="sb-row"><div class="sb-row-title">Girls Academy Spring Playoffs</div><div class="sb-row-sub">May 2026</div><div class="sb-row-note">Key D1 evaluation event</div></div>
-        <div class="sb-row"><div class="sb-row-title">ECNL Boys Nationals</div><div class="sb-row-sub">June 2026</div><div class="sb-row-note">Highest D1 coach attendance</div></div>
-        <div class="sb-row"><div class="sb-row-title">MLS Next Playoffs</div><div class="sb-row-sub">June 5–15 · Nationwide</div><div class="sb-row-note">Major summer showcase</div></div>
+        <div class="sb-row"><div class="sb-row-title">ECNL Boys — Indianapolis</div><div class="sb-row-sub">April 17–20 · Grand Park, IN</div><div class="sb-row-note">Hundreds of D1 coaches · Ongoing</div></div>
+        <div class="sb-row"><div class="sb-row-title">Girls Academy Spring Showcase</div><div class="sb-row-sub">April 9–13 · Greensboro, NC</div><div class="sb-row-note">300+ college coaches · Completed</div></div>
+        <div class="sb-row"><div class="sb-row-title">MLS Next Flex</div><div class="sb-row-sub">April 23–28 · Frisco, TX</div><div class="sb-row-note">400+ college scouts · 225+ schools</div></div>
+        <div class="sb-row"><div class="sb-row-title">MLS Next Cup</div><div class="sb-row-sub">May 23–31 · Salt Lake City, UT</div><div class="sb-row-note">Season-ending championship</div></div>
+        <div class="sb-row"><div class="sb-row-title">ECNL Boys National Playoffs</div><div class="sb-row-sub">June 25 – July 2 · San Diego, CA</div><div class="sb-row-note">Highest D1 coach attendance of summer</div></div>
+        <div class="sb-row"><div class="sb-row-title">MLS Next Fest (Winter)</div><div class="sb-row-sub">December · Mesa, AZ</div><div class="sb-row-note">500+ coaches · 1,400 teams · 30,000 players</div></div>
       </div>
       <div class="sb-card">
         <div class="sb-head"><div class="sb-title">Transfer Portal Dates</div><div class="sb-badge" style="color:var(--amber)">Official NCAA</div></div>
@@ -345,6 +362,121 @@ footer{background:var(--navy);padding:44px 24px;margin-top:8px;}
     <p>In-depth guides for players, parents, and coaches on every aspect of the college soccer recruiting process.</p>
   </div></div>
   <div class="page-content">
+
+    <!-- COMMITMENT TRACKER -->
+    <div class="sec-label">D1 Commitment Tracker — Class of 2027</div>
+
+    <!-- SUBMIT FORM -->
+    <div style="background:var(--navy);border-radius:var(--rl);padding:28px 30px;margin-bottom:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--white);margin-bottom:4px;">Submit a Commitment</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.5);">Just committed? Let us know and we'll add you to the tracker.</div>
+        </div>
+        <button onclick="toggleForm()" id="form-toggle-btn" style="background:var(--field);color:var(--navy);border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;">+ Submit a Commitment</button>
+      </div>
+      <div id="commit-form" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Player Full Name *</div>
+            <input id="cf-name" type="text" placeholder="First and last name" style="width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--white);font-family:var(--sans);outline:none;">
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Committed To *</div>
+            <input id="cf-school" type="text" placeholder="University name" style="width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--white);font-family:var(--sans);outline:none;">
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Class Year *</div>
+            <select id="cf-year" style="width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--white);font-family:var(--sans);outline:none;appearance:none;">
+              <option value="" style="color:var(--text);">Select year</option>
+              <option value="2026" style="color:var(--text);">2026</option>
+              <option value="2027" style="color:var(--text);">2027</option>
+              <option value="2028" style="color:var(--text);">2028</option>
+              <option value="2029" style="color:var(--text);">2029</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Position</div>
+            <select id="cf-pos" style="width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--white);font-family:var(--sans);outline:none;appearance:none;">
+              <option value="" style="color:var(--text);">Select position</option>
+              <option value="GK" style="color:var(--text);">Goalkeeper</option>
+              <option value="CB" style="color:var(--text);">Center Back</option>
+              <option value="FB" style="color:var(--text);">Fullback</option>
+              <option value="MF" style="color:var(--text);">Midfielder</option>
+              <option value="FW" style="color:var(--text);">Forward</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Men's or Women's</div>
+            <select id="cf-gender" style="width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--white);font-family:var(--sans);outline:none;appearance:none;">
+              <option value="" style="color:var(--text);">Select</option>
+              <option value="Men's" style="color:var(--text);">Men's</option>
+              <option value="Women's" style="color:var(--text);">Women's</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">State</div>
+            <input id="cf-state" type="text" placeholder="e.g. California" style="width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--white);font-family:var(--sans);outline:none;">
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Club Team</div>
+          <input id="cf-club" type="text" placeholder="e.g. LAFC Academy, Dallas Texans ECNL" style="width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--white);font-family:var(--sans);outline:none;">
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button onclick="submitCommitment()" style="background:var(--field);color:var(--navy);border:none;border-radius:8px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;">Submit →</button>
+          <button onclick="toggleForm()" style="background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);border-radius:8px;padding:11px 20px;font-size:13px;cursor:pointer;">Cancel</button>
+          <div style="font-size:12px;color:rgba(255,255,255,.4);">Submissions are reviewed before being listed.</div>
+        </div>
+        <div id="cf-success" style="display:none;margin-top:12px;background:rgba(151,196,89,.15);border:1px solid rgba(151,196,89,.3);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--field);">✓ Submitted! We'll review and add it to the tracker shortly.</div>
+      </div>
+    </div>
+
+    <!-- COMMITMENT TABLE -->
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:32px;">
+      <!-- FILTERS -->
+      <div style="padding:16px 22px;border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-right:4px;">Filter:</div>
+        <select id="filter-year" onchange="filterCommits()" style="border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;font-family:var(--sans);color:var(--text);background:var(--chalk);outline:none;">
+          <option value="all">All Classes</option>
+          <option value="2026">Class of 2026</option>
+          <option value="2027">Class of 2027</option>
+          <option value="2028">Class of 2028</option>
+          <option value="2029">Class of 2029</option>
+        </select>
+        <select id="filter-gender" onchange="filterCommits()" style="border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;font-family:var(--sans);color:var(--text);background:var(--chalk);outline:none;">
+          <option value="all">Men's & Women's</option>
+          <option value="Men's">Men's</option>
+          <option value="Women's">Women's</option>
+        </select>
+        <select id="filter-pos" onchange="filterCommits()" style="border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;font-family:var(--sans);color:var(--text);background:var(--chalk);outline:none;">
+          <option value="all">All Positions</option>
+          <option value="GK">Goalkeeper</option>
+          <option value="CB">Center Back</option>
+          <option value="FB">Fullback</option>
+          <option value="MF">Midfielder</option>
+          <option value="FW">Forward</option>
+        </select>
+        <input id="filter-search" oninput="filterCommits()" placeholder="Search player or school..." style="border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;font-family:var(--sans);color:var(--text);background:var(--chalk);outline:none;flex:1;min-width:160px;">
+        <div id="commit-count" style="font-size:12px;color:var(--faint);margin-left:auto;white-space:nowrap;"></div>
+      </div>
+      <!-- TABLE HEADER -->
+      <div style="background:var(--navy);padding:12px 22px;display:grid;grid-template-columns:1fr 1fr 80px 80px 100px;gap:12px;">
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Player</div>
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Committed To</div>
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Class</div>
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Pos</div>
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Gender</div>
+      </div>
+      <!-- TABLE BODY -->
+      <div id="commit-table-body"></div>
+      <div id="commit-empty" style="display:none;padding:32px;text-align:center;font-size:14px;color:var(--faint);">No commitments match your filters.</div>
+      <div id="commit-placeholder" style="padding:32px;text-align:center;">
+        <div style="font-size:14px;color:var(--muted);margin-bottom:8px;">Be the first to submit a commitment above.</div>
+        <div style="font-size:13px;color:var(--faint);">The tracker grows as players and families submit their commitments.</div>
+      </div>
+    </div>
+
     <div class="sec-label">Essential Guides</div>
     <div class="guide-grid">
       <div class="guide-card" onclick="openArticle('d1-d2-d3')">
@@ -436,33 +568,51 @@ footer{background:var(--navy);padding:44px 24px;margin-top:8px;}
     <div class="show-grid">
       <div class="show-card">
         <div class="show-name">ECNL Boys — Indianapolis Showcase</div>
-        <div class="show-date">April 17–20, 2026</div>
-        <div class="show-detail">Grand Park Sports Campus, Westfield, Indiana. One of the premier spring evaluation events for U14–U19 boys. Draws college coaches from all three NCAA divisions. Ongoing this weekend.</div>
+        <div class="show-date">April 17–20, 2026 · Grand Park, Westfield IN</div>
+        <div style="display:inline-block;background:var(--field-light);color:var(--green);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin:6px 0 8px;">Hundreds of D1 coaches</div>
+        <div class="show-detail">One of the premier spring evaluation events for U14–U19 boys. Grand Park is within driving distance of a significant number of college programs, which drives high coach turnout. ECNL Boys events consistently draw hundreds of scouts each season. Ongoing this weekend.</div>
       </div>
       <div class="show-card">
-        <div class="show-name">ECNL Girls — Phoenix Showcase</div>
-        <div class="show-date">April 10–13, 2026</div>
-        <div class="show-detail">Phoenix, Arizona. Completed. One of the highest D1 coach attendance events of the spring for women's recruiting.</div>
+        <div class="show-name">Girls Academy Spring Showcase</div>
+        <div class="show-date">April 9–13, 2026 · Bryan Park, Greensboro NC</div>
+        <div style="display:inline-block;background:var(--field-light);color:var(--green);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin:6px 0 8px;">300+ college coaches</div>
+        <div class="show-detail">The GA Spring Showcase draws over 300 college coaches and scouts from across the country, plus US Soccer Women's Youth National Team staff. U15–U19 teams play non-conference opponents across five days. One of the most important spring windows for women's recruiting. Completed April 13.</div>
       </div>
       <div class="show-card">
-        <div class="show-name">Girls Academy Spring Playoffs</div>
-        <div class="show-date">May 2026 · Location TBD</div>
-        <div class="show-detail">One of the top women's recruiting events of the spring. D1 coaches attend in large numbers to evaluate 2027 and 2028 prospects.</div>
+        <div class="show-name">ECNL Girls — Phoenix National Event</div>
+        <div class="show-date">Spring 2026 · Phoenix, AZ</div>
+        <div style="display:inline-block;background:var(--field-light);color:var(--green);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin:6px 0 8px;">Hundreds of D1 coaches</div>
+        <div class="show-detail">ECNL National Events averaged hundreds of scouts each in the 2024–25 season — more than almost every other youth platform. The Phoenix event is one of the highest-attended ECNL girls events of the spring evaluation window. Completed.</div>
       </div>
       <div class="show-card">
-        <div class="show-name">ECNL Boys National Championship</div>
-        <div class="show-date">June 2026 · Location TBD</div>
-        <div class="show-detail">The highest-concentration D1 coach evaluation event for boys in the summer. Historically draws more D1 staff than any other single event on the calendar.</div>
+        <div class="show-name">MLS Next Flex</div>
+        <div class="show-date">April 23–28, 2026 · Toyota Soccer Complex, Frisco TX</div>
+        <div style="display:inline-block;background:var(--field-light);color:var(--green);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin:6px 0 8px;">400+ college coaches</div>
+        <div class="show-detail">MLS Next Flex historically draws over 400 college scouts with representation from over 225 different schools. U15–U19 age groups compete across four days. Group winners qualify automatically for the MLS Next Cup. Critical spring event for players in the MLS Next ecosystem.</div>
       </div>
       <div class="show-card">
-        <div class="show-name">MLS Next Playoffs</div>
-        <div class="show-date">June 5–15, 2026 · Nationwide</div>
-        <div class="show-detail">Strong D1 coach attendance. Players in MLS academy programs should confirm their playoff schedule with their club.</div>
+        <div class="show-name">MLS Next Cup</div>
+        <div class="show-date">May 23–31, 2026 · Regional Athletics Complex, Salt Lake City UT</div>
+        <div style="display:inline-block;background:var(--field-light);color:var(--green);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin:6px 0 8px;">Hundreds of scouts</div>
+        <div class="show-detail">The season-ending MLS Next championship with finals at America First Field, home of Real Salt Lake. 32 teams per age group qualify through league performance and Flex results. Major talent identification opportunity for college and professional scouts.</div>
       </div>
       <div class="show-card">
-        <div class="show-name">ECNL Girls National Championship</div>
-        <div class="show-date">June 2026 · Location TBD</div>
-        <div class="show-detail">Major summer showcase for women's prospects. D1 coaches from programs across the country attend to evaluate top ECNL talent.</div>
+        <div class="show-name">ECNL Boys National Playoffs</div>
+        <div class="show-date">June 25 – July 2, 2026 · Surf Sports Park, San Diego CA</div>
+        <div style="display:inline-block;background:var(--field-light);color:var(--green);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin:6px 0 8px;">Highest D1 coach attendance of the year</div>
+        <div class="show-detail">The ECNL Boys National Playoffs are the single highest-concentration D1 coach evaluation event of the summer for boys. U13–U19 age groups. San Diego location draws coaches from programs across the West and nationally. The most important event on the boys recruiting calendar.</div>
+      </div>
+      <div class="show-card">
+        <div class="show-name">ECNL Boys National Finals</div>
+        <div class="show-date">July 17–19, 2026 · Striker Park, Richmond VA</div>
+        <div style="display:inline-block;background:var(--field-light);color:var(--green);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin:6px 0 8px;">Elite evaluation window</div>
+        <div class="show-detail">The championship conclusion of the ECNL Boys postseason. Top teams from each age group compete for the national title. College coaches attend in large numbers — players here are competing for spots on coaches' final recruiting boards ahead of fall.</div>
+      </div>
+      <div class="show-card">
+        <div class="show-name">MLS Next Fest</div>
+        <div class="show-date">December 2026 · Mesa, AZ (Annual)</div>
+        <div style="display:inline-block;background:var(--blue-light);color:var(--blue);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin:6px 0 8px;">500+ coaches · 1,400+ teams · 30,000 players</div>
+        <div class="show-detail">The largest youth soccer scouting and talent identification event in the United States. The 2025 edition featured over 500 professional, national team, and college coaches from approximately 250 collegiate programs, 1,474 teams, and over 30,000 players across 2,400 matches. The premier winter recruiting event in North America.</div>
       </div>
     </div>
     <div class="sec-label">How to Maximize Every Showcase</div>
@@ -642,7 +792,17 @@ function showPage(id) {
   const map = {news:0,recruiting:1,portal:2,showcases:3,programs:4};
   if(map[id] !== undefined) document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
   window.scrollTo(0,0);
+  window.location.hash = id;
 }
+
+// Restore page from URL hash on load
+(function() {
+  const hash = window.location.hash.replace('#','');
+  const valid = ['news','recruiting','portal','showcases','programs'];
+  if(hash && valid.includes(hash)) {
+    showPage(hash);
+  }
+})();
 
 function filterFeed(btn, cat) {
   document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
@@ -671,6 +831,95 @@ function closeModal() {
 function maybeClose(e) {
   if(e.target === document.getElementById('modal-overlay')) closeModal();
 }
+
+// COMMITMENT TRACKER
+let commitments = JSON.parse(localStorage.getItem('csd_commitments') || '[]');
+
+function renderCommits() {
+  const yearEl = document.getElementById('filter-year');
+  const genderEl = document.getElementById('filter-gender');
+  const posEl = document.getElementById('filter-pos');
+  const searchEl = document.getElementById('filter-search');
+  if(!yearEl) return;
+  const year = yearEl.value;
+  const gender = genderEl.value;
+  const pos = posEl.value;
+  const search = searchEl.value.toLowerCase();
+  const filtered = commitments.filter(c => {
+    if(year !== 'all' && c.year !== year) return false;
+    if(gender !== 'all' && c.gender !== gender) return false;
+    if(pos !== 'all' && c.pos !== pos) return false;
+    if(search && !c.name.toLowerCase().includes(search) && !c.school.toLowerCase().includes(search)) return false;
+    return true;
+  });
+  const body = document.getElementById('commit-table-body');
+  const empty = document.getElementById('commit-empty');
+  const placeholder = document.getElementById('commit-placeholder');
+  const count = document.getElementById('commit-count');
+  if(!body) return;
+  if(commitments.length === 0) {
+    placeholder.style.display = 'block';
+    body.innerHTML = '';
+    empty.style.display = 'none';
+    count.textContent = '';
+    return;
+  }
+  placeholder.style.display = 'none';
+  count.textContent = filtered.length + ' player' + (filtered.length !== 1 ? 's' : '');
+  if(filtered.length === 0) {
+    empty.style.display = 'block';
+    body.innerHTML = '';
+    return;
+  }
+  empty.style.display = 'none';
+  body.innerHTML = filtered.map(c => `
+    <div style="display:grid;grid-template-columns:1fr 1fr 80px 80px 100px;gap:12px;padding:13px 22px;border-bottom:1px solid var(--border);" onmouseover="this.style.background='var(--gray50)'" onmouseout="this.style.background=''">
+      <div>
+        <div style="font-size:14px;font-weight:600;color:var(--text);">${c.name}</div>
+        ${c.club ? `<div style="font-size:12px;color:var(--faint);">${c.club}${c.state ? ' · ' + c.state : ''}</div>` : (c.state ? `<div style="font-size:12px;color:var(--faint);">${c.state}</div>` : '')}
+      </div>
+      <div style="font-size:14px;font-weight:600;color:var(--blue);display:flex;align-items:center;">${c.school}</div>
+      <div style="display:flex;align-items:center;"><span style="font-size:12px;font-weight:700;background:var(--chalk);color:var(--muted);padding:3px 9px;border-radius:20px;">${c.year}</span></div>
+      <div style="display:flex;align-items:center;">${c.pos ? `<span style="font-size:11px;font-weight:700;background:var(--field-light);color:var(--green);padding:3px 8px;border-radius:20px;">${c.pos}</span>` : '<span style="color:var(--faint);font-size:12px;">—</span>'}</div>
+      <div style="display:flex;align-items:center;"><span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:${c.gender==="Women's"?'#EDE8FE':'var(--blue-light)'};color:${c.gender==="Women's"?'#3C3489':'var(--blue)'};">${c.gender || '—'}</span></div>
+    </div>
+  `).join('');
+}
+
+function filterCommits() { renderCommits(); }
+
+function toggleForm() {
+  const form = document.getElementById('commit-form');
+  const btn = document.getElementById('form-toggle-btn');
+  if(!form) return;
+  const open = form.style.display === 'none';
+  form.style.display = open ? 'block' : 'none';
+  btn.textContent = open ? '✕ Close' : '+ Submit a Commitment';
+  document.getElementById('cf-success').style.display = 'none';
+}
+
+function submitCommitment() {
+  const name = document.getElementById('cf-name').value.trim();
+  const school = document.getElementById('cf-school').value.trim();
+  const year = document.getElementById('cf-year').value;
+  if(!name || !school || !year) { alert('Please fill in player name, school, and class year.'); return; }
+  const entry = {
+    name, school, year,
+    pos: document.getElementById('cf-pos').value,
+    gender: document.getElementById('cf-gender').value,
+    state: document.getElementById('cf-state').value.trim(),
+    club: document.getElementById('cf-club').value.trim(),
+    date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})
+  };
+  commitments.unshift(entry);
+  localStorage.setItem('csd_commitments', JSON.stringify(commitments));
+  ['cf-name','cf-school','cf-state','cf-club'].forEach(id => document.getElementById(id).value = '');
+  ['cf-year','cf-pos','cf-gender'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cf-success').style.display = 'block';
+  renderCommits();
+}
+
+renderCommits();
 
 function subscribe() {
   const email = document.getElementById('nl-email').value.trim();
