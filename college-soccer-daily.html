@@ -462,8 +462,8 @@ footer{background:var(--navy);padding:44px 24px;margin-top:8px;}
       </div>
       <!-- TABLE HEADER -->
       <div style="background:var(--navy);padding:12px 22px;display:grid;grid-template-columns:1fr 1fr 80px 80px 100px;gap:12px;">
-        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Player</div>
-        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Committed To</div>
+        <div onclick="sortBy('name')" id="sort-name" style="font-size:11px;font-weight:700;color:rgba(255,255,255,.95);text-transform:uppercase;letter-spacing:.5px;cursor:pointer;user-select:none;transition:color .15s;">Player ↑</div>
+        <div onclick="sortBy('school')" id="sort-school" style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;cursor:pointer;user-select:none;transition:color .15s;">Committed To</div>
         <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Class</div>
         <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Pos</div>
         <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Gender</div>
@@ -550,10 +550,34 @@ footer{background:var(--navy);padding:44px 24px;margin-top:8px;}
         <div style="font-size:12px;font-weight:600;color:var(--green);">Opens May 1</div>
       </div>
     </div>
-    <div class="sec-label">Current Portal Activity</div>
-    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--rl);padding:24px;text-align:center;">
-      <div style="font-size:14px;color:var(--muted);line-height:1.7;">Portal activity will be updated here as players enter and commit.<br>The spring window opens May 1, 2026.</div>
+    <div class="sec-label">D1 Transfer Tracker — Class of 2026 (Mid-Year)</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <button onclick="setPortalGender('men')" id="portal-gender-men" style="background:var(--navy);color:var(--white);border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;">Men's</button>
+      <button onclick="setPortalGender('women')" id="portal-gender-women" style="background:var(--chalk);color:var(--muted);border:1px solid var(--border);border-radius:8px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;">Women's</button>
     </div>
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:12px;">
+      <!-- FILTERS -->
+      <div style="padding:14px 22px;border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <input id="portal-search" oninput="filterPortal()" placeholder="Search player, school in or out..." style="border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;font-family:var(--sans);color:var(--text);background:var(--chalk);outline:none;flex:1;min-width:180px;">
+        <select id="portal-pos" onchange="filterPortal()" style="border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;font-family:var(--sans);color:var(--text);background:var(--chalk);outline:none;">
+          <option value="all">All Positions</option>
+          <option value="GK">GK</option>
+          <option value="D">Defender</option>
+          <option value="M">Midfielder</option>
+          <option value="F">Forward</option>
+        </select>
+        <div id="portal-count" style="font-size:12px;color:var(--faint);margin-left:auto;white-space:nowrap;"></div>
+      </div>
+      <!-- TABLE HEADER -->
+      <div style="background:var(--navy);padding:12px 22px;display:grid;grid-template-columns:50px 1fr 1fr 1fr;gap:12px;">
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;">Pos</div>
+        <div onclick="sortPortalBy('name')" id="psort-name" style="font-size:11px;font-weight:700;color:rgba(255,255,255,.95);text-transform:uppercase;letter-spacing:.5px;cursor:pointer;user-select:none;transition:color .15s;">Player ↑</div>
+        <div onclick="sortPortalBy('from')" id="psort-from" style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;cursor:pointer;user-select:none;transition:color .15s;">From</div>
+        <div onclick="sortPortalBy('to')" id="psort-to" style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px;cursor:pointer;user-select:none;transition:color .15s;">To</div>
+      </div>
+      <div id="portal-table-body"></div>
+    </div>
+    <div style="font-size:12px;color:var(--faint);margin-bottom:32px;padding:0 4px;">Source: TopDrawerSoccer · Mid-year D1 transfers · Class of 2026. Spring window moves will be added as they are confirmed.</div>
   </div>
 </div>
 
@@ -1480,6 +1504,31 @@ if(!commitments) {
   localStorage.setItem('csd_commitments', JSON.stringify(commitments));
 }
 
+let sortField = 'name';
+let sortDir = 'asc';
+
+function sortBy(field) {
+  if(sortField === field) {
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortField = field;
+    sortDir = 'asc';
+  }
+  // Update header indicators
+  ['name','school'].forEach(f => {
+    const el = document.getElementById('sort-' + f);
+    if(!el) return;
+    if(f === sortField) {
+      el.style.color = 'rgba(255,255,255,.95)';
+      el.textContent = (f === 'name' ? 'Player' : 'Committed To') + (sortDir === 'asc' ? ' ↑' : ' ↓');
+    } else {
+      el.style.color = 'rgba(255,255,255,.45)';
+      el.textContent = f === 'name' ? 'Player' : 'Committed To';
+    }
+  });
+  renderCommits();
+}
+
 function renderCommits() {
   const yearEl = document.getElementById('filter-year');
   const genderEl = document.getElementById('filter-gender');
@@ -1490,12 +1539,20 @@ function renderCommits() {
   const gender = genderEl.value;
   const pos = posEl.value;
   const search = searchEl.value.toLowerCase();
-  const filtered = commitments.filter(c => {
+  let filtered = commitments.filter(c => {
     if(year !== 'all' && c.year !== year) return false;
     if(gender !== 'all' && c.gender !== gender) return false;
     if(pos !== 'all' && c.pos !== pos) return false;
     if(search && !c.name.toLowerCase().includes(search) && !c.school.toLowerCase().includes(search)) return false;
     return true;
+  });
+  // Sort
+  filtered.sort((a, b) => {
+    const av = (a[sortField] || '').toLowerCase();
+    const bv = (b[sortField] || '').toLowerCase();
+    if(av < bv) return sortDir === 'asc' ? -1 : 1;
+    if(av > bv) return sortDir === 'asc' ? 1 : -1;
+    return 0;
   });
   const body = document.getElementById('commit-table-body');
   const empty = document.getElementById('commit-empty');
@@ -1565,6 +1622,672 @@ function submitCommitment() {
 }
 
 renderCommits();
+
+// TRANSFER PORTAL DATA
+const PORTAL_TRANSFERS_WOMEN = [
+  {pos:'D',name:'Chloe Bryant',from:'Grambling State',to:'Akron'},
+  {pos:'D',name:'Hadley Hendrickson',from:'Eastern Illinois',to:'Akron'},
+  {pos:'M',name:'Reece Paget',from:'Seton Hall',to:'Akron'},
+  {pos:'D',name:'Tara Savage',from:'Chicago State',to:'Akron'},
+  {pos:'D',name:'Tewabech Seerup',from:'DePaul',to:'Akron'},
+  {pos:'D',name:'Leah Klurman',from:'Tennessee',to:'Alabama'},
+  {pos:'GK',name:'Olivia Herrera',from:'Arizona State',to:'Alabama'},
+  {pos:'D',name:'Madden McDonald',from:'South Carolina',to:'Arkansas'},
+  {pos:'D',name:'Jshyra Johnson',from:'Radford',to:'Arkansas'},
+  {pos:'GK',name:'Kennedy Zorn',from:'Michigan State',to:'Arizona State'},
+  {pos:'F',name:'Aurora Gaines',from:'Arizona',to:'Auburn'},
+  {pos:'GK',name:'Emily Edwards',from:'Purdue',to:'Auburn'},
+  {pos:'M',name:'Kelly Gordon',from:'SMU',to:'Auburn'},
+  {pos:'D',name:'Ellie Rebmann',from:'Wisconsin-Milwaukee',to:'Auburn'},
+  {pos:'M',name:'Kylie Snell',from:'Mississippi State',to:'Auburn'},
+  {pos:'D',name:'Tahirah Turnage-Morales',from:'Maryland',to:'Auburn'},
+  {pos:'D',name:'Eva Pattison',from:'Iowa',to:'Auburn'},
+  {pos:'M',name:'Kennedy Husbands',from:'Mississippi State',to:'Auburn'},
+  {pos:'M',name:'Noelle Sather',from:'South Florida',to:'Baylor'},
+  {pos:'D',name:'Keira Martin',from:'Santa Clara',to:'Baylor'},
+  {pos:'M',name:'Ava Slay',from:'Vanderbilt',to:'Baylor'},
+  {pos:'F',name:'Taylor Evans',from:'Duke',to:'Baylor'},
+  {pos:'F',name:'Annie Gnidula',from:'Texas',to:'Boston College'},
+  {pos:'D',name:'Aasha McLyn',from:'California',to:'Boston College'},
+  {pos:'GK',name:'Lexi Grundler',from:'Michigan State',to:'Bowling Green'},
+  {pos:'F',name:'Natalie Hoover',from:'Iowa State',to:'Bowling Green'},
+  {pos:'F',name:'Sofia Mastracci',from:'South Alabama',to:'Buffalo'},
+  {pos:'M',name:'Kayla Pardini',from:'Illinois',to:'Buffalo'},
+  {pos:'M',name:'Mae Hunt',from:'South Alabama',to:'Buffalo'},
+  {pos:'M',name:'Lily Killiski',from:'Boston College',to:'Butler'},
+  {pos:'M',name:'Isabella Woods',from:'Utah',to:'BYU'},
+  {pos:'M',name:'Milla Shafie',from:'UCLA',to:'California'},
+  {pos:'F',name:'Kathleen Ngulefac',from:'George Washington',to:'Charlotte'},
+  {pos:'M',name:'Lucie Bertrand',from:'Western Carolina',to:'Charlotte'},
+  {pos:'M',name:'Gabby Hoschek',from:'Elon',to:'Clemson'},
+  {pos:'M',name:'Sydney Harpster',from:'San Francisco',to:'Colorado State'},
+  {pos:'D',name:'Olivia Beauvois',from:'Seton Hall',to:'Connecticut'},
+  {pos:'F',name:'Madison Rose',from:'Arkansas',to:'Dartmouth'},
+  {pos:'GK',name:'Avery Strohecker',from:'Seton Hall',to:'Dayton'},
+  {pos:'D',name:'Keira Taylor',from:'Penn',to:'DePaul'},
+  {pos:'F',name:'Madeline Lewis',from:'Northern Illinois',to:'DePaul'},
+  {pos:'M',name:'Dory Latenser',from:'Southern Illinois',to:'DePaul'},
+  {pos:'M',name:'Izzy Allred',from:'High Point',to:'Drexel'},
+  {pos:'F',name:'Katie Shea Collins',from:'South Carolina',to:'Duke'},
+  {pos:'M',name:'Sam Courtwright',from:'Texas Tech',to:'Duke'},
+  {pos:'D',name:'Ashley Basinger',from:'Cincinnati',to:'Duquesne'},
+  {pos:'F',name:'Gabby Tirado',from:'Marist',to:'Elon'},
+  {pos:'F',name:'Avery White',from:'James Madison',to:'FGCU'},
+  {pos:'M',name:'Ryleigh Acosta',from:'Florida',to:'FGCU'},
+  {pos:'D',name:'Niobe Louis',from:'Jacksonville State',to:'FGCU'},
+  {pos:'F',name:'Kelsey Smith',from:'Maryland',to:'Florida'},
+  {pos:'M',name:'Zoe Main',from:'Mississippi State',to:'Florida'},
+  {pos:'M',name:'Tatum Borman',from:'Mississippi State',to:'Florida'},
+  {pos:'M',name:'Adia Symmonds',from:'Mississippi State',to:'Florida'},
+  {pos:'F',name:'Kyra Taylor',from:'Mississippi State',to:'Florida'},
+  {pos:'D',name:'Hannah Jibril',from:'Mississippi State',to:'Florida'},
+  {pos:'D',name:'Ella Petersen',from:'Mississippi State',to:'Florida'},
+  {pos:'M',name:'Charlotte Grim',from:'Mississippi State',to:'Florida'},
+  {pos:'F',name:'Alexandra Bayouth',from:'Stephen F. Austin',to:'Florida Atlantic'},
+  {pos:'M',name:'Shaneil Buckley',from:'Daytona State',to:'Florida State'},
+  {pos:'F',name:'Nyah Rose',from:'SMU',to:'Florida State'},
+  {pos:'M',name:'Ashley Henderson',from:'Memphis',to:'Florida State'},
+  {pos:'F',name:'Anaiyah Robinson',from:'Tennessee',to:'Florida State'},
+  {pos:'M',name:'Amy Angel',from:'Dayton',to:'George Mason'},
+  {pos:'D',name:'Amani Green',from:'Radford',to:'George Mason'},
+  {pos:'D',name:'Kieryn Jeter',from:'Penn State',to:'Georgia'},
+  {pos:'GK',name:'Reiley Fitzpatrick',from:'Northwestern',to:'Georgetown'},
+  {pos:'F',name:'Anaiya Morris',from:'Western Illinois',to:'Grambling State'},
+  {pos:'F',name:'Jasira Gates',from:'Missouri',to:'Grand Canyon'},
+  {pos:'F',name:'Savannah Tafireyi',from:'Houston',to:'Grand Canyon'},
+  {pos:'F',name:'Megan Sofield',from:'Arizona State',to:'Grand Canyon'},
+  {pos:'F',name:'Amanda Adams',from:'Houston',to:'Grand Canyon'},
+  {pos:'F',name:'Sasha Brewer',from:'Miami (FL)',to:'Grand Canyon'},
+  {pos:'D',name:'Adelaide Wolfe',from:'Iowa State',to:'Grand Canyon'},
+  {pos:'D',name:'Aleena Ulke',from:'Syracuse',to:'High Point'},
+  {pos:'M',name:'Taylor Howarth',from:'Mississippi',to:'High Point'},
+  {pos:'GK',name:'Kate Bormeier',from:"St. Mary's (CA)",to:'Houston'},
+  {pos:'F',name:'Gabriella Garcia-Terrell',from:'Howard',to:'Houston'},
+  {pos:'GK',name:'Molly Wissman',from:'Denver',to:'Houston'},
+  {pos:'GK',name:'Sierra McCluer',from:'Stephen F. Austin',to:'Houston'},
+  {pos:'M',name:'Danielle Shannon',from:'LSU',to:'Houston'},
+  {pos:'M',name:'Ava Arengo',from:'Virginia Tech',to:'Illinois'},
+  {pos:'F',name:'Hedda Ornberg',from:'South Florida',to:'Illinois'},
+  {pos:'M',name:'Alyssa White',from:'Oregon State',to:'Illinois'},
+  {pos:'F',name:'Summer Fishel',from:'Saint Louis',to:'Indiana'},
+  {pos:'M',name:'Lea Larouche',from:'Butler',to:'Iowa'},
+  {pos:'M',name:'Kylie Cino',from:'South Carolina',to:'Iowa'},
+  {pos:'D',name:'Julia Freed',from:'Bemidji State',to:'Iowa'},
+  {pos:'M',name:'Lucia Englund',from:'Butler',to:'Iowa'},
+  {pos:'M',name:'Mia Sowders',from:'Wisconsin',to:'Iowa State'},
+  {pos:'D',name:'Danica Lunceford',from:'San Francisco',to:'Iowa State'},
+  {pos:'GK',name:'Sara Gavagan',from:'UMBC',to:'Iowa State'},
+  {pos:'D',name:'Maia Soulis',from:'Ohio University',to:'Iowa State'},
+  {pos:'M',name:'Giovanna Hansen',from:'Portland',to:'Iowa State'},
+  {pos:'F',name:'Ava Hancock',from:'Illinois',to:'Iowa State'},
+  {pos:'D',name:'Breezie Brewer',from:'Alabama',to:'Iowa State'},
+  {pos:'D',name:'Elle Blessinger',from:'Wisconsin-Green Bay',to:'IU Indianapolis'},
+  {pos:'GK',name:'Sofia Rodriguez',from:'Morehead State',to:'IU Indianapolis'},
+  {pos:'F',name:'Megan Swift',from:'Chicago State',to:'IU Indianapolis'},
+  {pos:'M',name:'Samantha DeGuzman',from:'Virginia Tech',to:'James Madison'},
+  {pos:'F',name:'Lauren Carpenter',from:'Virginia Tech',to:'James Madison'},
+  {pos:'M',name:'Hailey Martinez',from:'Oregon State',to:'James Madison'},
+  {pos:'D',name:'Abby Freese',from:'Central Michigan',to:'Kansas State'},
+  {pos:'M',name:'Landry Fieker',from:'Oklahoma State',to:'Kansas State'},
+  {pos:'F',name:'Adelle Francis',from:'Michigan State',to:'Kansas State'},
+  {pos:'M',name:'Alexa Pino',from:'South Carolina',to:'Kentucky'},
+  {pos:'M',name:'Nadia Ramadan',from:'Alabama',to:'Kentucky'},
+  {pos:'F',name:'Cassidy Drago',from:'BYU',to:'Long Beach State'},
+  {pos:'M',name:'Elizabeth Eddy',from:'SMU',to:'Louisville'},
+  {pos:'F',name:'Abby Cox',from:'Rutgers',to:'Louisville'},
+  {pos:'D',name:'Norah Roush',from:'Ohio University',to:'Louisville'},
+  {pos:'M',name:'Linka Ono',from:'Arizona Western College',to:'LSU'},
+  {pos:'D',name:'Emma Alvord',from:'Oklahoma State',to:'LSU'},
+  {pos:'GK',name:'Rylie Kuyper',from:'Texas Tech',to:'LSU'},
+  {pos:'F',name:'Sabrine Brault',from:'Oklahoma State',to:'Maine'},
+  {pos:'F',name:'Isabella Meadows',from:'Connecticut',to:'Maine'},
+  {pos:'F',name:'Lilly Bane',from:'Purdue',to:'Maryland'},
+  {pos:'F',name:'Abigail Stager',from:'Kentucky',to:'Maryland'},
+  {pos:'M',name:'Aryanna Oliver',from:'Radford',to:'Maryland'},
+  {pos:'D',name:'Ava Paolini',from:'Florida',to:'Maryland'},
+  {pos:'F',name:'Jolie Farmer',from:'Penn State',to:'Maryland'},
+  {pos:'M',name:'Elsa Freeman',from:'Boston College',to:'Massachusetts-Lowell'},
+  {pos:'D',name:'Jaileah McPherson',from:'Florida International',to:'Miami (FL)'},
+  {pos:'GK',name:'Emilie Maihs',from:'North Carolina',to:'Miami (FL)'},
+  {pos:'F',name:'Alyssa Stephenson',from:'Northern Illinois',to:'Miami (FL)'},
+  {pos:'M',name:'Alessia Saia',from:'Notre Dame',to:'Miami (FL)'},
+  {pos:'M',name:'Luciana Latino',from:'Tennessee',to:'Michigan'},
+  {pos:'F',name:'Faith George',from:'USC',to:'Michigan State'},
+  {pos:'D',name:'Jasmine Boggs',from:'Tennessee',to:'Michigan State'},
+  {pos:'GK',name:'Bella Schopp',from:'Brown',to:'Michigan State'},
+  {pos:'F',name:'Taylor Dodson',from:'Stephen F. Austin',to:'Middle Tennessee'},
+  {pos:'GK',name:'Anna Claire Jacobi',from:'Appalachian State',to:'Mississippi'},
+  {pos:'D',name:'Paxton Bock',from:'SMU',to:'Mississippi'},
+  {pos:'M',name:'Audrey Shackelford',from:'Washington State',to:'Mississippi'},
+  {pos:'D',name:'Alena Watts',from:'Washington State',to:'Mississippi'},
+  {pos:'D',name:'Maizy Kluksdal',from:'Washington State',to:'Mississippi'},
+  {pos:'D',name:'Keira Mitchell',from:'Washington State',to:'Mississippi'},
+  {pos:'D',name:'Sydney Snowden',from:'Appalachian State',to:'Mississippi'},
+  {pos:'F',name:'Ava Ghoreishi',from:'Appalachian State',to:'Mississippi'},
+  {pos:'F',name:'Isabella Pontieri',from:'North Florida',to:'Mississippi'},
+  {pos:'M',name:'Reese Black',from:'Charlotte',to:'Mississippi State'},
+  {pos:'F',name:'Hailey Johnson',from:'Lipscomb',to:'Mississippi State'},
+  {pos:'M',name:'Mila Erceg',from:'Mississippi',to:'Mississippi State'},
+  {pos:'M',name:'Abbey Dalton',from:'Michigan State',to:'Mississippi State'},
+  {pos:'D',name:'Pearce Groer',from:'Texas',to:'Mississippi State'},
+  {pos:'M',name:'Anisten Cabantac',from:'Purdue',to:'Missouri State'},
+  {pos:'F',name:'Lily Dibernardo',from:'Cincinnati',to:'Missouri State'},
+  {pos:'GK',name:'Kate Lewis',from:'Saint Louis',to:'Missouri State'},
+  {pos:'M',name:'Shiana Samarasinghe',from:'UC San Diego',to:'Montana'},
+  {pos:'M',name:'Lindsay Lenhard',from:'UNC Wilmington',to:'New Hampshire'},
+  {pos:'GK',name:'Ellie Breech',from:'Pittsburgh',to:'NC State'},
+  {pos:'M',name:'Lilliah Blum',from:'Utah',to:'North Carolina'},
+  {pos:'M',name:'Summer Denigan',from:'Georgia',to:'North Carolina'},
+  {pos:'D',name:'Izzi Stratton',from:'BYU',to:'North Carolina'},
+  {pos:'M',name:'Emma Thurston',from:'Southern Indiana',to:'North Texas'},
+  {pos:'D',name:'Kailee Chavez',from:'Oregon',to:'Oakland'},
+  {pos:'M',name:'Jamuna Williams',from:'Washington State',to:'Oakland'},
+  {pos:'F',name:'Olivia Mehl',from:'Northern Iowa',to:'Oakland'},
+  {pos:'GK',name:'Mojisola Ayodele',from:'NJIT',to:'Oklahoma'},
+  {pos:'F',name:'Sherline King',from:'Jones College',to:'Oklahoma State'},
+  {pos:'D',name:'Brenna Rowlett',from:'Tulsa',to:'Oklahoma State'},
+  {pos:'M',name:'Bryn Geppert',from:'Stephen F. Austin',to:'Oklahoma State'},
+  {pos:'M',name:'Emily Senatore',from:'Northwestern State',to:'Oklahoma State'},
+  {pos:'F',name:'Raquelle Mitchell',from:'Southern Mississippi',to:'Oklahoma State'},
+  {pos:'M',name:'Emma Jensen',from:'Northwest Mississippi CC',to:'Oklahoma State'},
+  {pos:'M',name:'Maddie Sharrer',from:'Colorado',to:'Oregon'},
+  {pos:'F',name:'Lauren Hunter',from:'Santa Clara',to:'Oregon'},
+  {pos:'M',name:'Logan Russo',from:'Texas Tech',to:'Oregon'},
+  {pos:'GK',name:'Kailey Kimball',from:'Louisville',to:'Oregon'},
+  {pos:'GK',name:'Libby Brooker',from:'Colorado State',to:'Oregon State'},
+  {pos:'M',name:'Paige Kalal',from:'Minnesota',to:'Penn State'},
+  {pos:'M',name:'Lily Boyden',from:'UCLA',to:'Penn State'},
+  {pos:'F',name:'Jasmine Guerber',from:'Buffalo',to:'Pittsburgh'},
+  {pos:'D',name:'Claire Jones',from:'SMU',to:'Pittsburgh'},
+  {pos:'GK',name:'Addison Roemer',from:'American',to:'Pittsburgh'},
+  {pos:'F',name:'Rose Calkins',from:'Arizona',to:'Portland'},
+  {pos:'GK',name:'Phoebe Carver',from:'USC',to:'Purdue'},
+  {pos:'F',name:'McKenzie Carle',from:'Bellarmine',to:'Purdue'},
+  {pos:'F',name:'Rosa Maalouf',from:'Texas',to:'Purdue'},
+  {pos:'D',name:'Tanna Schornstein',from:'USC',to:'Purdue'},
+  {pos:'D',name:'Jaiden Anderson',from:'USC',to:'Purdue'},
+  {pos:'D',name:'Cassie Bibby',from:'USC',to:'Purdue'},
+  {pos:'GK',name:'Chloe Tseros',from:'Canisius',to:'Purdue'},
+  {pos:'GK',name:'Alexa Malaspina',from:'Utah',to:'Sacramento State'},
+  {pos:'GK',name:'Pepper Escher',from:'Massachusetts',to:'Saint Louis'},
+  {pos:'M',name:'Jeanette Fieldsend',from:'James Madison',to:'Saint Louis'},
+  {pos:'M',name:'Caroline Fowlkes',from:'College of Charleston',to:'Saint Louis'},
+  {pos:'M',name:'Gillian Poiesz',from:'Memphis',to:'Saint Louis'},
+  {pos:'M',name:'Aoi Kataoka',from:'George Washington',to:'Santa Clara'},
+  {pos:'D',name:'Jessica Osborne',from:'Auburn',to:'SMU'},
+  {pos:'M',name:'Olivia Silcox',from:'Memphis',to:'SMU'},
+  {pos:'D',name:'Ella Zimmerman',from:'Iowa State',to:'SMU'},
+  {pos:'M',name:'Kaia Samuelsen Elverum',from:'Jacksonville State',to:'SMU'},
+  {pos:'F',name:'Amelia Malkin',from:'Florida',to:'SMU'},
+  {pos:'D',name:'Maleeya Martin',from:'Michigan State',to:'SMU'},
+  {pos:'M',name:'Lida Dodge',from:'Florida Atlantic',to:'South Alabama'},
+  {pos:'F',name:'Maryn Wolf',from:'Stanford',to:'South Carolina'},
+  {pos:'F',name:'Sydney Middaugh',from:"St. Mary's (CA)",to:'South Carolina'},
+  {pos:'F',name:'Anita Quintero',from:'UTEP',to:'South Florida'},
+  {pos:'D',name:'Ellie Pitts',from:'Mississippi State',to:'South Florida'},
+  {pos:'F',name:'Delaney Tellex',from:'Florida',to:'South Florida'},
+  {pos:'F',name:'Ava Plezia',from:'Kentucky',to:'South Florida'},
+  {pos:'M',name:'Reese Rupe',from:'Texas A&M',to:'South Florida'},
+  {pos:'D',name:'Audrey Buck',from:'UCF',to:'South Florida'},
+  {pos:'D',name:'Joelle Stinson',from:'UT Martin',to:'South Florida'},
+  {pos:'F',name:'Alyssa Tutas',from:'Oklahoma',to:'Samford'},
+  {pos:'F',name:'Brinley Murphy',from:'Florida',to:'Samford'},
+  {pos:'F',name:'Bella Winn',from:'UCLA',to:'Stanford'},
+  {pos:'GK',name:'Maggie Manning',from:'Houston',to:'Syracuse'},
+  {pos:'D',name:'Kendall Mesh',from:'Old Dominion',to:'Syracuse'},
+  {pos:'M',name:'Ines Derrien',from:'USC',to:'Tennessee'},
+  {pos:'F',name:'Taylor Cheatham',from:'Penn State',to:'Tennessee'},
+  {pos:'F',name:'Kai Tsakiris',from:'Florida',to:'Tennessee'},
+  {pos:'M',name:'Hannah Tate',from:'Denver',to:'Texas'},
+  {pos:'F',name:'Ashlynn Anderson',from:'Florida State',to:'Texas'},
+  {pos:'F',name:'Alicia Riggins',from:'West Virginia',to:'Texas'},
+  {pos:'GK',name:'Bayliss Flynn',from:'Montana',to:'Texas'},
+  {pos:'D',name:'Abbi Sine',from:'BYU',to:'Texas Tech'},
+  {pos:'GK',name:'Addie Todd',from:'Florida State',to:'Texas Tech'},
+  {pos:'F',name:'Eres Freifeld',from:'North Carolina',to:'TCU'},
+  {pos:'M',name:'Peyton Nourse',from:'Florida State',to:'TCU'},
+  {pos:'D',name:'Zoe Cuneio',from:'Purdue',to:'TCU'},
+  {pos:'D',name:'Amelie Darey',from:'Butler',to:'TCU'},
+  {pos:'F',name:'Via Naihin',from:'Syracuse',to:'UAB'},
+  {pos:'M',name:'Momo Chogyoji',from:'Arizona Western College',to:'UCF'},
+  {pos:'D',name:'Naomi Clark',from:'Oklahoma',to:'UCF'},
+  {pos:'D',name:'Bella Douglas',from:'Boston College',to:'UCF'},
+  {pos:'D',name:'Carli Crews',from:'Memphis',to:'UCF'},
+  {pos:'M',name:'Marli Galdamez',from:'TCU',to:'UCLA'},
+  {pos:'F',name:'Asa Yamazaki',from:'Arizona Western College',to:'UCLA'},
+  {pos:'F',name:'Katie Reyes',from:'USC Lancaster',to:'UNC Asheville'},
+  {pos:'D',name:'Kandis Calvin',from:'Charlotte',to:'UNC Asheville'},
+  {pos:'GK',name:'Ava Droze',from:'Southern University',to:'UNLV'},
+  {pos:'F',name:'Skylar Cano',from:'Indiana State',to:'UNLV'},
+  {pos:'F',name:'Kaitlin Taylor',from:'Western Oregon',to:'UNLV'},
+  {pos:'M',name:'Taylor Jenkins',from:'Connecticut',to:'USC'},
+  {pos:'GK',name:'Annabel Austen',from:'Penn',to:'USC'},
+  {pos:'F',name:'Maya McDermott',from:'Syracuse',to:'USC'},
+  {pos:'D',name:'Ashley Thurk',from:'Minnesota',to:'USC'},
+  {pos:'D',name:'Hadley Snyder',from:'Louisville',to:'USC'},
+  {pos:'D',name:'Allie Carroll',from:'Northwest Mississippi CC',to:'UT Martin'},
+  {pos:'D',name:'Brooke Gardner',from:'UNLV',to:'Utah'},
+  {pos:'D',name:'Kennedy Fletcher',from:'Arizona',to:'Utah'},
+  {pos:'F',name:'Madeline Stoddard',from:'Auburn',to:'Utah'},
+  {pos:'F',name:'Nevaeh Peregrina',from:'Portland',to:'Utah'},
+  {pos:'GK',name:'Anna Solomon',from:'Oregon',to:'Utah'},
+  {pos:'F',name:'Alexys Ocampo',from:'San Diego State',to:'Utah State'},
+  {pos:'M',name:'Kei Yoneda',from:'Arizona Western College',to:'Utah State'},
+  {pos:'M',name:'Mia Lopez',from:'BYU',to:'Utah State'},
+  {pos:'D',name:'Victoria Espinoza',from:'Laramie County CC',to:'Utah State'},
+  {pos:'M',name:'Presley Ray',from:'Weber State',to:'Utah Valley'},
+  {pos:'M',name:'Londyn Lovell',from:'Utah',to:'Utah Valley'},
+  {pos:'F',name:'Megan Hinnenkamp',from:'Florida',to:'Vanderbilt'},
+  {pos:'D',name:'Ava Lozada',from:'Seton Hall',to:'VCU'},
+  {pos:'D',name:'Cierra Collins',from:'Syracuse',to:'VCU'},
+  {pos:'M',name:'Estella Gajarsky-Prado',from:'UNC Asheville',to:'VCU'},
+  {pos:'GK',name:'Cameryn Nunn',from:'San Jose State',to:'VCU'},
+  {pos:'D',name:'Bo Price',from:'LIU',to:'VCU'},
+  {pos:'M',name:'Juliette Perrault',from:'Oklahoma State',to:'Vermont'},
+  {pos:'M',name:'Giovana Canali',from:'Miami (FL)',to:'Virginia'},
+  {pos:'F',name:'Reese Mattern',from:'Tennessee',to:'Virginia'},
+  {pos:'M',name:'Lili Lubic',from:'Delaware',to:'Virginia Tech'},
+  {pos:'F',name:'Henley Tippins',from:'Georgetown',to:'Wake Forest'},
+  {pos:'M',name:'Riley Cross',from:'Penn State',to:'Wake Forest'},
+  {pos:'GK',name:'Ashlyn Dvorak',from:'Montana',to:'Washington State'},
+  {pos:'D',name:'Riley Carolan',from:'Montana',to:'Washington State'},
+  {pos:'F',name:'Emma Widmor',from:'Montana',to:'Washington State'},
+  {pos:'M',name:'Lydia Robertson',from:'Montana',to:'Washington State'},
+  {pos:'F',name:'Reagan Brisendine',from:'Montana',to:'Washington State'},
+  {pos:'F',name:'Maycen Slater',from:'Montana',to:'Washington State'},
+  {pos:'D',name:'Makena Smith',from:'Montana',to:'Washington State'},
+  {pos:'D',name:'Ashlyn Sandow',from:'Montana',to:'Washington State'},
+  {pos:'D',name:'Taylie Nowels',from:'Montana',to:'Washington State'},
+  {pos:'F',name:'Alexis Lee',from:'Oklahoma State',to:'Washington State'},
+  {pos:'F',name:'Eva Mowery',from:'Maryland',to:'West Florida'},
+  {pos:'F',name:'Rylee Felton',from:'Cincinnati',to:'West Virginia'},
+  {pos:'D',name:'Mia Paugh',from:'Utah',to:'West Virginia'},
+  {pos:'F',name:'Alivia Stott',from:'Tennessee',to:'Xavier'},
+  {pos:'M',name:"Peyton O'Shaugnessy",from:'Omaha',to:'Yale'},
+];
+
+let portalGender = 'men';
+
+function setPortalGender(g) {
+  portalGender = g;
+  document.getElementById('portal-gender-men').style.background = g === 'men' ? 'var(--navy)' : 'var(--chalk)';
+  document.getElementById('portal-gender-men').style.color = g === 'men' ? 'var(--white)' : 'var(--muted)';
+  document.getElementById('portal-gender-men').style.border = g === 'men' ? 'none' : '1px solid var(--border)';
+  document.getElementById('portal-gender-women').style.background = g === 'women' ? 'var(--navy)' : 'var(--chalk)';
+  document.getElementById('portal-gender-women').style.color = g === 'women' ? 'var(--white)' : 'var(--muted)';
+  document.getElementById('portal-gender-women').style.border = g === 'women' ? 'none' : '1px solid var(--border)';
+  portalSortField = 'name';
+  portalSortDir = 'asc';
+  ['name','from','to'].forEach(f => {
+    const el = document.getElementById('psort-' + f);
+    if(!el) return;
+    const labels = {name:'Player', from:'From', to:'To'};
+    el.style.color = f === 'name' ? 'rgba(255,255,255,.75)' : 'rgba(255,255,255,.45)';
+    el.textContent = labels[f] + (f === 'name' ? ' ↑' : '');
+  });
+  renderPortal();
+}
+  {pos:'F',name:'Aiden Benitez',from:'Butler',to:'Akron'},
+  {pos:'F',name:'Angel Lopez',from:'Coastal Carolina',to:'Akron'},
+  {pos:'D',name:'Nolan McGuire',from:'DePaul',to:'Akron'},
+  {pos:'F',name:'Nathan Ferguson',from:'Akron',to:'Belmont'},
+  {pos:'GK',name:'Natan Admassu',from:'Wright State',to:'Binghamton'},
+  {pos:'M',name:'Colin Findlay',from:'York (Pa.)',to:'Bucknell'},
+  {pos:'F',name:'Kai Oppenheim',from:'UC San Diego',to:'California'},
+  {pos:'F',name:'Alessio Andreottola',from:'Fort Lewis',to:'Clemson'},
+  {pos:'GK',name:'Aleksa Janjic',from:'Marshall',to:'Clemson'},
+  {pos:'M',name:'Malick Daouda',from:'Penn State',to:'Clemson'},
+  {pos:'F',name:'Martin Bakken',from:'Dayton',to:'Clemson'},
+  {pos:'D',name:'Breno Correira',from:'Gardner-Webb',to:'Clemson'},
+  {pos:'D',name:'Baxter Hurt',from:'Lipscomb',to:'Coastal Carolina'},
+  {pos:'F',name:'Parker Jackson',from:'Portland',to:'Coastal Carolina'},
+  {pos:'D',name:'Chris Glenney',from:'New Hampshire',to:'Colgate'},
+  {pos:'M',name:'Sean Keane',from:'Auburn Montgomery',to:'College of Charleston'},
+  {pos:'D',name:'Caden Johnson',from:'Iowa Western CC',to:'Creighton'},
+  {pos:'F',name:'Angel Lopez',from:'Iowa Western CC',to:'Creighton'},
+  {pos:'D',name:'Dominik Wicks',from:'MiraCosta College',to:'CSUN'},
+  {pos:'F',name:'James Lear',from:'Dayton',to:'CSUN'},
+  {pos:'M',name:'Chase Jackson',from:'Temple',to:'Dayton'},
+  {pos:'D',name:'Akwasi Agyapong',from:'Lincoln University',to:'Dayton'},
+  {pos:'D',name:'Kiryl Dubins',from:'Canisius',to:'Dayton'},
+  {pos:'GK',name:'Santino Inkpen',from:'UNC Greensboro',to:'Dayton'},
+  {pos:'F',name:'Zach Forehand',from:'La Salle',to:'Dayton'},
+  {pos:'F',name:'Antonio Pinto',from:'Loyola Chicago',to:'Dayton'},
+  {pos:'GK',name:'Tyler Sloan',from:'Stonehill',to:'Dayton'},
+  {pos:'F',name:'Christian Dionne',from:'Penn State',to:'DePaul'},
+  {pos:'M',name:'Marko Odorcic',from:'Wright State',to:'East Tennessee State'},
+  {pos:'M',name:'Ben Madore',from:'Penn State',to:'Elon'},
+  {pos:'D',name:'Caleb Frakes',from:'Northern Kentucky',to:'Elon'},
+  {pos:'F',name:'Aron Martinez',from:'Iowa Western CC',to:'FGCU'},
+  {pos:'GK',name:'Harvey Sellers',from:'Lipscomb',to:'FGCU'},
+  {pos:'F',name:'Jeremy Obah',from:'Peninsula College',to:'FGCU'},
+  {pos:'D',name:'Mateo Camejo',from:'Drexel',to:'Florida International'},
+  {pos:'F',name:'Miquel Gelabert',from:'Cumberland',to:'Florida International'},
+  {pos:'M',name:'Martin Piedeleu',from:'Siena College',to:'Florida International'},
+  {pos:'F',name:'Santi Possu',from:'Concord',to:'Florida International'},
+  {pos:'M',name:'Oliver Stavdal',from:'Kentucky',to:'Florida International'},
+  {pos:'M',name:'Owen Barnett',from:'Hofstra',to:'Florida International'},
+  {pos:'M',name:'Jad Benjelloun',from:"St. John's",to:'Florida International'},
+  {pos:'M',name:'Thomas Sellwood',from:'Seton Hall',to:'Florida International'},
+  {pos:'M',name:'Rayane Tchemmoun',from:'Marshall',to:'Fordham'},
+  {pos:'M',name:'Jake Rubis',from:'NJIT',to:'George Mason'},
+  {pos:'M',name:'Angelo Ginocchi',from:'Mercyhurst',to:'George Mason'},
+  {pos:'M',name:'Matias De Jesus',from:'Maryland',to:'George Mason'},
+  {pos:'D',name:'Finnley O\'Brien',from:'Grand Canyon',to:'George Mason'},
+  {pos:'M',name:'Nate Porterfield',from:'Gardner-Webb',to:'Georgia Southern'},
+  {pos:'F',name:'Charlie Votel',from:'Temple',to:'Georgia Southern'},
+  {pos:'D',name:'Anton Jerga',from:'Radford',to:'Georgia Southern'},
+  {pos:'M',name:'Harry Davison',from:"Saint Peter's",to:'Georgia Southern'},
+  {pos:'M',name:'Rowan Drews',from:'Army',to:'Georgia State'},
+  {pos:'GK',name:'Matthew Dovale',from:'Central Arkansas',to:'Gonzaga'},
+  {pos:'F',name:'Aidan Morrison',from:'William & Mary',to:'High Point'},
+  {pos:'M',name:'Bernardo Raposo',from:'Butler',to:'High Point'},
+  {pos:'F',name:'Bastian Carlman',from:'Fort Hays State',to:'Hofstra'},
+  {pos:'D',name:'Luke Kirilenko',from:'Rider',to:'Hofstra'},
+  {pos:'M',name:'Henri Poll',from:'McKendree University',to:'Hofstra'},
+  {pos:'F',name:'Lewis Johnson',from:'Gardner-Webb',to:'Hofstra'},
+  {pos:'M',name:'Owen Haviland',from:'Stevenson',to:'Hofstra'},
+  {pos:'D',name:'Lucas Menchaca Ruiz-Cuevas',from:'Husson',to:'Hofstra'},
+  {pos:'D',name:'Joel Bona',from:'Rhode Island',to:'Hofstra'},
+  {pos:'GK',name:'Mateus Baptista de Souza',from:'Purdue Northwest',to:'Houston Christian'},
+  {pos:'D',name:'Ryan Anderson',from:'UT-Dallas',to:'Houston Christian'},
+  {pos:'M',name:'Sam Sebagabo',from:'Blinn College',to:'Houston Christian'},
+  {pos:'F',name:'Callum Niven',from:'Neosho County CC',to:'Houston Christian'},
+  {pos:'M',name:'Noah Fernandes',from:'Alabama-Montgomery',to:'Houston Christian'},
+  {pos:'F',name:'Bennett Painter',from:'Bowling Green',to:'Indiana'},
+  {pos:'M',name:'Alex Matthews',from:'Missouri State',to:'Indiana'},
+  {pos:'D',name:'Nick McHenry',from:'Ohio State',to:'Indiana'},
+  {pos:'GK',name:'Michael Mroz',from:'Evansville',to:'Indiana'},
+  {pos:'M',name:'Grant Paskus',from:'Northern Illinois',to:'Indiana'},
+  {pos:'M',name:'Jack Bilyeu',from:'Xavier',to:'IU Indianapolis'},
+  {pos:'D',name:'Jai Dindiyal',from:'Xavier',to:'IU Indianapolis'},
+  {pos:'D',name:'Luke Gonda',from:'Bellarmine',to:'IU Indianapolis'},
+  {pos:'D',name:'Jayden Quezada',from:'Chicago State',to:'IU Indianapolis'},
+  {pos:'F',name:'Landon Dennis',from:'Gardner-Webb',to:'Jacksonville'},
+  {pos:'F',name:'Emanuel Cappello',from:'Syracuse',to:'Jacksonville'},
+  {pos:'D',name:'Nassim Akki',from:'Manhattan',to:'Jacksonville'},
+  {pos:'D',name:'Chris Niblock',from:'High Point',to:'James Madison'},
+  {pos:'M',name:'Leon Kondic',from:'Louisville',to:'James Madison'},
+  {pos:'M',name:'Gabriel Santuari',from:'Clemson',to:'Kansas City'},
+  {pos:'M',name:'Noah Serwy',from:'Emory & Henry',to:'Kansas City'},
+  {pos:'M',name:'Silas Laytham',from:'Crowder College',to:'Kansas City'},
+  {pos:'GK',name:'Jacob English',from:'Southern Indiana',to:'Kentucky'},
+  {pos:'F',name:'Michael Lee',from:'Louisville',to:'Kentucky'},
+  {pos:'D',name:'Amadou Diop',from:'Georgia Gwinnett College',to:'Kentucky'},
+  {pos:'D',name:'Carson Hammond',from:'UC Davis',to:'Kentucky'},
+  {pos:'F',name:'Fredrik Skilberg',from:'SMU',to:'Kentucky'},
+  {pos:'GK',name:'Dan Rose',from:'Marshall',to:'Kentucky'},
+  {pos:'M',name:'Yasha Schaerer',from:'Marshall',to:'Kentucky'},
+  {pos:'F',name:'Samson Kpardeh',from:'Gardner-Webb',to:'Liberty'},
+  {pos:'D',name:'Finn Van den Berg',from:'Drexel',to:'Liberty'},
+  {pos:'F',name:'Javan Ochieng',from:'Gardner-Webb',to:'Liberty'},
+  {pos:'M',name:'Håkon Edstrom',from:'Evansville',to:'Louisville'},
+  {pos:'F',name:'Andrés Escudero',from:'Evansville',to:'Louisville'},
+  {pos:'M',name:'Brayden Sellers',from:'Saint Louis',to:'Louisville'},
+  {pos:'M',name:'Giacomo Zizza',from:'Lehigh',to:'Louisville'},
+  {pos:'M',name:'Seth Stewart',from:'Indiana',to:'Loyola Chicago'},
+  {pos:'M',name:'Dylan Gugin',from:"St. John's",to:'Marist'},
+  {pos:'F',name:'Andrew Armstrong',from:'Dayton',to:'Marshall'},
+  {pos:'F',name:'Ron Pressler',from:'Houston Christian',to:'Marshall'},
+  {pos:'D',name:'Luka Lukic',from:'Temple',to:'Marshall'},
+  {pos:'M',name:'Lazarus Ocira',from:'Eastern Florida State',to:'Marshall'},
+  {pos:'GK',name:'Mathias Christensen',from:'Snow College',to:'Memphis'},
+  {pos:'D',name:'Arlo McIntyre',from:'Pittsburgh-Greensburg',to:'Memphis'},
+  {pos:'D',name:'Junior Saint Juste',from:'South Carolina',to:'Memphis'},
+  {pos:'GK',name:'Noah Kasin',from:'Georgia Southwestern State',to:'Memphis'},
+  {pos:'D',name:'Daman Sangha',from:'Duquesne',to:'Memphis'},
+  {pos:'D',name:'Ethan Cook',from:'Albany',to:'Memphis'},
+  {pos:'M',name:'Keanan Bader',from:'South Carolina',to:'Memphis'},
+  {pos:'D',name:'Zackarya Oumamass',from:'Otero College',to:'Memphis'},
+  {pos:'F',name:'Renan Syrio',from:'Cowley College',to:'Memphis'},
+  {pos:'M',name:'Erik Nava',from:'Mohave College',to:'Memphis'},
+  {pos:'M',name:'Alessandro Peruz',from:'Indian Hills CC',to:'Memphis'},
+  {pos:'D',name:'Jin Tokishi',from:'Cowley College',to:'Memphis'},
+  {pos:'M',name:'Thomas Mancuso',from:'Holy Cross',to:'Memphis'},
+  {pos:'D',name:'Boni Salinas',from:'Louisburg College',to:'Memphis'},
+  {pos:'D',name:'Nadji Rebai',from:'Mars Hill',to:'Memphis'},
+  {pos:'D',name:'Henrique Cruz',from:'East Tennessee State',to:'Memphis'},
+  {pos:'D',name:"Connor O'Keefe",from:'St. Francis (Pa.)',to:'Michigan State'},
+  {pos:'F',name:'Thomas Rodella',from:'Life University',to:'Missouri State'},
+  {pos:'GK',name:'Jonathan Chairez',from:'Paris Junior College',to:'Missouri State'},
+  {pos:'M',name:'Lohan Poirier',from:'Kansas City CC',to:'Missouri State'},
+  {pos:'F',name:'Marc Ballart',from:'Post University',to:'Missouri State'},
+  {pos:'D',name:'Stan Klaver',from:'IU Indianapolis',to:'Missouri State'},
+  {pos:'M',name:'Jack Kehoe',from:"Mount St. Mary's",to:'Missouri State'},
+  {pos:'GK',name:'Fernando Alves',from:'Iona University',to:'Missouri State'},
+  {pos:'D',name:'Josh Gordon',from:'Kentucky',to:'NC State'},
+  {pos:'GK',name:'Matheus Rhormens',from:'Queens (N.C.)',to:'NC State'},
+  {pos:'M',name:'Hayato Takayama',from:'Iowa Western CC',to:'NC State'},
+  {pos:'F',name:'David Davila',from:'Southern Indiana',to:'New Hampshire'},
+  {pos:'M',name:'Daniel Firek',from:'Lipscomb',to:'New Hampshire'},
+  {pos:'M',name:'Tyson Amoo-Mensah',from:'DePaul',to:'New Hampshire'},
+  {pos:'M',name:'Ryan Zellefrow',from:'Vermont',to:'North Carolina'},
+  {pos:'M',name:'Joschi Schelb',from:'Rutgers',to:'North Carolina'},
+  {pos:'M',name:'Nico Loebus',from:'Vermont',to:'North Carolina'},
+  {pos:'D',name:'Nick Lockermann',from:'Vermont',to:'North Carolina'},
+  {pos:'GK',name:'Cayden Crawford',from:'Dayton',to:'Northern Illinois'},
+  {pos:'M',name:'Osagie Omoregie',from:'North Park College',to:'Northern Illinois'},
+  {pos:'F',name:'Ethan Nakolo',from:'Oklahoma Christian',to:'Northwestern'},
+  {pos:'F',name:'Isaiah Chisolm',from:'Kentucky',to:'Ohio State'},
+  {pos:'M',name:'Victor Labite',from:'Fairleigh Dickinson',to:'Ohio State'},
+  {pos:'D',name:'Martin Wurschmidt',from:'Evansville',to:'Ohio State'},
+  {pos:'D',name:'Christian Baumgartner',from:'DePaul',to:'Ohio State'},
+  {pos:'F',name:'Ryan Hannosh',from:'Butler',to:'Ohio State'},
+  {pos:'F',name:'Josue Youta',from:'Daytona State College',to:'Ohio State'},
+  {pos:'F',name:'Jason Purks',from:'Northern Kentucky',to:'Old Dominion'},
+  {pos:'D',name:'Jacob Caprile',from:'Eastern Florida State',to:'Old Dominion'},
+  {pos:'D',name:'Ludovico Vicini',from:'Northeast CC',to:'Old Dominion'},
+  {pos:'M',name:'Milo Wray',from:'James Madison',to:'Oregon State'},
+  {pos:'F',name:'Michael Nesci',from:'Indiana',to:'Oregon State'},
+  {pos:'M',name:'Wyatt Borso',from:'Notre Dame',to:'Oregon State'},
+  {pos:'D',name:'Toby Grant',from:'Vermont',to:'Penn State'},
+  {pos:'F',name:'Kyler Vojvodic',from:'Rhode Island',to:'Penn State'},
+  {pos:'M',name:'Arian Recinos',from:'New Hampshire',to:'Penn State'},
+  {pos:'F',name:'Chanan Chanda',from:'Mount Royal University',to:'Penn State'},
+  {pos:'GK',name:'Justin Ross',from:'Clemson',to:'Penn State'},
+  {pos:'M',name:'Caden Grabfelder',from:'Penn State',to:'Pittsburgh'},
+  {pos:'GK',name:'Oliver Weng',from:'FGCU',to:'Portland'},
+  {pos:'F',name:'Javier Hernandez',from:'North Carolina',to:'Portland'},
+  {pos:'D',name:'Scott Chavira',from:'UNLV',to:'Portland'},
+  {pos:'F',name:'Dominic Barrios',from:'Pacific',to:'Portland'},
+  {pos:'F',name:'Oskar Kaufmann',from:'USC Upstate',to:'Portland'},
+  {pos:'M',name:'Justin Nelson',from:'Rollins',to:'Portland'},
+  {pos:'D',name:'Miles Avery',from:'Georgetown',to:'Portland'},
+  {pos:'M',name:'Isaac Emojong',from:'Utah Valley',to:'Portland'},
+  {pos:'D',name:'Mateus Romualdo',from:'Snow College',to:'Sacramento State'},
+  {pos:'F',name:'Jakub Kozlowski',from:'Palomar College',to:'Sacramento State'},
+  {pos:'M',name:'Alander Soares',from:'Lindenwood',to:'Saint Louis'},
+  {pos:'F',name:'Ryan Belal',from:'Wake Forest',to:'Saint Louis'},
+  {pos:'M',name:'Guilherme Gomes',from:"St. John's",to:'Saint Louis'},
+  {pos:'GK',name:'Christian Herluf',from:'NC State',to:'Saint Louis'},
+  {pos:'D',name:'Luke Adams',from:'Tulsa',to:'Saint Louis'},
+  {pos:'D',name:'Oscar Trujillo',from:'West Virginia',to:'San Diego State'},
+  {pos:'F',name:'Jaxson Hutcheon',from:'Loyola Marymount',to:'San Diego State'},
+  {pos:'D',name:'Luke Fischer',from:'California Baptist',to:'San Diego State'},
+  {pos:'F',name:'Nico Ruiz',from:'California',to:'San Francisco'},
+  {pos:'M',name:'Marci Killeen',from:'Boston College',to:'San Francisco'},
+  {pos:'D',name:'Ben Brody',from:'Edgewood',to:'San Francisco'},
+  {pos:'F',name:'Alex Bazia',from:'Gonzaga',to:'Seattle'},
+  {pos:'D',name:'Ethan Beauman-Ansah',from:'Bradley',to:'Seattle'},
+  {pos:'D',name:'Victor Akoum',from:'Indiana',to:'Seattle'},
+  {pos:'M',name:'Cesar Batres',from:"St. Mary's (CA)",to:'Seattle'},
+  {pos:'M',name:'Tom Coughlin',from:'Wisconsin-Green Bay',to:'Seattle'},
+  {pos:'D',name:'Takashi Sasaki',from:'Stanford',to:'Seattle'},
+  {pos:'GK',name:'Levi Bieber',from:'Washington',to:'Seattle'},
+  {pos:'M',name:'Sivert Ryssdalsnes',from:'Quinnipiac',to:'Seton Hall'},
+  {pos:'M',name:'Andre Philibbosian',from:'Seattle',to:'SMU'},
+  {pos:'D',name:'TJ Dilley',from:"St. Mary's (CA)",to:'SMU'},
+  {pos:'GK',name:'Jonathan Evans',from:'Penn State',to:'SMU'},
+  {pos:'M',name:'Nick Harshaw',from:'Bellarmine',to:'SMU'},
+  {pos:'D',name:'Noah Holmstrøm',from:'Georgia Southern',to:'SMU'},
+  {pos:'M',name:'Franco Ocana',from:'Gardner-Webb',to:'SMU'},
+  {pos:'GK',name:'Daniel Wozniak',from:'Johnson County CC',to:'SMU'},
+  {pos:'D',name:'Charles Volcy',from:'Grand Canyon',to:'South Florida'},
+  {pos:'D',name:'Jack Kiefer',from:'Grand Canyon',to:'South Florida'},
+  {pos:'F',name:'Max Kiefer',from:'Grand Canyon',to:'South Florida'},
+  {pos:'F',name:'Eli Langford',from:'Point Loma Nazarene',to:'South Florida'},
+  {pos:'F',name:'Liam Healy',from:'Grand Canyon',to:'South Florida'},
+  {pos:'D',name:'Baden Wandling',from:'Grand Canyon',to:'South Florida'},
+  {pos:'M',name:'Diego Sanchez',from:'Grand Canyon',to:'South Florida'},
+  {pos:'D',name:'Felipe Cobian',from:'Grand Canyon',to:'South Florida'},
+  {pos:'GK',name:'Michael Guiry',from:'Army',to:'South Florida'},
+  {pos:'D',name:'Serigne Babacar Diallo',from:'Grand Canyon',to:'South Florida'},
+  {pos:'GK',name:'Dominic Pratt',from:'Kenyon College',to:"St. John's"},
+  {pos:'D',name:'Tobi Osoba',from:'La Salle',to:"St. John's"},
+  {pos:'F',name:'Henrik Ropstad',from:'SUNY Old Westbury',to:"St. John's"},
+  {pos:'D',name:'Cayden Walton',from:'Holy Cross',to:"St. John's"},
+  {pos:'D',name:'Jace Sais',from:'UNLV',to:"St. John's"},
+  {pos:'F',name:'Ezekiel Padilla',from:'Pacific',to:"St. John's"},
+  {pos:'D',name:'Tim Logan',from:'Georgetown',to:'Stanford'},
+  {pos:'D',name:'Jackson Miller',from:'Cal Poly',to:'Syracuse'},
+  {pos:'M',name:'Guesly Alexandre',from:'Iowa Western CC',to:'Syracuse'},
+  {pos:'GK',name:'Gavin Atkinson',from:'Grand Canyon',to:'Temple'},
+  {pos:'F',name:'Chad Endozo',from:'Lake Forest College',to:'Temple'},
+  {pos:'D',name:'Marin Selak',from:'Daytona State College',to:'Temple'},
+  {pos:'GK',name:'Jason Villalobos',from:'Otterbein',to:'Temple'},
+  {pos:'F',name:'Luc Haller',from:'Northwest College',to:'Temple'},
+  {pos:'D',name:'Cale Saunders',from:'Daytona State College',to:'Tulsa'},
+  {pos:'F',name:'Jhosua Jory',from:'Angelina College',to:'Tulsa'},
+  {pos:'F',name:'Christian Mezas',from:"St. Edward's",to:'Tulsa'},
+  {pos:'F',name:'Peleg Armendariz',from:'Cleveland State',to:'Tulsa'},
+  {pos:'M',name:'Quentin Christey',from:'Syracuse',to:'Tulsa'},
+  {pos:'GK',name:'Alex Svetanoff',from:'Louisville',to:'UAB'},
+  {pos:'D',name:'Johnny Rush',from:'Ohio State',to:'UAB'},
+  {pos:'GK',name:'David Ruy',from:"St. Mary's (CA)",to:'UC Santa Barbara'},
+  {pos:'M',name:'Tobias Gerber',from:'Northeast CC',to:'UC Santa Barbara'},
+  {pos:'D',name:'Viggo Gustavsson',from:'Grand Canyon',to:'UC Santa Barbara'},
+  {pos:'M',name:'Kalle Rahbek',from:'Wofford',to:'UC Santa Barbara'},
+  {pos:'F',name:'Donovan Sessoms',from:'Sacramento State',to:'UC Santa Barbara'},
+  {pos:'D',name:'Takahiro Fujita',from:'Marshall',to:'UCF'},
+  {pos:'GK',name:'Matisse Hébert',from:'Wisconsin',to:'UCF'},
+  {pos:'M',name:'Joachim Kyei',from:'Daytona State',to:'UCF'},
+  {pos:'D',name:'Logan Hall',from:'Jacksonville',to:'UCLA'},
+  {pos:'F',name:'Kayoum Mbamba',from:'Daytona State',to:'UNC Asheville'},
+  {pos:'F',name:'Harumi Yunaiyama',from:'Monroe College',to:'UNC Asheville'},
+  {pos:'F',name:'Woody Angell',from:'Cal Poly Pomona',to:'UNC Asheville'},
+  {pos:'D',name:'Evan Jimerson',from:'DePaul',to:'UNC Asheville'},
+  {pos:'M',name:'Jayden Montgomery',from:"St. John's",to:'UNC Asheville'},
+  {pos:'D',name:'Ian Smith',from:"St. Mary's (CA)",to:'UNC Asheville'},
+  {pos:'F',name:'David Lee',from:"St. Mary's (CA)",to:'UNC Asheville'},
+  {pos:'M',name:'Taichi Nogami',from:'University of Rio Grande',to:'UNC Asheville'},
+  {pos:'F',name:'Gio Polizzi',from:'Rider',to:'UNC Asheville'},
+  {pos:'D',name:'Samuel Carrias',from:'Central Connecticut',to:'UNC Asheville'},
+  {pos:'F',name:'Orthodoxos Orthodoxou',from:'Charlotte',to:'UNC Asheville'},
+  {pos:'M',name:"Eliot O'Neil",from:"Mount St. Mary's",to:'UNC Asheville'},
+  {pos:'F',name:'Matteo Samori',from:'UMBC',to:'UNC Asheville'},
+  {pos:'M',name:'Tiago Campos',from:'Gardner-Webb',to:'UNC Greensboro'},
+  {pos:'D',name:'Sho Haggerty',from:'Villanova',to:'UNC Greensboro'},
+  {pos:'M',name:'Bendix Bennetzen',from:'Duquesne',to:'UNC Greensboro'},
+  {pos:'M',name:'Caleb Borneo',from:'Akron',to:'UNC Greensboro'},
+  {pos:'M',name:'Jack Shannon',from:'Drexel',to:'UNC Greensboro'},
+  {pos:'GK',name:'Alex Kron',from:'Northern Kentucky',to:'UNC Wilmington'},
+  {pos:'M',name:'Dodge Brooks',from:'Louisville',to:'USC Upstate'},
+  {pos:'GK',name:'Jonathan Munteanu',from:'Dayton',to:'USC Upstate'},
+  {pos:'D',name:'Matiwos Rumley',from:'Penn State',to:'USC Upstate'},
+  {pos:'D',name:'Yorgos Gavas',from:'Drexel',to:'USC Upstate'},
+  {pos:'D',name:'Jalen Moore',from:'Gardner-Webb',to:'USC Upstate'},
+  {pos:'M',name:'Ezra Widman',from:'Xavier',to:'Vermont'},
+  {pos:'M',name:'Beckett Miller',from:'San Diego State',to:'Villanova'},
+  {pos:'M',name:'Ethan Martinez',from:'Santa Clara',to:'Virginia'},
+  {pos:'F',name:'Arnold Matshazi',from:'San Jose State',to:'Virginia'},
+  {pos:'M',name:'Peter Tolkin',from:'Butler',to:'Virginia'},
+  {pos:'F',name:'Chase Vazquez',from:'Louisville',to:'Virginia Tech'},
+  {pos:'F',name:'Joby Reid',from:'Houston Christian',to:'Wake Forest'},
+  {pos:'D',name:'Miles Hadley',from:'Army',to:'Wake Forest'},
+  {pos:'M',name:'Marcos Miranda',from:'John Brown',to:'Wake Forest'},
+  {pos:'GK',name:'Stockton Short',from:'Utah Valley',to:'Washington'},
+  {pos:'F',name:'Callum Lugton',from:'Syracuse',to:'Washington'},
+  {pos:'D',name:'Harry Hogben',from:'Missouri State',to:'West Virginia'},
+  {pos:'M',name:'Jett Aktan',from:'Old Dominion',to:'West Virginia'},
+  {pos:'D',name:'Civan Ferreira',from:'Loyola Marymount',to:'West Virginia'},
+  {pos:'D',name:'Jacob Redenfors',from:'Pittsburgh',to:'West Virginia'},
+  {pos:'D',name:'Alex Rosin',from:'Notre Dame',to:'Western Michigan'},
+  {pos:'M',name:'Kyle Pierson',from:'Michigan',to:'Western Michigan'},
+  {pos:'D',name:'Eddie Hudson',from:'Aquinas',to:'Western Michigan'},
+  {pos:'M',name:'Josh Veychek',from:'Pittsburgh',to:'Western Michigan'},
+  {pos:'F',name:'Vitor Geromel',from:'Clemson',to:'Western Michigan'},
+  {pos:'F',name:'Emile Kisse',from:'Fordham',to:'Wisconsin'},
+  {pos:'M',name:'Joon Han',from:'DePaul',to:'Wisconsin'},
+  {pos:'F',name:'Luke Van Heukelum',from:'Maryland',to:'Wisconsin'},
+  {pos:'D',name:'Joaquin Torres',from:'Cal Poly',to:'Wisconsin'},
+  {pos:'F',name:'Moursali Abdou',from:'Arizona Western',to:'Wisconsin-Milwaukee'},
+  {pos:'GK',name:'Carson Pridie',from:'Davidson',to:'Wisconsin-Milwaukee'},
+  {pos:'M',name:'Riley Stevens',from:'Edgewood',to:'Wisconsin-Milwaukee'},
+  {pos:'D',name:'AJ Wild',from:'Davidson',to:'Wisconsin-Milwaukee'},
+  {pos:'M',name:'Allen Wild',from:'Gardner-Webb',to:'Wisconsin-Milwaukee'},
+  {pos:'D',name:'Scott Cheevers',from:'North Carolina',to:'Wofford'},
+  {pos:'D',name:'Ajmal Tesilimi',from:'Iowa Western CC',to:'Xavier'},
+  {pos:'GK',name:'Charles Barnes',from:'Winthrop',to:'Xavier'},
+  {pos:'M',name:'Fred Cotta',from:'Snow College',to:'Xavier'},
+  {pos:'F',name:'Jayvyn Jackson',from:'Indiana',to:'Xavier'},
+  {pos:'D',name:'Yves Vaage',from:'Gardner-Webb',to:'Xavier'},
+  {pos:'M',name:'Efraims Valutadatils',from:'Iowa Western CC',to:'Xavier'},
+  {pos:'M',name:'Immanuel Wayoro',from:'Rockhurst',to:'Xavier'},
+  {pos:'D',name:'Joshua Kline',from:'Northern Kentucky',to:'Xavier'},
+  {pos:'GK',name:'Victor Laracca',from:'Fairleigh Dickinson',to:'Xavier'},
+  {pos:'D',name:'Jose Pedro',from:'Akron',to:'Xavier'},
+];
+
+let portalSortField = 'name';
+let portalSortDir = 'asc';
+
+function sortPortalBy(field) {
+  if(portalSortField === field) {
+    portalSortDir = portalSortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    portalSortField = field;
+    portalSortDir = 'asc';
+  }
+  ['name','from','to'].forEach(f => {
+    const el = document.getElementById('psort-' + f);
+    if(!el) return;
+    const labels = {name:'Player', from:'From', to:'To'};
+    if(f === portalSortField) {
+      el.style.color = 'rgba(255,255,255,.95)';
+      el.textContent = labels[f] + (portalSortDir === 'asc' ? ' ↑' : ' ↓');
+    } else {
+      el.style.color = 'rgba(255,255,255,.45)';
+      el.textContent = labels[f];
+    }
+  });
+  renderPortal();
+}
+
+function filterPortal() { renderPortal(); }
+
+function renderPortal() {
+  const searchEl = document.getElementById('portal-search');
+  const posEl = document.getElementById('portal-pos');
+  const countEl = document.getElementById('portal-count');
+  const body = document.getElementById('portal-table-body');
+  if(!body) return;
+  const search = searchEl ? searchEl.value.toLowerCase() : '';
+  const pos = posEl ? posEl.value : 'all';
+  let filtered = (portalGender === 'women' ? PORTAL_TRANSFERS_WOMEN : PORTAL_TRANSFERS).filter(t => {
+    if(pos !== 'all' && t.pos !== pos) return false;
+    if(search && !t.name.toLowerCase().includes(search) && !t.from.toLowerCase().includes(search) && !t.to.toLowerCase().includes(search)) return false;
+    return true;
+  });
+  filtered.sort((a, b) => {
+    const av = (a[portalSortField] || '').toLowerCase();
+    const bv = (b[portalSortField] || '').toLowerCase();
+    if(av < bv) return portalSortDir === 'asc' ? -1 : 1;
+    if(av > bv) return portalSortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+  if(countEl) countEl.textContent = filtered.length + ' transfer' + (filtered.length !== 1 ? 's' : '');
+  const posColors = {GK:'background:#042C53;color:#97C459;', D:'background:var(--blue-light);color:var(--blue);', M:'background:var(--field-light);color:var(--green);', F:'background:var(--amber-light);color:var(--amber);'};
+  body.innerHTML = filtered.map(t => `
+    <div style="display:grid;grid-template-columns:50px 1fr 1fr 1fr;gap:12px;padding:12px 22px;border-bottom:1px solid var(--border);align-items:center;" onmouseover="this.style.background='var(--gray50)'" onmouseout="this.style.background=''">
+      <div><span style="font-size:11px;font-weight:700;padding:3px 7px;border-radius:4px;${posColors[t.pos]||'background:var(--chalk);color:var(--muted);'}">${t.pos}</span></div>
+      <div style="font-size:13px;font-weight:600;color:var(--text);">${t.name}</div>
+      <div style="font-size:13px;color:var(--muted);">${t.from}</div>
+      <div style="font-size:13px;font-weight:600;color:var(--blue);">${t.to}</div>
+    </div>
+  `).join('');
+}
+
+renderPortal();
 
 function subscribe() {
   const email = document.getElementById('nl-email').value.trim();
